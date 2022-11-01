@@ -1,6 +1,5 @@
 <template>
   <body>
-    {{ width }}, {{ height }}
     <b-navbar type="dark" variant="dark" class="shadow">
       <b-container class="navbar-container">
         <b-row align-v="center" style="width: 100vw; margin-top: 20px">
