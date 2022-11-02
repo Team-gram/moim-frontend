@@ -11,7 +11,7 @@
           <b-col cols="9">
             <b-form-input
               id="form-input"
-              v-model="nickname"
+              v-model="nickname" 
               placeholder="닉네임을 입력하세요"
             ></b-form-input>
           </b-col>

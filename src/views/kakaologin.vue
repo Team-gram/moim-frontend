@@ -22,9 +22,8 @@ export default {
           .then(result=>{
             console.log(result);
           })
-          this.$router.replace('/register-data');
           console.log(userinfo.id);
-          this.$router.replace('/main');
+          this.$router.replace('/register');
         },
   }
 }
