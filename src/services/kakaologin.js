@@ -20,25 +20,27 @@ const getKakaoToken = async (code) => {
             .then(response => response.json())
             .then((request)=>
             {
-
                 window.Kakao.Auth.setAccessToken(request.access_token); //인가 코드를 통해 실제 접근 토큰을 가져옴
-                fetch("https://kapi.kakao.com/v2/user/me",{
-                    method : "GET",
-                    headers : {
-                        "Authorization" : "Bearer " + request.access_token //접근 토큰을 기반으로 개인정보를 요청함
-                    }
-                })
-                .then(success=> {
-                    console.log(success.json());
-                    return success;
-                 })
-                .then(fail=>console.log(fail))
-                
             })
-    } catch (error) {
-        console.error(error)
+        }catch (error) {
+        console.error(error);
     }
 };
+const getUserInfo = async() => {
+  let userinfo = '';
+  await window.Kakao.API.request({
+    url: '/v2/user/me',
+    success: function(res) {
+      userinfo = res;
+    },
+    fail: function(error) {
+      console.log(error);
+    },
+  });
+  return userinfo;
+}
+
 export {
     getKakaoToken,
+    getUserInfo,
 };
