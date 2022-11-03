@@ -1,7 +1,9 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import KakaoLogin from '../views/kakaologin.vue'
+import KakaoLogin from '@/views/kakaologin.vue'
 import HelloWorld from '@/components/HelloWorld.vue'
+import Register from "@/views/registerPage.vue"
+import MainHome from "@/views/mainhome.vue"
 Vue.use(VueRouter);
 
 const routes = 
@@ -19,8 +21,13 @@ const routes =
   {
     path: "/register",
     name: 'Register',
-    component: () => import("@/views/registerPage"),
-  }
+    component: Register
+  },
+  {
+    path: "/main",
+    name: 'MainHome',
+    component: MainHome
+  },
 ]
 
 const router = new VueRouter({
