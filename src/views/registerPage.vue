@@ -32,7 +32,7 @@
                   style="max-width: 200px"
                 ></b-form-select>
               </b-col>
-              <b-col style="text-align: left; padding: 8px 0 0 0;">시</b-col>
+              <b-col style="text-align: left; padding: 8px 0 0 0">시</b-col>
             </b-row>
             <b-row class="mb-2">
               <b-col cols="auto">
@@ -43,7 +43,7 @@
                   style="max-width: 200px"
                 ></b-form-select>
               </b-col>
-              <b-col style="text-align: left; padding: 8px 0 0 0;">구</b-col>
+              <b-col style="text-align: left; padding: 8px 0 0 0">구</b-col>
             </b-row>
             <b-row class="mb-2">
               <b-col cols="auto">
@@ -54,7 +54,7 @@
                   style="max-width: 200px"
                 ></b-form-select>
               </b-col>
-              <b-col style="text-align: left; padding: 8px 0 0 0;">동</b-col>
+              <b-col style="text-align: left; padding: 8px 0 0 0">동</b-col>
             </b-row>
           </b-col>
         </b-row>
@@ -83,184 +83,27 @@
             <b-card id="form-input" style="max-width: 900px">
               <b-container>
                 <b-row align-h="center">
-                  <b-col cols="auto" id="button">
-                    <div id="category-button">
-                      <img
-                        src="@/assets/category-icon/게임오락.png"
-                        id="category-icon"
-                        style="width: 50px"
-                      />
-                      <div id="category-text">게임/오락</div>
-                    </div>
-                  </b-col>
-                  <b-col cols="auto" id="button">
-                    <div id="category-button">
-                      <img
-                        src="@/assets/category-icon/아웃도어여행.png"
-                        id="category-icon"
-                        style="width: 50px"
-                      />
-                      <div id="category-text">아웃도어/여행</div>
-                    </div>
-                  </b-col>
-                  <b-col cols="auto" id="button">
-                    <div id="category-button">
-                      <img
-                        src="@/assets/category-icon/스포츠운동.png"
-                        id="category-icon"
-                        style="width: 50px"
-                      />
-                      <div id="category-text">스포츠/운동</div>
-                    </div>
-                  </b-col>
-                  <b-col cols="auto" id="button">
-                    <div id="category-button">
-                      <img
-                        src="@/assets/category-icon/댄스무용.png"
-                        id="category-icon"
-                        style="width: 50px"
-                      />
-                      <div id="category-text">댄스/무용</div>
-                    </div> </b-col
+                  <b-col
+                    v-for="category in category_list"
+                    :key="category"
+                    cols="auto"
+                    id="button"
+                    @click="addSelectedCategory(category)"
                   >
-                  <b-col cols="auto" id="button">
-                    <div id="category-button">
+                    <div
+                      id="category-button"
+                      :style="[
+                        selected_category_list.includes(category)
+                          ? { backgroundColor: '#9b9b9b' }
+                          : { backgroundColor: '#d9d9d9' },
+                      ]"
+                    >
                       <img
-                        src="@/assets/category-icon/업무직무.png"
+                        :src="require(`@/assets/category-icon/${category}.png`)"
                         id="category-icon"
                         style="width: 50px"
                       />
-                      <div id="category-text">업무/직무</div>
-                    </div>
-                  </b-col>
-                  <b-col cols="auto" id="button">
-                    <div id="category-button">
-                      <img
-                        src="@/assets/category-icon/인문학책글.png"
-                        id="category-icon"
-                        style="width: 50px"
-                      />
-                      <div id="category-text">인문학/책/글</div>
-                    </div>
-                  </b-col>
-                  <b-col cols="auto" id="button">
-                    <div id="category-button">
-                      <img
-                        src="@/assets/category-icon/패션뷰티.png"
-                        id="category-icon"
-                        style="width: 50px"
-                      />
-                      <div id="category-text">패션/뷰티</div>
-                    </div>
-                  </b-col>
-                  <b-col cols="auto" id="button">
-                    <div id="category-button">
-                      <img
-                        src="@/assets/category-icon/문화공연.png"
-                        id="category-icon"
-                        style="width: 50px"
-                      />
-                      <div id="category-text">문화/공연</div>
-                    </div>
-                  </b-col>
-                  <b-col cols="auto" id="button">
-                    <div id="category-button">
-                      <img
-                        src="@/assets/category-icon/음악악기.png"
-                        id="category-icon"
-                        style="width: 50px"
-                      />
-                      <div id="category-text">음악/악기</div>
-                    </div>
-                  </b-col>
-                  <b-col cols="auto" id="button">
-                    <div id="category-button">
-                      <img
-                        src="@/assets/category-icon/공예만들기.png"
-                        id="category-icon"
-                        style="width: 50px"
-                      />
-                      <div id="category-text">공예/만들기</div>
-                    </div>
-                  </b-col>
-                  <b-col cols="auto" id="button">
-                    <div id="category-button">
-                      <img
-                        src="@/assets/category-icon/요리제조.png"
-                        id="category-icon"
-                        style="width: 50px"
-                      />
-                      <div id="category-text">요리/제조</div>
-                    </div>
-                  </b-col>
-                  <b-col cols="auto" id="button">
-                    <div id="category-button">
-                      <img
-                        src="@/assets/category-icon/사진영상.png"
-                        id="category-icon"
-                        style="width: 50px"
-                      />
-                      <div id="category-text">사진/영상</div>
-                    </div>
-                  </b-col>
-                  <b-col cols="auto" id="button">
-                    <div id="category-button">
-                      <img
-                        src="@/assets/category-icon/차오토바이.png"
-                        id="category-icon"
-                        style="width: 50px"
-                      />
-                      <div id="category-text">차/오토바이</div>
-                    </div>
-                  </b-col>
-                  <b-col cols="auto" id="button">
-                    <div id="category-button">
-                      <img
-                        src="@/assets/category-icon/봉사활동.png"
-                        id="category-icon"
-                        style="width: 50px"
-                      />
-                      <div id="category-text">봉사활동</div>
-                    </div>
-                  </b-col>
-                  <b-col cols="auto" id="button">
-                    <div id="category-button">
-                      <img
-                        src="@/assets/category-icon/반려동물.png"
-                        id="category-icon"
-                        style="width: 50px"
-                      />
-                      <div id="category-text">반려동물</div>
-                    </div>
-                  </b-col>
-                  <b-col cols="auto" id="button">
-                    <div id="category-button">
-                      <img
-                        src="@/assets/category-icon/결혼가족.png"
-                        id="category-icon"
-                        style="width: 50px"
-                      />
-                      <div id="category-text">결혼/가족</div>
-                    </div>
-                  </b-col>
-                  <b-col cols="auto" id="button">
-                    <div id="category-button">
-                      <img
-                        src="@/assets/category-icon/사교인맥.png"
-                        id="category-icon"
-                        style="width: 50px"
-                      />
-                      <div id="category-text">사교/인맥</div>
-                    </div>
-                  </b-col>
-                  <b-col cols="auto" id="button">
-                    <div id="category-button">
-                      <img
-                        src="@/assets/category-icon/자유주제.png"
-                        id="category-icon"
-                        style="width: 50px"
-                      />
-                      <div id="category-text">자유주제</div>
+                      <div id="category-text">{{ category }}</div>
                     </div>
                   </b-col>
                 </b-row>
@@ -295,16 +138,48 @@ export default {
         { value: { C: "3PO" }, text: "This is an option with object value" },
         { value: "d", text: "This one is disabled", disabled: true },
       ],
+      category_list: [
+        "게임오락",
+        "아웃도어여행",
+        "스포츠운동",
+        "댄스무용",
+        "업무직무",
+        "인문학책글",
+        "패션뷰티",
+        "문화공연",
+        "음악악기",
+        "공예만들기",
+        "요리제조",
+        "사진영상",
+        "차오토바이",
+        "봉사활동",
+        "반려동물",
+        "결혼가족",
+        "사교인맥",
+        "자유주제",
+      ],
+      selected_category_list: [],
     };
   },
   methods: {
-    addSelectedCategory: function() {
-      
-    }
-  }
-  // created() {
-  //   this.store.mutations.setHideHeader(true);
-  // },
+    addSelectedCategory: function (category) {
+      if (this.selected_category_list.includes(category)) {
+        this.selected_category_list = this.selected_category_list.filter(
+          (element) => element !== category
+        );
+      } else {
+        if (this.selected_category_list.length < 5) {
+          this.selected_category_list.push(category);
+        }
+      }
+
+      console.log(this.selected_category_list);
+    },
+  },
+  created() {
+    this.selected_category_list = [];
+    // this.store.mutations.setHideHeader(true);
+  },
 };
 </script>
 
@@ -329,7 +204,7 @@ h4 {
   border-radius: 10px !important;
   border: 0px solid;
   background-color: #ffffff !important;
-   float: left;
+  float: left;
 }
 #subtitle {
   text-align: left;
@@ -350,7 +225,7 @@ h4 {
   margin: 5px 5px 10px 5px;
   padding: 0;
   align-content: center;
-  background-color: #d9d9d9 !important;
+  /* background-color: #d9d9d9 !important; */
   /* float: left; */
 }
 div #button {
