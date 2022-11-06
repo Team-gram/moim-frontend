@@ -14,6 +14,7 @@
               id="form-input"
               v-model="nickname"
               placeholder="닉네임을 입력하세요"
+              aria-describedby="input-live-feedback"
               style="max-width: 200px"
             ></b-form-input>
           </b-col>
@@ -27,34 +28,40 @@
               <b-col cols="auto">
                 <b-form-select
                   id="form-input"
-                  v-model="selected"
-                  :options="options"
-                  style="max-width: 200px"
+                  v-model="region1_selected"
+                  :options="region1_options"
+                  style="width: 200px"
                 ></b-form-select>
               </b-col>
-              <b-col style="text-align: left; padding: 8px 0 0 0">시</b-col>
+              <b-col style="text-align: left; padding: 8px 0 0 0"
+                >광역시/도</b-col
+              >
             </b-row>
             <b-row class="mb-2">
               <b-col cols="auto">
                 <b-form-select
                   id="form-input"
-                  v-model="selected"
-                  :options="options"
-                  style="max-width: 200px"
+                  v-model="region2_selected"
+                  :options="region2_options"
+                  style="width: 200px"
                 ></b-form-select>
               </b-col>
-              <b-col style="text-align: left; padding: 8px 0 0 0">구</b-col>
+              <b-col style="text-align: left; padding: 8px 0 0 0"
+                >시/군/구</b-col
+              >
             </b-row>
             <b-row class="mb-2">
               <b-col cols="auto">
                 <b-form-select
                   id="form-input"
-                  v-model="selected"
-                  :options="options"
-                  style="max-width: 200px"
+                  v-model="region3_selected"
+                  :options="region3_options"
+                  style="width: 200px"
                 ></b-form-select>
               </b-col>
-              <b-col style="text-align: left; padding: 8px 0 0 0">동</b-col>
+              <b-col style="text-align: left; padding: 8px 0 0 0"
+                >읍/면/동</b-col
+              >
             </b-row>
           </b-col>
         </b-row>
@@ -119,6 +126,7 @@
       class="ml-auto register-button"
       align="center"
       style="margin-right: 10px; margin-top: 20px; margin-bottom: 40px"
+      @click="clickCompleteButton()"
       >정보 입력 완료
     </b-button>
   </div>
@@ -130,14 +138,12 @@ export default {
     return {
       nickname: "",
       selfIntro: "",
-      selected: null,
-      options: [
-        { value: null, text: "Please select an option" },
-        { value: "a", text: "This is First option" },
-        { value: "b", text: "Selected Option" },
-        { value: { C: "3PO" }, text: "This is an option with object value" },
-        { value: "d", text: "This one is disabled", disabled: true },
-      ],
+      region1_selected: null,
+      region2_selected: null,
+      region3_selected: null,
+      region1_options: ["aa시", "bb시", "cc시"],
+      region2_options: ["aa구", "bb구", "cc구"],
+      region3_options: ["aa동", "bb동", "cc동"],
       category_list: [
         "게임오락",
         "아웃도어여행",
@@ -175,11 +181,38 @@ export default {
 
       console.log(this.selected_category_list);
     },
+    clickCompleteButton: function () {
+      var text = "";
+      if (this.nickname == "") {
+        text += "'닉네임'";
+      }
+      if (
+        this.region1_selected == null ||
+        this.region2_selected == null ||
+        this.region3_selected == null
+      ) {
+        if (text !== "") {
+          text += ", ";
+        }
+        text += "'활동지역'";
+      }
+
+      if (text !== "") {
+        this.$bvToast.toast(text+` 은 필수 입력 항목입니다.`, {
+          // title: "회원 정보 등록 실패",
+          toaster: "b-toaster-top-right",
+          appendToast: false,
+          autoHideDelay: 3000,
+        });
+      } else {
+        this.$router.replace("/");
+      }
+    },
   },
   created() {
     this.selected_category_list = [];
-    // this.store.mutations.setHideHeader(true);
   },
+  computed: {},
 };
 </script>
 
