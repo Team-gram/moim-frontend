@@ -110,7 +110,7 @@
                         id="category-icon"
                         style="width: 50px"
                       />
-                      <div id="category-text">{{ category }}</div>
+                      <div id="category-text">{{ category.replaceAll("-","/") }}</div>
                     </div>
                   </b-col>
                 </b-row>
@@ -145,23 +145,23 @@ export default {
       region2_options: ["aa구", "bb구", "cc구"],
       region3_options: ["aa동", "bb동", "cc동"],
       category_list: [
-        "게임오락",
-        "아웃도어여행",
-        "스포츠운동",
-        "댄스무용",
-        "업무직무",
-        "인문학책글",
-        "패션뷰티",
-        "문화공연",
-        "음악악기",
-        "공예만들기",
-        "요리제조",
-        "사진영상",
-        "차오토바이",
+        "게임-오락",
+        "아웃도어-여행",
+        "스포츠-운동",
+        "댄스-무용",
+        "업무-직무",
+        "인문학-책-글",
+        "패션-뷰티",
+        "문화-공연",
+        "음악-악기",
+        "공예-만들기",
+        "요리-제조",
+        "사진-영상",
+        "차-오토바이",
         "봉사활동",
         "반려동물",
-        "결혼가족",
-        "사교인맥",
+        "결혼-가족",
+        "사교-인맥",
         "자유주제",
       ],
       selected_category_list: [],
