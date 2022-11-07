@@ -21,6 +21,63 @@
         </b-row>
 
         <b-row class="mb-3">
+          <b-col id="subtitle">전화번호*</b-col>
+          <div class="w-100"></div>
+          <b-col>
+            <b-form-input
+              id="form-input"
+              v-model="number1"
+              aria-describedby="input-live-feedback"
+            ></b-form-input>
+          </b-col>
+          <b-col cols="auto" style="padding: 8px 0px 0 0;">-</b-col>
+          <b-col>
+            <b-form-input
+              id="form-input"
+              v-model="number2"
+              aria-describedby="input-live-feedback"
+            ></b-form-input> 
+          </b-col>
+          <b-col cols="auto" style="padding: 8px 0px 0 0;">-</b-col>
+          <b-col>
+            <b-form-input
+              id="form-input"
+              v-model="number3"
+              aria-describedby="input-live-feedback"
+            ></b-form-input>
+          </b-col>
+        </b-row>
+
+        <b-row class="mb-3">
+          <b-col id="subtitle">생년월일*</b-col>
+          <div class="w-100"></div>
+          <b-col>
+            <b-form-select
+              id="form-input"
+              v-model="year_selected"
+              :options="year_options"
+            ></b-form-select>
+          </b-col>
+          <b-col cols="auto" style="padding: 8px 0px 0 0;">년</b-col>
+          <b-col>
+            <b-form-select
+              id="form-input"
+              v-model="month_selected"
+              :options="month_options"
+            ></b-form-select>
+          </b-col>
+          <b-col cols="auto" style="padding: 8px 0px 0 0;">월</b-col>
+          <b-col>
+            <b-form-select
+              id="form-input"
+              v-model="day_selected"
+              :options="day_options"
+            ></b-form-select>
+          </b-col>
+          <b-col cols="auto" style="padding: 8px 0px 0 0;">일</b-col>
+        </b-row>
+
+        <b-row class="mb-3">
           <b-col id="subtitle">활동지역*</b-col>
           <div class="w-100"></div>
           <b-col>
@@ -110,7 +167,9 @@
                         id="category-icon"
                         style="width: 50px"
                       />
-                      <div id="category-text">{{ category.replaceAll("-","/") }}</div>
+                      <div id="category-text">
+                        {{ category.replaceAll("-", "/") }}
+                      </div>
                     </div>
                   </b-col>
                 </b-row>
@@ -138,6 +197,15 @@ export default {
     return {
       nickname: "",
       selfIntro: "",
+      number1: "",
+      number2: "",
+      number3: "",
+      year_selected: "",
+      month_selected: "",
+      day_selected: "",
+      year_options: [],
+      month_options: [],
+      day_options: [],
       region1_selected: null,
       region2_selected: null,
       region3_selected: null,
@@ -198,7 +266,7 @@ export default {
       }
 
       if (text !== "") {
-        this.$bvToast.toast(text+` 은 필수 입력 항목입니다.`, {
+        this.$bvToast.toast(text + ` 은 필수 입력 항목입니다.`, {
           // title: "회원 정보 등록 실패",
           toaster: "b-toaster-top-right",
           appendToast: false,
@@ -211,6 +279,16 @@ export default {
   },
   created() {
     this.selected_category_list = [];
+
+    for (var year = 1900; year <= 2022; year++) {
+      this.year_options.push(year);
+    }
+    for (var month = 1; month <= 12; month++) {
+      this.month_options.push(month);
+    }
+    for (var day = 1; day <= 31; day++) {
+      this.day_options.push(day);
+    }
   },
   computed: {},
 };
