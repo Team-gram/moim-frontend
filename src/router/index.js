@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import KakaoLogin from '../views/kakaologin.vue'
 import HelloWorld from '@/components/HelloWorld.vue'
+import MoimSearchList from '@/views/moimSearchList'
 Vue.use(VueRouter);
 
 const routes = 
@@ -20,7 +21,12 @@ const routes =
     path: "/register",
     name: 'Register',
     component: () => import("@/views/registerPage"),
-  }
+  },
+  {
+    path: "/search",
+    name: 'MoimSearchList',
+    component: MoimSearchList
+  },
 ]
 
 const router = new VueRouter({

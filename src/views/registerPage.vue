@@ -89,7 +89,7 @@
           <b-col>
             <b-card id="form-input" style="max-width: 900px">
               <b-container>
-                <b-row align-h="center">
+                <b-row align-h="left">
                   <b-col
                     v-for="category in category_list"
                     :key="category"
