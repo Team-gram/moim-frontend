@@ -87,6 +87,7 @@
                   id="form-input"
                   v-model="region1_selected"
                   :options="region1_options"
+                  v-on:change="UpdateLocation(1,$event)"
                   style="width: 200px"
                 ></b-form-select>
               </b-col>
@@ -100,6 +101,7 @@
                   id="form-input"
                   v-model="region2_selected"
                   :options="region2_options"
+                  v-on:change="UpdateLocation(2,$event)"
                   style="width: 200px"
                 ></b-form-select>
               </b-col>
@@ -192,6 +194,8 @@
 </template>
 
 <script>
+import locationjson from "@/data/법정동.json";
+
 export default {
   data() {
     return {
@@ -209,9 +213,9 @@ export default {
       region1_selected: null,
       region2_selected: null,
       region3_selected: null,
-      region1_options: ["aa시", "bb시", "cc시"],
-      region2_options: ["aa구", "bb구", "cc구"],
-      region3_options: ["aa동", "bb동", "cc동"],
+      region1_options: [],
+      region2_options: [],
+      region3_options: [],
       category_list: [
         "게임-오락",
         "아웃도어-여행",
@@ -236,6 +240,23 @@ export default {
     };
   },
   methods: {
+    UpdateLocation: function(num,event){
+      if(num==1){
+        this.region2_options.splice(0);
+        for(var index in locationjson[event]){
+          this.region2_options.push(index);
+        }
+        this.region2_options.sort();
+      }else{
+        this.region3_options.splice(0);
+        for(index in locationjson[this.region1_selected][event]){
+          this.region3_options.push(locationjson[this.region1_selected][event][index]);
+        }
+        this.region3_options.sort();
+      }
+      
+      
+    },
     addSelectedCategory: function (category) {
       if (this.selected_category_list.includes(category)) {
         this.selected_category_list = this.selected_category_list.filter(
@@ -289,6 +310,10 @@ export default {
     for (var day = 1; day <= 31; day++) {
       this.day_options.push(day);
     }
+    for(var index in locationjson){
+      this.region1_options.push(index);
+    }
+    this.region1_options.sort();
   },
   computed: {},
 };
