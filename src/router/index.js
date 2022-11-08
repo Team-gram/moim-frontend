@@ -27,7 +27,7 @@ const routes =
     component: Register
   },
   {
-    path: "/main",
+    path: "/",
     name: 'MainHome',
     component: MainHome
   },
@@ -35,11 +35,6 @@ const routes =
     path: "/search",
     name: 'MoimSearchList',
     component: MoimSearchList
-  },
-  {
-    path: "/main",
-    name: 'MoimMain',
-    component: MoimMain
   },
 ]
 

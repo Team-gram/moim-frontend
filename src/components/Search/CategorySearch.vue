@@ -5,7 +5,7 @@
   >
     <h4 id="category-name">{{ this.categoryName }}</h4>
     <div id="optionBox">
-      <b-row align-h="center">
+      <b-row>
         <b-col
           v-for="subCategory in subCategoryList"
           :key="subCategory"
