@@ -22,7 +22,7 @@
           <div class="w-100"></div>
           <b-col>
             <b-navbar-nav :fill="width <= 600">
-              <b-nav-item href="#">홈</b-nav-item>
+              <b-nav-item href="/">홈</b-nav-item>
               <b-nav-item href="#">MY모임</b-nav-item>
               <b-nav-item href="#">일정관리</b-nav-item>
               <b-nav-item href="#">설정</b-nav-item>
