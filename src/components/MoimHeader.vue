@@ -4,7 +4,7 @@
       <b-container class="navbar-container">
         <b-row align-v="center" style="width: 100vw; margin-top: 20px">
           <b-col>
-            <b-navbar-brand href="/main" style="margin-left: 10px">
+            <b-navbar-brand href="/" style="margin-left: 10px">
               <img src="../assets/moim_logo_fullname.png" width="120" />
             </b-navbar-brand>
           </b-col>
@@ -22,7 +22,7 @@
           <div class="w-100"></div>
           <b-col>
             <b-navbar-nav :fill="width <= 600">
-              <b-nav-item href="/main">홈</b-nav-item>
+              <b-nav-item href="/">홈</b-nav-item>
               <b-nav-item href="#">MY모임</b-nav-item>
               <b-nav-item href="#">일정관리</b-nav-item>
               <b-nav-item href="#">설정</b-nav-item>
