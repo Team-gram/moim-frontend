@@ -14,7 +14,7 @@ import MoimList from "@/components/moimList.vue";
 export default {
   components: {
     Categorysearch,
-    // KeywordSearch
+    // KeywordSearch,
     MoimList
   },
 };
