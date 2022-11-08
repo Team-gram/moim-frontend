@@ -12,7 +12,7 @@
           <b-col>
             <b-form-input
               id="form-input"
-              v-model="nickname"
+              v-model="nickname" 
               placeholder="닉네임을 입력하세요"
               aria-describedby="input-live-feedback"
               style="max-width: 200px"
