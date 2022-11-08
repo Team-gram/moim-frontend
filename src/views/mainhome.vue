@@ -3,15 +3,90 @@
     align="center"
     style="margin-top: 20px; margin-left: 20px; margin-right: 20px"
   >
-  <h4 style="margin-top: 20px; margin-bottom: 40px">어떤 모임을 찾고 있나요?</h4>
+  <h4 style="margin-top: 20px; margin-bottom: 40px"><b>어떤 모임을 찾고 있나요?</b></h4>
+    <div id="searchBox">
+        <b-row align-h="between">
+          <b-col>
+            <b-form-input
+              id="searchInput"
+              v-model="text"
+              placeholder="검색어를 입력하세요."
+            ></b-form-input>
+          </b-col>
+          <b-col cols="auto">
+            <b-img
+              id="search-button"
+              :src="require('@/assets/search.png')"
+            ></b-img>
+          </b-col>
+        </b-row>
+      </div>
+      <b-row>
+          <b-col>
+            <b-card id="category" style="max-width: 900px">
+              <b-container>
+                <b-row align-h="left">
+                  <b-col
+                    v-for="category in category_list"
+                    :key="category"
+                    cols="auto"
+                    id="button"
+                  >
+                    <div
+                      id="category-button"
+                      :style="[
+                        selected_category_list.includes(category)
+                          ? { backgroundColor: '#9b9b9b' }
+                          : { backgroundColor: '#d9d9d9' },
+                      ]"
+                    >
+                      <img
+                        :src="require(`@/assets/category-icon/${category}.png`)"
+                        id="category-icon"
+                        style="width: 50px"
+                      />
+                      <div id="category-text">
+                        {{ category.replaceAll("-", "/") }}
+                      </div>
+                    </div>
+                  </b-col>
+                </b-row>
+              </b-container>
+            </b-card>
+          </b-col>
+        </b-row>
   </div>
+  
 </template>
 
 
 <script>
 export default {
   name: 'MainHome',
-  components: {
+  data(){
+    return{
+      category_list: [
+        "게임-오락",
+        "아웃도어-여행",
+        "스포츠-운동",
+        "댄스-무용",
+        "업무-직무",
+        "인문학-책-글",
+        "패션-뷰티",
+        "문화-공연",
+        "음악-악기",
+        "공예-만들기",
+        "요리-제조",
+        "사진-영상",
+        "차-오토바이",
+        "봉사활동",
+        "반려동물",
+        "결혼-가족",
+        "사교-인맥",
+        "자유주제",
+      ],
+      selected_category_list: [],
+    };
   },
   methods: {
   },
@@ -19,7 +94,57 @@ export default {
 </script>
 
 <style>
-h4 {
+#searchBox {
+  border-radius: 20px !important;
+  border: 0px solid;
+  background-color: #f3f3f3 !important;
+  float: center;
+  max-width: 700px;
+  height: 40px;
+  margin: 10px 0 10px 0;
+}
+#searchInput {
+  float: left;
+  border: 0px solid;
+  background-color: rgba(0, 0, 0, 0);
+  margin: 0 0 0 9px;
+  /* width: 80% !important; */
+}
+#search-button {
+  cursor: pointer;
+  height: 20px;
+  width: 20px;
+  float: right;
+  margin: 9px 20px 0 0;
+}
+#category{
+  border: none;
+}
+#category-button {
+  cursor: pointer;
+  width: 80px !important;
+  height: 80px !important;
+  border: 0px solid;
+  border-radius: 10px;
+  margin: 5px 5px 10px 5px;
+  padding: 0;
+  align-content: center;
+  /* background-color: #d9d9d9 !important; */
+  /* float: left; */
+}
+div #button {
+  padding: 0;
+  /* display:inline-block; */
+}
+#category-card {
+  padding: 0;
+}
+#category-icon {
+  margin: 5px 0 0 0;
+}
+#category-text {
+  font-size: 70% !important;
   font-weight: bold;
+  margin: 5px 0 0 0;
 }
 </style>

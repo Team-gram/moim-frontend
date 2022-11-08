@@ -4,6 +4,8 @@ import KakaoLogin from '@/views/kakaologin.vue'
 import HelloWorld from '@/components/HelloWorld.vue'
 import Register from "@/views/registerPage"
 import MainHome from "@/views/mainhome"
+import MoimSearchList from '@/views/moimSearchList'
+
 Vue.use(VueRouter);
 
 const routes = 
@@ -27,6 +29,11 @@ const routes =
     path: "/main",
     name: 'MainHome',
     component: MainHome
+  },
+  {
+    path: "/search",
+    name: 'MoimSearchList',
+    component: MoimSearchList
   },
 ]
 
