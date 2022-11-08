@@ -1,6 +1,5 @@
 <template>
   <div class="KakaoLogin">
-    <h1>hello</h1>
   </div>
 </template>
 <script>
@@ -15,14 +14,13 @@ export default {
   },
   methods: {
     async setKakaoToken () {
-          getKakaoToken(this.$route.query.code);
+          await getKakaoToken(this.$route.query.code);
           let userinfo = await getUserInfo();
           //서버 vaild 호출
           this.axios.get('https://2080c2c3-dc1f-48fa-8d27-db3471cbce2a.mock.pstmn.io/validate',{params: {id : userinfo.id}})
           .then(result=>{
             console.log(result);
           })
-          console.log(userinfo.id);
           this.$router.replace('/register');
         },
   }
