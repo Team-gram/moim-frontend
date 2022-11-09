@@ -3,8 +3,8 @@
     align="center"
     style="margin-top: 20px; margin-left: 20px; margin-right: 20px"
   >
-    <b-card class="register-card" style="max-width: 1000px">
-      <h4 style="margin-top: 20px; margin-bottom: 40px">회원 정보 등록</h4>
+    <b-card id="register-card" style="max-width: 1000px">
+      <h4 id="register-title">회원 정보 등록</h4>
       <b-container class="bv-example-row">
         <b-row class="mb-3">
           <b-col id="subtitle">닉네임*</b-col>
@@ -12,7 +12,7 @@
           <b-col>
             <b-form-input
               id="form-input"
-              v-model="nickname" 
+              v-model="nickname"
               placeholder="닉네임을 입력하세요"
               aria-describedby="input-live-feedback"
               style="max-width: 200px"
@@ -23,27 +23,43 @@
         <b-row class="mb-3">
           <b-col id="subtitle">전화번호*</b-col>
           <div class="w-100"></div>
-          <b-col>
-            <b-form-input
+          <b-col
+            cols="auto"
+            style="padding: 0 5px 0 15px; margin: 0px 5px 5px 0"
+          >
+            <b-form-select
               id="form-input"
               v-model="number1"
-              aria-describedby="input-live-feedback"
-            ></b-form-input>
+              :options="number1_list"
+              style="width: 70px; text-align: center"
+            ></b-form-select>
           </b-col>
-          <b-col cols="auto" style="padding: 8px 0px 0 0;">-</b-col>
-          <b-col>
+          <b-col cols="auto" style="padding: 8px 0px 0 0; margin: 0px 5px 5px 0"
+            >-</b-col
+          >
+          <b-col
+            cols="auto"
+            style="padding: 0 5px 0 5px; margin: 0px 5px 5px 0"
+          >
             <b-form-input
               id="form-input"
               v-model="number2"
               aria-describedby="input-live-feedback"
-            ></b-form-input> 
+              style="width: 70px; text-align: center"
+            ></b-form-input>
           </b-col>
-          <b-col cols="auto" style="padding: 8px 0px 0 0;">-</b-col>
-          <b-col>
+          <b-col cols="auto" style="padding: 8px 0px 0 0; margin: 0px 5px 5px 0"
+            >-</b-col
+          >
+          <b-col
+            cols="auto"
+            style="padding: 0 5px 0 5px; margin: 0px 5px 5px 0"
+          >
             <b-form-input
               id="form-input"
               v-model="number3"
               aria-describedby="input-live-feedback"
+              style="width: 70px; text-align: center"
             ></b-form-input>
           </b-col>
         </b-row>
@@ -51,30 +67,48 @@
         <b-row class="mb-3">
           <b-col id="subtitle">생년월일*</b-col>
           <div class="w-100"></div>
-          <b-col>
+          <b-col
+            cols="auto"
+            style="padding: 0 5px 0 15px; margin: 0px 5px 5px 0"
+          >
             <b-form-select
               id="form-input"
               v-model="year_selected"
               :options="year_options"
+              style="width: 80px; text-align: center"
             ></b-form-select>
           </b-col>
-          <b-col cols="auto" style="padding: 8px 0px 0 0;">년</b-col>
-          <b-col>
+          <b-col cols="auto" style="padding: 8px 0px 0 0; margin: 0px 5px 5px 0"
+            >년</b-col
+          >
+          <b-col
+            cols="auto"
+            style="padding: 0 5px 0 15px; margin: 0px 5px 5px 0"
+          >
             <b-form-select
               id="form-input"
               v-model="month_selected"
               :options="month_options"
+              style="width: 60px; text-align: center"
             ></b-form-select>
           </b-col>
-          <b-col cols="auto" style="padding: 8px 0px 0 0;">월</b-col>
-          <b-col>
+          <b-col cols="auto" style="padding: 8px 0px 0 0; margin: 0px 5px 5px 0"
+            >월</b-col
+          >
+          <b-col
+            cols="auto"
+            style="padding: 0 5px 0 15px; margin: 0px 5px 5px 0"
+          >
             <b-form-select
               id="form-input"
               v-model="day_selected"
               :options="day_options"
+              style="width: 60px; text-align: center"
             ></b-form-select>
           </b-col>
-          <b-col cols="auto" style="padding: 8px 0px 0 0;">일</b-col>
+          <b-col cols="auto" style="padding: 8px 0px 0 0; margin: 0px 5px 5px 0"
+            >일</b-col
+          >
         </b-row>
 
         <b-row class="mb-3">
@@ -82,45 +116,50 @@
           <div class="w-100"></div>
           <b-col>
             <b-row class="mb-2">
-              <b-col cols="auto">
+              <b-col cols="auto" style="margin: 0px 5px 5px 0">
                 <b-form-select
                   id="form-input"
                   v-model="region1_selected"
                   :options="region1_options"
-                  v-on:change="UpdateLocation(1,$event)"
-                  style="width: 200px"
-                ></b-form-select>
+                  v-on:change="UpdateLocation(1, $event)"
+                  style="width: 200px; text-align: center"
+                >
+                  <template #first>
+                    <b-form-select-option :value="null" disabled
+                      >광역시/도</b-form-select-option
+                    >
+                  </template>
+                </b-form-select>
               </b-col>
-              <b-col style="text-align: left; padding: 8px 0 0 0"
-                >광역시/도</b-col
-              >
-            </b-row>
-            <b-row class="mb-2">
-              <b-col cols="auto">
+              <b-col cols="auto" style="margin: 0px 5px 5px 0">
                 <b-form-select
                   id="form-input"
                   v-model="region2_selected"
                   :options="region2_options"
-                  v-on:change="UpdateLocation(2,$event)"
-                  style="width: 200px"
-                ></b-form-select>
+                  v-on:change="UpdateLocation(2, $event)"
+                  style="width: 200px; text-align: center"
+                >
+                  <template #first>
+                    <b-form-select-option :value="null" disabled
+                      >시/군/구</b-form-select-option
+                    >
+                  </template>
+                </b-form-select>
               </b-col>
-              <b-col style="text-align: left; padding: 8px 0 0 0"
-                >시/군/구</b-col
-              >
-            </b-row>
-            <b-row class="mb-2">
-              <b-col cols="auto">
+              <b-col cols="auto" style="margin: 0px 5px 5px 0">
                 <b-form-select
                   id="form-input"
                   v-model="region3_selected"
                   :options="region3_options"
-                  style="width: 200px"
-                ></b-form-select>
+                  style="width: 200px; text-align: center"
+                >
+                  <template #first>
+                    <b-form-select-option :value="null" disabled
+                      >읍/면/동</b-form-select-option
+                    >
+                  </template>
+                </b-form-select>
               </b-col>
-              <b-col style="text-align: left; padding: 8px 0 0 0"
-                >읍/면/동</b-col
-              >
             </b-row>
           </b-col>
         </b-row>
@@ -146,9 +185,9 @@
         </b-row>
         <b-row>
           <b-col>
-            <b-card id="form-input" style="max-width: 900px">
+            <b-card id="form-input" style="max-width: 900px;">
               <b-container>
-                <b-row align-h="left">
+                <b-row>
                   <b-col
                     v-for="category in category_list"
                     :key="category"
@@ -183,8 +222,8 @@
     </b-card>
     <b-button
       pill
-      id="show-btn"
-      class="ml-auto register-button"
+      id="register-button"
+      class="ml-auto"
       align="center"
       style="margin-right: 10px; margin-top: 20px; margin-bottom: 40px"
       @click="clickCompleteButton()"
@@ -195,18 +234,44 @@
 
 <script>
 import locationjson from "@/data/법정동.json";
+import categoryjson from "@/data/카테고리.json";
 
 export default {
   data() {
     return {
       nickname: "",
       selfIntro: "",
-      number1: "",
+      number1: null,
+      number1_list: [
+        "02",
+        "031",
+        "032",
+        "033",
+        "041",
+        "042",
+        "043",
+        "044",
+        "051",
+        "052",
+        "053",
+        "054",
+        "055",
+        "061",
+        "062",
+        "063",
+        "064",
+        "010",
+        "011",
+        "016",
+        "017",
+        "018",
+        "019",
+      ],
       number2: "",
       number3: "",
-      year_selected: "",
-      month_selected: "",
-      day_selected: "",
+      year_selected: null,
+      month_selected: null,
+      day_selected: null,
       year_options: [],
       month_options: [],
       day_options: [],
@@ -216,46 +281,33 @@ export default {
       region1_options: [],
       region2_options: [],
       region3_options: [],
-      category_list: [
-        "게임-오락",
-        "아웃도어-여행",
-        "스포츠-운동",
-        "댄스-무용",
-        "업무-직무",
-        "인문학-책-글",
-        "패션-뷰티",
-        "문화-공연",
-        "음악-악기",
-        "공예-만들기",
-        "요리-제조",
-        "사진-영상",
-        "차-오토바이",
-        "봉사활동",
-        "반려동물",
-        "결혼-가족",
-        "사교-인맥",
-        "자유주제",
-      ],
+      category_list: [],
       selected_category_list: [],
     };
   },
   methods: {
-    UpdateLocation: function(num,event){
-      if(num==1){
+    SetCategory: function () {
+      this.category_list.splice(0);
+      for (var index in categoryjson) {
+        this.category_list.push(index);
+      }
+    },
+    UpdateLocation: function (num, event) {
+      if (num == 1) {
         this.region2_options.splice(0);
-        for(var index in locationjson[event]){
+        for (var index in locationjson[event]) {
           this.region2_options.push(index);
         }
         this.region2_options.sort();
-      }else{
+      } else {
         this.region3_options.splice(0);
-        for(index in locationjson[this.region1_selected][event]){
-          this.region3_options.push(locationjson[this.region1_selected][event][index]);
+        for (index in locationjson[this.region1_selected][event]) {
+          this.region3_options.push(
+            locationjson[this.region1_selected][event][index]
+          );
         }
         this.region3_options.sort();
       }
-      
-      
     },
     addSelectedCategory: function (category) {
       if (this.selected_category_list.includes(category)) {
@@ -272,8 +324,28 @@ export default {
     },
     clickCompleteButton: function () {
       var text = "";
-      if (this.nickname == "") {
+      if (this.nickname.split(' ').join('') == "") {
         text += "'닉네임'";
+      }
+      if (
+        this.number1 == null ||
+        this.number2 == "" ||
+        this.number3 == ""
+      ) {
+        if (text !== "") {
+          text += ", ";
+        }
+        text += "'전화번호'";
+      }
+      if (
+        this.year_selected == null ||
+        this.month_selected == null ||
+        this.day_selected == null
+      ) {
+        if (text !== "") {
+          text += ", ";
+        }
+        text += "'생년월일'";
       }
       if (
         this.region1_selected == null ||
@@ -310,10 +382,11 @@ export default {
     for (var day = 1; day <= 31; day++) {
       this.day_options.push(day);
     }
-    for(var index in locationjson){
+    for (var index in locationjson) {
       this.region1_options.push(index);
     }
     this.region1_options.sort();
+    this.SetCategory();
   },
   computed: {},
 };
@@ -323,14 +396,18 @@ export default {
 h4 {
   font-weight: bold;
 }
-.register-button {
+#register-button {
   width: 200px !important;
   height: 50px !important;
   background-color: #799761 !important;
   border: 0px solid;
   font-weight: bold;
 }
-.register-card {
+#register-title {
+  font-weight: bold;
+  margin: 10px 0 30px 0;
+}
+#register-card {
   border-radius: 20px !important;
   border: 0px solid;
   padding: 0;

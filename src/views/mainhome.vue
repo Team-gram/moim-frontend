@@ -62,35 +62,27 @@
 
 
 <script>
+import categoryjson from "@/data/카테고리.json";
+
 export default {
   name: 'MainHome',
   data(){
     return{
-      category_list: [
-        "게임-오락",
-        "아웃도어-여행",
-        "스포츠-운동",
-        "댄스-무용",
-        "업무-직무",
-        "인문학-책-글",
-        "패션-뷰티",
-        "문화-공연",
-        "음악-악기",
-        "공예-만들기",
-        "요리-제조",
-        "사진-영상",
-        "차-오토바이",
-        "봉사활동",
-        "반려동물",
-        "결혼-가족",
-        "사교-인맥",
-        "자유주제",
-      ],
+      category_list: [],
       selected_category_list: [],
     };
   },
   methods: {
+    SetCategory: function () {
+      this.category_list.splice(0);
+      for (var index in categoryjson) {
+        this.category_list.push(index);
+      }
+    },
   },
+  created() {
+    this.SetCategory();
+  }
 }
 </script>
 
