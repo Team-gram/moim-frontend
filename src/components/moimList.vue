@@ -40,6 +40,9 @@ export default {
           { name: '모임5', data: '모임5에 대한 설명', image: require(`@/assets/test.jpg`)},
         ]
     }
+  },
+  method(){
+    
   }
 };
 </script>

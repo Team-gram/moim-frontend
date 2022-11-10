@@ -11,10 +11,12 @@
             id="searchInput"
             v-model="searchKeyword"
             placeholder="검색어를 입력하세요."
+            @keyup.enter="submit"
           ></b-form-input>
         </b-col>
         <b-col cols="auto">
           <b-img
+            @click="submit"
             id="search-button"
             :src="require('@/assets/search.png')"
           ></b-img>
@@ -155,6 +157,10 @@ export default {
   methods: {
     turnOnOffFileter: function () {
       this.showFilter = !this.showFilter;
+    },
+    sudmit: function(){
+      alert("검색실행");
+      console.log(this.searchKeyword)
     },
   },
 };

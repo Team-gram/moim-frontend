@@ -5,23 +5,7 @@
     style="margin-top: 20px; margin-left: 20px; margin-right: 20px"
   >
   <h4 style="margin-top: 20px; margin-bottom: 40px"><b>어떤 모임을 찾고 있나요?</b></h4>
-    <div id="searchBox">
-        <b-row align-h="between">
-          <b-col>
-            <b-form-input
-              id="searchInput"
-              type="text"
-              placeholder="검색어를 입력하세요."
-            ></b-form-input>
-          </b-col>
-          <b-col cols="auto">
-            <b-img
-              id="search-button"
-              :src="require('@/assets/search.png')"
-            ></b-img>
-          </b-col>
-        </b-row>
-      </div>
+  <searchbar></searchbar>
       <b-row>
           <b-col>
             <b-card id="category" style="max-width: 900px">
@@ -57,15 +41,16 @@
           </b-col>
         </b-row>
   </div>
-  
 </template>
 
-
 <script>
+import searchbar from "@/components/Search/SearchBar";
 import categoryjson from "@/data/카테고리.json";
-
 export default {
   name: 'MainHome',
+  components: {
+    searchbar,
+  },
   data(){
     return{
       category_list: [],
@@ -87,29 +72,6 @@ export default {
 </script>
 
 <style>
-#searchBox {
-  border-radius: 20px !important;
-  border: 0px solid;
-  background-color: #f3f3f3 !important;
-  float: center;
-  max-width: 700px;
-  height: 40px;
-  margin: 10px 0 10px 0;
-}
-#searchInput {
-  float: left;
-  border: 0px solid;
-  background-color: rgba(0, 0, 0, 0);
-  margin: 0 0 0 9px;
-  /* width: 80% !important; */
-}
-#search-button {
-  cursor: pointer;
-  height: 20px;
-  width: 20px;
-  float: right;
-  margin: 9px 20px 0 0;
-}
 #category{
   border: none;
 }

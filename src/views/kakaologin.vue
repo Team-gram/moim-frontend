@@ -20,8 +20,7 @@ export default {
           let usedid = await this.getUsedid(userinfo.id);
           //임시 테스트 usedid가 1이면 main으로 이동, usedid가 0이면 register로 이동.
           //[수정]해서 테스트하세요
-          usedid=1;
-          if(usedid==1)
+          if(usedid!=0)
             this.$router.replace('/');
           else
             this.$router.replace('/register');
