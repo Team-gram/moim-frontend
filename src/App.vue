@@ -15,12 +15,6 @@ export default {
     MoimHeader,
   },
   methods: {
-    kakaoLogin() {
-      const params = {
-        redirectUri:'http://localhost:8080/kakaologin',
-      }
-      window.Kakao.Auth.authorize(params);
-    },
   },
 }
 </script>
