@@ -3,7 +3,7 @@
     align="center"
     style="margin-top: 20px; margin-left: 20px; margin-right: 20px"
   >
-    <h4 id="category-name">{{ this.categoryName }}</h4>
+    <h4 id="category-name">{{ this.categoryName.replaceAll('-','/') }}</h4>
     <div id="optionBox">
       <b-row>
         <b-col
@@ -51,6 +51,7 @@
             v-model="region1_selected"
             :options="region1_options"
             class="mb-3"
+            v-on:change="UpdateLocation(1, $event)"
             id="form-input"
           >
             <template #first>
@@ -65,6 +66,7 @@
             v-model="region2_selected"
             :options="region2_options"
             class="mb-3"
+            v-on:change="UpdateLocation(2, $event)"
             id="form-input"
           >
             <template #first>
@@ -99,27 +101,21 @@
 </template>
 
 <script>
+import locationjson from "@/data/법정동.json";
+import categoryjson from "@/data/카테고리.json";
+
 export default {
   data() {
     return {
       searchKeyword:"",
-      categoryName: "아웃도어/여행",
-      subCategoryList: [
-        "전체",
-        "등산",
-        "산책/트래킹",
-        "캠핑/백패킹",
-        "국내여행",
-        "해외여행",
-        "낚시",
-        "패러글라이딩",
-      ],
+      categoryName: "아웃도어-여행",
+      subCategoryList: [],
       region1_selected: null,
       region2_selected: null,
       region3_selected: null,
-      region1_options: ["oo시", "oo도"],
-      region2_options: ["oo군", "oo구"],
-      region3_options: ["oo읍", "oo동"],
+      region1_options: [],
+      region2_options: [],
+      region3_options: [],
       showFilter: false,
     };
   },
@@ -127,7 +123,36 @@ export default {
     turnOnOffFileter: function () {
       this.showFilter = !this.showFilter;
     },
+    UpdateLocation: function (num, event) {
+      if (num == 1) {
+        this.region2_options.splice(0);
+        for (var index in locationjson[event]) {
+          console.log(index);
+          this.region2_options.push(index);
+        }
+        this.region2_options.sort();
+      } else {
+        this.region3_options.splice(0);
+        for (index in locationjson[this.region1_selected][event]) {
+          this.region3_options.push(
+            locationjson[this.region1_selected][event][index]
+          );
+        }
+        this.region3_options.sort();
+      }
+    },
   },
+  created() {
+    for (var index_location in locationjson) {
+      this.region1_options.push(index_location);
+    }
+    this.region1_options.sort();
+
+    for (var cat_index in categoryjson[this.categoryName]) {
+        this.subCategoryList.push(categoryjson[this.categoryName][cat_index].replaceAll('-','/'));
+      }
+      this.subCategoryList.sort();
+  }
 };
 </script>
 
