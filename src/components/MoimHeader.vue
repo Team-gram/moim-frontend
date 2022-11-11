@@ -24,8 +24,8 @@
             <b-navbar-nav :fill="width <= 600">
               <b-nav-item href="/">홈</b-nav-item>
               <b-nav-item href="#">MY모임</b-nav-item>
-              <b-nav-item href="#">일정관리</b-nav-item>
-              <b-nav-item href="#">설정</b-nav-item>
+              <b-nav-item href="/calendar">일정관리</b-nav-item>
+              <b-nav-item href="/setting">설정</b-nav-item>
             </b-navbar-nav>
           </b-col>
         </b-row>

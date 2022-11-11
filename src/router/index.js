@@ -6,7 +6,8 @@ import HelloWorld from '@/components/HelloWorld.vue'
 import Register from "@/views/registerPage"
 import MainHome from "@/views/mainhome"
 import MoimSearchList from '@/views/moimSearchList'
-
+import UserSetting from '@/views/userSetting'
+import MoimCalendar from '@/views/MoimCalendar'
 Vue.use(VueRouter);
 
 const routes = 
@@ -36,6 +37,16 @@ const routes =
     name: 'MoimSearchList',
     component: MoimSearchList
   },
+  {
+    path: "/setting",
+    name: 'UserSetting',
+    component: UserSetting
+  },
+  {
+    path:"/calendar",
+    name: 'MoimCalendar',
+    component: MoimCalendar
+  }
 ]
 
 const router = new VueRouter({
