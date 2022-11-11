@@ -3,20 +3,29 @@
     align="center"
     style="margin-top: 10px; margin-left: 20px; margin-right: 20px"
   >
-    <div id="listBox" v-for="day in dayindex" :key="day">
-      <b-row id="listTitle" align-v="center">
-        <b-col cols="auto" style="padding: 0 0 0 15px">
-          <div id="listTitle" >{{ day }}</div>
-        </b-col>
-        <b-col cols="auto">
-          <div id="listnodata" v-if="calendardata[day] === 'NULL'">
-            등록된 정기 일정이 없습니다.
-          </div>
-          <div v-else id="listdata" v-for="(item)  in calendardata[day]" :key="item">
-            {{item.time}} | {{item.data}}
-          </div>
-        </b-col>
-      </b-row>
+  <div id ="selectcalendar">
+    <b-row align-v="center" align-h="center">
+      <b-col cols="auto" style="padding: 5px 20px 5px 0" :class="{bold: isRegular}" @click="regular">정기 일정</b-col>
+      <b-col cols="auto" style="padding: 0 0 0 0">|</b-col>
+      <b-col cols="auto" style="padding: 0 0 0 20px" :class="{bold: !isRegular}" @click="irregular">비정기 일정</b-col>
+    </b-row>
+  </div>
+    <div id="listbackground">
+      <div id="listBox" v-for="day in dayindex" :key="day">
+        <b-row id="listTitle" align-v="center" align-h="between">
+          <b-col cols="auto" style="padding: 0 0 0 15px">
+            <div id="listTitle" >{{ day }}</div>
+          </b-col>
+          <b-col cols="auto">
+            <div id="listnodata" v-if="calendardata[day] === 'NULL'">
+              등록된 정기 일정이 없습니다.
+            </div>
+            <div v-else id="listdata" v-for="(item,index)  in calendardata[day]" :key="index">
+              {{item.time}} | {{item.data}}
+            </div>
+          </b-col>
+        </b-row>
+      </div>
     </div>
   </div>
 </template>
@@ -27,38 +36,65 @@ export default {
     return {
       calendardata : calendar["221002"],
       dayindex : ["월","화","수","목","금","토","일"],
+      isRegular: true,
     };
   },
-};
+  methods:{
+    regular(){
+      this.isRegular = true;
+    },
+    irregular(){
+      this.isRegular = false;
+    }
+  }
+}
 </script>
 
 <style>
+.bold{
+  font-weight: bold !important;
+}
+#selectcalendar{
+  background-color: #f3f3f3 !important;
+  border-radius: 20px !important;
+  width:  17em;
+  margin: 20px 0 20px 0;
+  font-size: 14px;
+}
+#listbackground{
+  background-color: #f3f3f3 !important;
+  border-radius: 20px !important; 
+  padding: 10px 20px 10px 20px;
+  margin: 10px 0 10px 0;
+}
 #listTitle {
   text-align: left;
   font-weight: bold !important;
-  font-size: 25px;
+  font-size: 20px;
+  padding: 0px 0px 0px 5px;
 }
 #listnodata{
-  font-weight: bold !important;
-  font-size: 18px;
+  font-size: 14px;
   margin: auto;
+  margin: 10px 10px 10px 0px;
+  padding: 3px 0px 3px 5px;
 }
 #listdata {
-  font-weight: bold !important;
-  font-size: 18px;
+  font-size: 14px;
+  width:14em;
   margin-left: 30px;
-  background-color: white;
-  margin: 10px 10px 10px 10px;
+  background-color: #f3f3f3;
+  margin: 10px 10px 10px 0px;
   border-radius: 10px !important;
-  padding: 10px 20px 10px 20px;
+  padding: 3px 0px 3px 5px;
 }
 #listBox {
   border-radius: 10px !important;
   border: 0px solid;
-  background-color: #f3f3f3 !important;
+  background-color: #d9d9d9 !important;
   float: center;
   max-width: 1000px;
-  padding: 20px 20px 20px 20px;
+  padding: 20px 10px 20px 10px;
   margin: 10px 0 10px 0;
 }
 </style>
