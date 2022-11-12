@@ -159,29 +159,47 @@ export default {
     },
     UpdateLocation: function (num, event) {
       if (num == 1) {
+
+        this.region2_selected=null;
+        this.region3_selected=null;
+
         this.region2_options.splice(0);
+        this.region3_options.splice(0);
+
         for (var index in locationjson[event]) {
           console.log(index);
           this.region2_options.push(index);
         }
+
         this.region2_options.sort();
+
       } else {
+
+        this.region3_selected=null;
+
         this.region3_options.splice(0);
+
         for (index in locationjson[this.region1_selected][event]) {
           this.region3_options.push(
             locationjson[this.region1_selected][event][index]
           );
         }
+
         this.region3_options.sort();
       }
     },
     UpdateCategory: function (event) {
+
+      this.category2_selected=null;
+
       this.category2_options.splice(0);
+
       // var newEvent = event.replaceAll('/','-');
-      for (var cat_index in categoryjson[event.replaceAll('/','-')]) {
-        this.category2_options.push(categoryjson[this.category1_selected.replaceAll('/','-')][cat_index].replaceAll('-','/'));
+      for (var cat_index in categoryjson[event]) {
+        this.category2_options.push(categoryjson[this.category1_selected][cat_index]);
       }
-      this.category2_options.sort();
+
+      // this.category2_options.sort();
     },
   },
   created() {
@@ -189,8 +207,9 @@ export default {
       this.region1_options.push(index_location);
     }
     this.region1_options.sort();
+    
     for (var index_category in categoryjson) {
-      this.category1_options.push(index_category.replaceAll('-','/'));
+      this.category1_options.push(index_category);
     }
     this.category1_options.sort();
   },

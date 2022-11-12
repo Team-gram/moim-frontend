@@ -26,12 +26,12 @@
                       ]"
                     >
                       <img
-                        :src="require(`@/assets/category-icon/${category}.png`)"
+                        :src="require(`@/assets/category-icon/${category.replaceAll('/','-')}.png`)"
                         id="category-icon"
                         style="width: 50px"
                       />
                       <div id="category-text">
-                        {{ category.replaceAll("-", "/") }}
+                        {{ category }}
                       </div>
                     </div>
                   </b-col>
