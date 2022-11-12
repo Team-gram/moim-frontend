@@ -1,40 +1,42 @@
 <template>
-<div id="searchBox">
-        <b-row align-h="between">
-          <b-col>
-            <b-form-input
-              id="searchInput"
-              type="text"
-              v-model="searchKeyword"
-              placeholder="검색어를 입력하세요."
-              @keyup.enter="Submit()"
-            ></b-form-input>
-          </b-col>
-          <b-col cols="auto">
-            <b-img
-              @click="Submit()"
-              id="search-button"
-              :src="require('@/assets/search.png')"
-            ></b-img>
-          </b-col>
-        </b-row>
-      </div>
+  <div id="searchBox">
+    <b-row align-h="between">
+      <b-col>
+        <b-form-input
+          id="searchInput"
+          type="text"
+          v-model="searchKeyword"
+          placeholder="검색어를 입력하세요."
+          @keyup.enter="Submit()"
+        ></b-form-input>
+      </b-col>
+      <b-col cols="auto">
+        <b-img
+          @click="Submit()"
+          id="search-button"
+          :src="require('@/assets/search.png')"
+        ></b-img>
+      </b-col>
+    </b-row>
+  </div>
 </template>
 
 <script>
 export default {
-  data(){
+  data() {
     return {
-      searchKeyword: '',
-    }
+      searchKeyword: "",
+    };
   },
   methods: {
-   Submit: function (){
-      console.log(this.searchKeyword)
+    Submit: function () {
+      if(this.searchKeyword.split(' ').join('') !== "") {
+        this.$emit("searchKeyword", this.searchKeyword);
+      }
+      // console.log(this.searchKeyword);
     },
   },
-
-}
+};
 </script>
 <style>
 #searchBox {

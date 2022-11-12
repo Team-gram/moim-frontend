@@ -1,45 +1,52 @@
-
 <template>
   <div
     align="center"
     style="margin-top: 20px; margin-left: 20px; margin-right: 20px"
   >
-  <h4 style="margin-top: 20px; margin-bottom: 40px"><b>어떤 모임을 찾고 있나요?</b></h4>
-  <searchbar></searchbar>
-      <b-row>
-          <b-col>
-            <b-card id="category" style="max-width: 900px">
-              <b-container>
-                <b-row>
-                  <b-col
-                    v-for="category in category_list"
-                    :key="category"
-                    cols="auto"
-                    id="button"
-                  >
-                    <div
-                      id="category-button"
-                      :style="[
-                        selected_category_list.includes(category)
-                          ? { backgroundColor: '#9b9b9b' }
-                          : { backgroundColor: '#d9d9d9' },
-                      ]"
-                    >
-                      <img
-                        :src="require(`@/assets/category-icon/${category.replaceAll('/','-')}.png`)"
-                        id="category-icon"
-                        style="width: 50px"
-                      />
-                      <div id="category-text">
-                        {{ category }}
-                      </div>
-                    </div>
-                  </b-col>
-                </b-row>
-              </b-container>
-            </b-card>
-          </b-col>
-        </b-row>
+    <h4 style="margin-top: 20px; margin-bottom: 40px">
+      <b>어떤 모임을 찾고 있나요?</b>
+    </h4>
+    <searchbar v-on:searchKeyword="searchKeyword"></searchbar>
+    <b-row>
+      <b-col>
+        <b-card id="category" style="max-width: 900px">
+          <b-container>
+            <b-row>
+              <b-col
+                v-for="category in category_list"
+                :key="category"
+                cols="auto"
+                id="button"
+              >
+                <div
+                  id="category-button"
+                  :style="[
+                    selected_category_list.includes(category)
+                      ? { backgroundColor: '#9b9b9b' }
+                      : { backgroundColor: '#d9d9d9' },
+                  ]"
+                  @click="searchCategory(category)"
+                >
+                  <img
+                    :src="
+                      require(`@/assets/category-icon/${category.replaceAll(
+                        '/',
+                        '-'
+                      )}.png`)
+                    "
+                    id="category-icon"
+                    style="width: 50px"
+                  />
+                  <div id="category-text">
+                    {{ category }}
+                  </div>
+                </div>
+              </b-col>
+            </b-row>
+          </b-container>
+        </b-card>
+      </b-col>
+    </b-row>
   </div>
 </template>
 
@@ -47,12 +54,12 @@
 import searchbar from "@/components/Search/SearchBar";
 import categoryjson from "@/data/카테고리.json";
 export default {
-  name: 'MainHome',
+  name: "MainHome",
   components: {
     searchbar,
   },
-  data(){
-    return{
+  data() {
+    return {
       category_list: [],
       selected_category_list: [],
     };
@@ -64,15 +71,29 @@ export default {
         this.category_list.push(index);
       }
     },
+    searchKeyword: function (Data) {
+      console.log(Data);
+      this.$router.push({
+        name: "MoimSearchList",
+        query: { type: "keyword", data: Data },
+      });
+    },
+    searchCategory: function (Data) {
+      console.log(Data);
+      this.$router.push({
+        name: "MoimSearchList",
+        query: { type: "category", data: Data },
+      });
+    }
   },
   created() {
     this.SetCategory();
-  }
-}
+  },
+};
 </script>
 
 <style>
-#category{
+#category {
   border: none;
 }
 #category-button {

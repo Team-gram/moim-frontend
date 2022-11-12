@@ -147,6 +147,7 @@ export default {
     },
   },
   created() {
+    this.categoryName=this.$route.query.data;
     for (var index_location in locationjson) {
       this.region1_options.push(index_location);
     }

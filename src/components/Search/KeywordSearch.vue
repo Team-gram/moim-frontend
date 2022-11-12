@@ -4,7 +4,7 @@
     style="margin-top: 20px; margin-left: 20px; margin-right: 20px"
   >
     <h4 id="keyword-name">'{{this.oldSearchKeyword}}'에 대한 검색 결과</h4>
-    <searchbar></searchbar>
+    <searchbar v-on:searchKeyword="searchKeyword"></searchbar>
     <div
       style="float: center; max-width: 1000px; height: 30px"
       v-if="showFilter == false"
@@ -154,6 +154,12 @@ export default {
       // 입력값에 대한 검색 결과 요청
       }
     },
+    searchKeyword: function (Data) {
+      this.$router.push({
+        name: "MoimSearchList",
+        query: { type: "keyword", data: Data },
+      });
+    },
     turnOnOffFileter: function () {
       this.showFilter = !this.showFilter;
     },
@@ -203,11 +209,12 @@ export default {
     },
   },
   created() {
+    this.oldSearchKeyword=this.$route.query.data;
     for (var index_location in locationjson) {
       this.region1_options.push(index_location);
     }
     this.region1_options.sort();
-    
+
     for (var index_category in categoryjson) {
       this.category1_options.push(index_category);
     }
