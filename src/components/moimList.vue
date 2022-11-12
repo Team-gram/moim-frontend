@@ -4,7 +4,7 @@
     style="margin-top: 10px; margin-left: 20px; margin-right: 20px"
   >
     <div id="listBox">
-      <div id="listItem" v-for="moimItem in moimList" :key="moimItem">
+      <div id="listItem" v-for="moimItem in moimList" :key="moimItem.name">
         <b-row align-v="center">
           <b-col cols="auto">
             <b-img

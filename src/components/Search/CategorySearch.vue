@@ -3,7 +3,7 @@
     align="center"
     style="margin-top: 20px; margin-left: 20px; margin-right: 20px"
   >
-    <h4 id="category-name">{{ this.categoryName.replaceAll('-','/') }}</h4>
+    <h4 id="category-name">{{ this.categoryName }}</h4>
     <div id="optionBox">
       <b-row>
         <b-col
@@ -108,7 +108,7 @@ export default {
   data() {
     return {
       searchKeyword:"",
-      categoryName: "아웃도어-여행",
+      categoryName: "아웃도어/여행",
       subCategoryList: [],
       region1_selected: null,
       region2_selected: null,
@@ -125,13 +125,17 @@ export default {
     },
     UpdateLocation: function (num, event) {
       if (num == 1) {
+        this.region2_selected=null;
+        this.region3_selected=null;
         this.region2_options.splice(0);
+        this.region3_options.splice(0);
         for (var index in locationjson[event]) {
           console.log(index);
           this.region2_options.push(index);
         }
         this.region2_options.sort();
       } else {
+        this.region3_selected=null;
         this.region3_options.splice(0);
         for (index in locationjson[this.region1_selected][event]) {
           this.region3_options.push(
@@ -149,9 +153,9 @@ export default {
     this.region1_options.sort();
 
     for (var cat_index in categoryjson[this.categoryName]) {
-        this.subCategoryList.push(categoryjson[this.categoryName][cat_index].replaceAll('-','/'));
+        this.subCategoryList.push(categoryjson[this.categoryName][cat_index]);
       }
-      this.subCategoryList.sort();
+      // this.subCategoryList.sort();
   }
 };
 </script>
