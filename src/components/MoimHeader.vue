@@ -16,7 +16,7 @@
               class="ml-auto login-button"
               @click="$bvModal.show('bv-modal-example')"
               style="float: right; margin-right: 10px"
-              >로그인
+              >{{userID}}
             </b-button>
           </b-col>
           <div class="w-100"></div>
@@ -49,11 +49,13 @@
 </template>
 
 <script>
+import EventBus from '@/event'
 export default {
   data() {
     return {
       width: 0,
       height: 0,
+      userID: "로그인",
     };
   },
   methods: {
@@ -71,6 +73,10 @@ export default {
   created() {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
+    EventBus.$on('username', (res)=>{
+      this.userID = res + "님";
+      console.log("이벤트 작동");
+    });
   },
   mounted() {
     window.addEventListener("resize", this.handleResize);
@@ -79,8 +85,8 @@ export default {
     window.removeEventListener("resize", this.handleResize);
   },
 };
-</script>
 
+</script>
 <style scoped>
 .navbar.navbar-dark.bg-dark {
   background-color: #b6d884 !important;
