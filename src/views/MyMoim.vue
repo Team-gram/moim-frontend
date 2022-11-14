@@ -1,50 +1,59 @@
  <template>
+ <div
+    align="center"
+    style="margin-top: 10px; margin-left: 20px; margin-right: 20px"
+  >
   <div id="listbackground">
-    <div id="listBox" v-for="day in dayindex" :key="day">
-      <b-row id="listTitle" align-v="center" align-h="between">
+    <b-row id="MymoimTitle">내 모임
+      <b-col id="plus">
+        <b-img style="width:40px;height:36px; border-radius: 45%;" :src="require('@/assets/plus.png')"></b-img>
+      </b-col>
+    </b-row>
+    <div id="listBox" v-for="list in moimlist" :key="list">
+      <b-row id="listTitle" align-v="center" align-h="between"> 
         <b-col cols="auto" style="padding: 0 0 0 15px">
-          <div id="listTitle" >{{ day }}</div>
-        </b-col>
-        <b-col cols="auto">
-          <div id="listnodata" v-if="calendardata[day] === 'NULL'">
-            등록된 정기 일정이 없습니다.
-          </div>
-          <div v-else id="listdata" v-for="(item,index)  in calendardata[day]" :key="index">
-            {{item.time}} | {{item.data}}
-          </div>
+          <div style="font-size:18px">{{ list["모임이름"] }}</div>
+          <div id="moiminfo">{{ list["모임정보"] }}</div>
         </b-col>
       </b-row>
     </div>
   </div>
+ </div>
 </template>
 
 <script>
-import calendar from "@/data/캘린더.json"
+import calendar from "@/data/내모임.json"
 export default {
   data() {
     return {
-      calendardata : calendar["221002"],
-      dayindex : ["월","화","수","목","금","토","일"],
-      isRegular: true,
+      moimlist:calendar["내모임"],
     };
   },
   methods:{
-    regular(){
-      this.isRegular = true;
-    },
-    irregular(){
-      this.isRegular = false;
-    }
   }
 }
 </script>
 
 <style>
+#MymoimTitle{
+  text-align: left;
+  font-weight: bold !important;
+  font-size: 25px;
+  padding: 0px 0px 15px 0px;
+  align-items: center;
+}
+#moiminfo{
+  font-size: 15px;
+}
+#plus{
+  padding: 0px 0px 0px 10px;
+}
 #listbackground{
   background-color: #f3f3f3 !important;
   border-radius: 20px !important; 
-  padding: 10px 20px 10px 20px;
+  padding: 20px 30px 10px 30px;
   margin: 10px 0 10px 0;
+  max-width: 1050px;
 }
 #listTitle {
   text-align: left;

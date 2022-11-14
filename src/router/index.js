@@ -8,6 +8,7 @@ import MainHome from "@/views/mainhome"
 import MoimSearchList from '@/views/moimSearchList'
 import UserSetting from '@/views/userSetting'
 import MoimCalendar from '@/views/MoimCalendar'
+import MyMoim from '@/views/MyMoim'
 Vue.use(VueRouter);
 
 const routes = 
@@ -46,6 +47,11 @@ const routes =
     path:"/calendar",
     name: 'MoimCalendar',
     component: MoimCalendar
+  },
+  {
+    path:"/mymoim",
+    name: 'MyMoim',
+    component: MyMoim
   }
 ]
 
