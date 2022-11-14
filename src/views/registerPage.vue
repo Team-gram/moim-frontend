@@ -317,13 +317,13 @@ export default {
       } else {
         if (this.selected_category_list.length < 5) {
           this.selected_category_list.push(category);
+          console.log(category)
         }
       }
-
-      console.log(this.selected_category_list);
     },
     clickCompleteButton: function () {
       var text = "";
+      let data = new Object();
       if (this.nickname.split(' ').join('') == "") {
         text += "'닉네임'";
       }
@@ -366,9 +366,32 @@ export default {
           autoHideDelay: 3000,
         });
       } else {
+        data.id = this.$store.kakaouserinfo.id;
+        data.name = this.nickname;
+        data.profileImage = this.$store.kakaouserinfo.properties.profile_image;
+        data.sido = this.region1_selected;
+        data.sigungu = this.region2_selected;
+        data.dong = this.region3_selected;
+        if(this.$store.kakaouserinfo.kakao_account.has_gender)
+          data.gender = this.$store.kakaouserinfo.gender;
+        else
+          data.gender = "";
+        data.birthday = this.year_selected + "-" + this.month_selected + "-" + this.day_selected;
+        data.categories = this.selected_category_list;
+        console.log(data);
+        this.RegisterCall(data);
         this.$router.replace("/");
       }
     },
+    async RegisterCall(data){
+        let res = ''
+        await this.axios.post('/join',data)
+        .then(result=>{
+          res = result;
+        })
+        return res;
+
+    }
   },
   created() {
     this.selected_category_list = [];

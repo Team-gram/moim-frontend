@@ -84,10 +84,25 @@ export default {
         name: "MoimSearchList",
         query: { type: "category", data: Data },
       });
+    },
+    async Userinfo(id){
+      let data = ''
+      await this.axios.get('/user',{params: {"id" : id}})
+          .then(response=>{
+            data = response;
+          })
+      return data;
     }
   },
   created() {
+    // 파라미터
     this.SetCategory();
+    if(this.$route.query.id)
+    {
+      const userdata = this.Userinfo(this.$route.query.id);
+      if(userdata.vaild==0)
+        this.$router.replace('/register');
+    }
   },
 };
 </script>
