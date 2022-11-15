@@ -9,7 +9,7 @@
         <b-img style="width:40px;height:36px; border-radius: 45%;" :src="require('@/assets/plus.png')"></b-img>
       </b-col>
     </b-row>
-    <div v-for="(list,index) in moimlist" :key="index">
+    <div v-for="(list,index) in moimlist" :key="index" @click="callMoim(index)">
       <div id="listBox" v-show="index<mylist+4 && index>=mylist">
         <b-row id="listTitle" align-v="center">
           <b-col cols="auto" style="padding: 0 0 0 15px">
@@ -52,6 +52,9 @@ export default {
       if(this.mylist+4<this.maxmylist)
         this.mylist+=4;
     },
+    callMoim(index){
+      console.log(this.moimlist[index]["moimid"]);
+    }
   }
 }
 </script>

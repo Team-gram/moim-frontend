@@ -1,80 +1,85 @@
  <template>
- <div
-    align="center"
-    style="margin-top: 10px; margin-left: 20px; margin-right: 20px"
-  >
-  <div id="listbackground">
-    <b-row id="MymoimTitle">내 모임
-      <b-col id="plus" >
-        <b-img style="width:40px;height:36px; border-radius: 45%;" :src="require('@/assets/plus.png')"></b-img>
-      </b-col>
-    </b-row>
-    <div v-for="(list,index) in moimlist" :key="index">
-      <div id="listBox" v-show="index<mylist+4 && index>=mylist">
-        <b-row id="listTitle" align-v="center" @click="redirectmymoim(index)">
-          <b-col cols="auto" style="padding: 0 0 0 15px">
-            <b-img style="width:40px;height:36px; border-radius: 45%;" :src="require('@/assets/test.jpg')"></b-img>
-          </b-col>
-          <b-col cols="auto" style="padding: 0 0 0 15px">
-            <div style="font-size:18px">{{ list["모임이름"] }}</div>
-            <div id="moiminfo">{{ list["모임정보"] }}</div>
-          </b-col>
-        </b-row>
-      </div>
+ <div>
+    <b-img center valign="absmiddle" id="Introimg" :src="require(`@/assets/test.jpg`)"></b-img>
+    <b-button class="overlay" pill variant="light" id="button">가입하기</b-button>
+  <div
+      align="center"
+      style="margin-top: 10px; margin-left: 20px; margin-right: 20px"
+    >
+    <div id="listbackground">
+      <div id="title">기본 정보</div>
+      <b-row class="mb-3" id="menu">
+        <b-col id="subtitle">카테고리</b-col>
+        <div class="w-100" ></div>
+        <b-col id="categorytext">{{category_data1}} > {{category_data2}}</b-col>
+      </b-row>
+      <b-row class="mb-3" id="menu">
+        <b-col id="subtitle">활동지역</b-col>
+        <div class="w-100" ></div>
+        <b-col id="categorytext">{{region}}</b-col>
+      </b-row>
+      <b-row class="mb-3" id="menu">
+        <b-col id="subtitle">정기 모임</b-col>
+        <div class="w-100" ></div>
+        <b-col id="categorytext">{{regular}}</b-col>
+      </b-row>
+      <b-row class="mb-3" id="menu">
+        <b-col id="subtitle">정원 및 가입자 수</b-col>
+        <div class="w-100" ></div>
+        <b-col id="categorytext">{{maximum}}, {{register}}</b-col>
+      </b-row>
     </div>
-    <b-row id="Mymoimselect">
-      <b-button @click="prevlist()">◀</b-button>
-      <b-button @click="nextlist()">▶</b-button>
-      <div>{{(mylist+4)/4}}</div>
-      <div>/</div>
-      <div>{{parseInt(maxmylist/4)+1}}</div>
-    </b-row>
+    <div id="listbackground">
+      <div id="title">소개글</div>
+      <div>{{introduction}}</div>
+    </div>
+    <div id="listbackground">
+      <div id="title">분석 리스트</div>
+    </div>
   </div>
  </div>
 </template>
 
 <script>
-import calendar from "@/data/내모임.json"
 export default {
   data() {
     return {
-      moimlist:calendar["내모임"],
-      mylist:0,
-      maxmylist:calendar["count"],
+      category_data1:"아웃도어/여행",
+      category_data2:"등산",
+      region: "경기도 수원시 영통구 우만동",
+      regular: "등록된 정기 모임이 없습니다.",
+      maximum: "정원: 30명",
+      register: "가입자 수:10명",
+      introduction: "우리 모임은 1970년 영국에서 만들어진",
     };
   },
   methods:{
-    prevlist(){
-      if(this.mylist>=4)
-        this.mylist -=4;
-    },
-    nextlist(){
-      if(this.mylist+4<this.maxmylist)
-        this.mylist+=4;
-    },
-    redirectmymoim(index){
-        console.log(this.moimlist[index]["moimid"]);
-    }
+    
   }
 }
 </script>
-
 <style>
-#MymoimTitle{
-  text-align: left;
-  font-weight: bold !important;
-  font-size: 25px;
-  padding: 0px 0px 15px 0px;
-  align-items: center;
+#Introimg{
+  width:100%;
 }
-#moiminfo{
+#button{
+  padding: 2px 5px 2px 5px;
+}
+#title{
+  font-size: 22px;
+}
+#subtitle{
+  font-size: 17px;
+}
+#menu{
+  margin: 0 10px 0 10px;
+}
+#categorytext{
+  background-color: white !important;
+  border-radius: 20px !important;
   font-size: 15px;
-}
-#plus{
-  padding: 0px 0px 0px 10px;
-}
-#Mymoimselect{
-  align-items: left;
+  max-width: 45em;
+  padding: 5px 0 5px 0;
 }
 #listbackground{
   background-color: #f3f3f3 !important;
@@ -82,35 +87,5 @@ export default {
   padding: 20px 30px 30px 30px;
   margin: 10px 0 10px 0;
   max-width: 1050px;
-}
-#listTitle {
-  text-align: left;
-  font-weight: bold !important;
-  font-size: 20px;
-  padding: 0px 0px 0px 5px;
-}
-#listnodata{
-  font-size: 14px;
-  margin: auto;
-  margin: 10px 10px 10px 0px;
-  padding: 3px 0px 3px 5px;
-}
-#listdata {
-  font-size: 14px;
-  width:14em;
-  margin-left: 30px;
-  background-color: #f3f3f3;
-  margin: 10px 10px 10px 0px;
-  border-radius: 10px !important;
-  padding: 3px 0px 3px 5px;
-}
-#listBox {
-  border-radius: 10px !important;
-  border: 0px solid;
-  background-color: #d9d9d9 !important;
-  float: center;
-  max-width: 1000px;
-  padding: 20px 10px 20px 10px;
-  margin: 10px 0 10px 0;
 }
 </style>
