@@ -86,19 +86,6 @@
       ></b-form-radio-group>
     </b-col>
   </b-row>
-  <b-row class="mb-3">
-    <b-col id="subtitle">한 줄 소개</b-col>
-    <div class="w-100"></div>
-    <b-col>
-      <b-form-textarea
-        id="form-input"
-        v-model="simpleIntro"
-        placeholder="간단한 자기소개를 입력하세요"
-        rows="1"
-        max-rows="1"
-      ></b-form-textarea
-    ></b-col>
-  </b-row>
  <b-row class="mb-3">
     <b-col id="subtitle">장문 소개</b-col>
     <div class="w-100"></div>
@@ -183,7 +170,6 @@ export default {
         { item: "Y", name: "네" },
         { item: "N", name: "아니요" },
       ],
-      simpleIntro: "",
       Intro: "",
       region1_selected: null,
       region2_selected: null,
