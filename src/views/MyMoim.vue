@@ -5,21 +5,30 @@
   >
   <div id="listbackground">
     <b-row id="MymoimTitle">내 모임
-      <b-col id="plus">
+      <b-col id="plus" >
         <b-img style="width:40px;height:36px; border-radius: 45%;" :src="require('@/assets/plus.png')"></b-img>
       </b-col>
     </b-row>
-    <div id="listBox" v-for="list in moimlist" :key="list">
-      <b-row id="listTitle" align-v="center">
-        <b-col cols="auto" style="padding: 0 0 0 15px">
-          <b-img style="width:40px;height:36px; border-radius: 45%;" :src="require('@/assets/test.jpg')"></b-img>
-        </b-col>
-        <b-col cols="auto" style="padding: 0 0 0 15px">
-          <div style="font-size:18px">{{ list["모임이름"] }}</div>
-          <div id="moiminfo">{{ list["모임정보"] }}</div>
-        </b-col>
-      </b-row>
+    <div v-for="(list,index) in moimlist" :key="index">
+      <div id="listBox" v-show="index<mylist+4 && index>=mylist">
+        <b-row id="listTitle" align-v="center">
+          <b-col cols="auto" style="padding: 0 0 0 15px">
+            <b-img style="width:40px;height:36px; border-radius: 45%;" :src="require('@/assets/test.jpg')"></b-img>
+          </b-col>
+          <b-col cols="auto" style="padding: 0 0 0 15px">
+            <div style="font-size:18px">{{ list["모임이름"] }}</div>
+            <div id="moiminfo">{{ list["모임정보"] }}</div>
+          </b-col>
+        </b-row>
+      </div>
     </div>
+    <b-row id="Mymoimselect">
+      <b-button @click="prevlist()">◀</b-button>
+      <b-button @click="nextlist()">▶</b-button>
+      <div>{{(mylist+4)/4}}</div>
+      <div>/</div>
+      <div>{{parseInt(maxmylist/4)+1}}</div>
+    </b-row>
   </div>
  </div>
 </template>
@@ -30,9 +39,19 @@ export default {
   data() {
     return {
       moimlist:calendar["내모임"],
+      mylist:0,
+      maxmylist:calendar["count"],
     };
   },
   methods:{
+    prevlist(){
+      if(this.mylist>=4)
+        this.mylist -=4;
+    },
+    nextlist(){
+      if(this.mylist+4<this.maxmylist)
+        this.mylist+=4;
+    },
   }
 }
 </script>
@@ -50,6 +69,9 @@ export default {
 }
 #plus{
   padding: 0px 0px 0px 10px;
+}
+#Mymoimselect{
+  align-items: left;
 }
 #listbackground{
   background-color: #f3f3f3 !important;
