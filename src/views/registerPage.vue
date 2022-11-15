@@ -151,18 +151,27 @@
         </b-row>
 
         <b-row>
-          <b-col id="subtitle"
+          <b-col id="subtitle" cols="auto"
             >관심 카테고리<a id="subdescription">(최대 5개 선택 가능)</a></b-col
           >
+          <b-col cols="auto">
+            <b-button @click="AddSelectedCategory">추가</b-button>
+          </b-col>
         </b-row>
-        <b-row class="mb-2">
+        <b-row
+          class="mb-2"
+          v-for="(item, index) in selected_category"
+          :key="item.childCategory"
+        >
           <b-col cols="auto" style="margin: 0px 5px 5px 0">
             <b-form-select
               id="form-input"
-              v-model="category1_selected"
-              :options="category1_options"
-              v-on:change="UpdateCategory($event)"
+              v-model="item.parentCategory"
+              :options="parentCategory_options"
+              v-on:change="SetChildCategory($event, index)"
               style="width: 200px; text-align: center"
+              value-field="categoryId"
+              text-field="categoryName"
             >
               <template #first>
                 <b-form-select-option :value="null" disabled
@@ -174,9 +183,11 @@
           <b-col cols="auto" style="margin: 0px 5px 5px 0">
             <b-form-select
               id="form-input"
-              v-model="category2_selected"
-              :options="category2_options"
+              v-model="item.childCategory"
+              :options="item.childCategory_options"
               style="width: 200px; text-align: center"
+              value-field="categoryId"
+              text-field="categoryName"
             >
               <template #first>
                 <b-form-select-option :value="null" disabled
@@ -185,13 +196,18 @@
               </template>
             </b-form-select>
           </b-col>
-          <b-col>
-            <b-button>추가</b-button>
+          <b-col cols="auto">
+            <b-button @click="DeleteSelectedCategory(index)">삭제</b-button>
           </b-col>
         </b-row>
 
         <b-row class="mb-3">
-          <b-col id="subtitle">정보공개여부<a id="subdescription">(다른 사용자에게 나의 정보(일정 등)를 공개하는 것에 동의합니다.)</a></b-col>
+          <b-col id="subtitle"
+            >정보공개여부<a id="subdescription"
+              >(다른 사용자에게 나의 정보(일정 등)를 공개하는 것에
+              동의합니다.)</a
+            ></b-col
+          >
           <div class="w-100"></div>
           <b-col>
             <b-form-radio-group
@@ -221,7 +237,8 @@
 
 <script>
 import locationjson from "@/data/법정동.json";
-import categoryjson from "@/data/카테고리.json";
+import { getAllParentCategory, getChildCategory } from "@/services/category.js";
+// import { registerUser } from "@/services/register.js";
 
 export default {
   data() {
@@ -250,21 +267,11 @@ export default {
       region1_options: [],
       region2_options: [],
       region3_options: [],
-      category_list: [],
-      selected_category_list: [],
-      category1_selected: null,
-      category2_selected: null,
-      category1_options: [],
-      category2_options: [],
+      parentCategory_options: [],
+      selected_category: [],
     };
   },
   methods: {
-    SetCategory: function () {
-      this.category_list.splice(0);
-      for (var index in categoryjson) {
-        this.category1_options.push(index);
-      }
-    },
     UpdateLocation: function (num, event) {
       if (num == 1) {
         this.region2_options.splice(0);
@@ -282,35 +289,11 @@ export default {
         this.region3_options.sort();
       }
     },
-    UpdateCategory: function (event) {
-      this.category2_options.splice(0);
-      for (var index in categoryjson[event]) {
-        this.category2_options.push(categoryjson[this.category1_selected][index]);
-      }
-    },
-    addSelectedCategory: function (category) {
-      if (this.selected_category_list.includes(category)) {
-        this.selected_category_list = this.selected_category_list.filter(
-          (element) => element !== category
-        );
-      } else {
-        if (this.selected_category_list.length < 5) {
-          this.selected_category_list.push(category);
-        }
-      }
 
-      console.log(this.selected_category_list);
-    },
-    clickCompleteButton: function () {
+    async clickCompleteButton() {
       var text = "";
       if (this.nickname.split(" ").join("") == "") {
         text += "'닉네임'";
-      }
-      if (this.number1 == null || this.number2 == "" || this.number3 == "") {
-        if (text !== "") {
-          text += ", ";
-        }
-        text += "'전화번호'";
       }
       if (
         this.year_selected == null ||
@@ -341,12 +324,70 @@ export default {
           autoHideDelay: 3000,
         });
       } else {
-        this.$router.replace("/");
+        var birthday = this.year_selected.toString()+'-'+this.month_selected.toString().padStart(2,'0')+'-'+this.day_selected.toString().padStart(2,'0');
+        var categories = [];
+        for(var i = 0 ; i <this.selected_category.length; i++) {
+          if(this.selected_category[i].childCategory != null) {
+            categories.push(this.selected_category[i].childCategory);
+          }
+        }
+        console.log(birthday);
+        console.log(categories);
+        // let joinUser = await registerUser(
+        //   "id",
+        //   this.nickname,
+        //   this.region1_selected,
+        //   this.region2_selected,
+        //   this.region3_selected,
+        //   this.gender_selected,
+        //   birthday,
+        //   this.selfIntro,
+        //   this.data_selected,
+        //   categories
+        // );
+        // if(joinUser.status === 200) {
+        //   this.$router.replace("/");
+        // }
+      }
+    },
+    async SetParentCategory() {
+      this.parentCategory_options = [];
+      let parentCategory = await getAllParentCategory();
+      if (parentCategory.status === 200) {
+        this.parentCategory_options = parentCategory.data;
+      }
+      console.log(this.parentCategory_options);
+    },
+    async SetChildCategory(parentId, index) {
+      this.selected_category[index].childCategory = null;
+
+      let childCategory = await getChildCategory(parentId);
+      if (childCategory.status === 200) {
+        this.selected_category[index].childCategory_options =
+          childCategory.data;
+      }
+      console.log(this.selected_category[index].childCategory_options);
+      console.log(this.selected_category);
+    },
+    AddSelectedCategory: function () {
+      console.log("hello");
+      if (this.selected_category.length < 5) {
+        this.selected_category.push({
+          parentCategory: null,
+          childCategory: null,
+          childCategory_options: null,
+        });
+      }
+      console.log(this.selected_category);
+    },
+    DeleteSelectedCategory: function (index) {
+      if (this.selected_category.length > 1) {
+        this.selected_category.splice(index, 1);
       }
     },
   },
   created() {
-    this.selected_category_list = [];
+    // this.childCategory_options = [];
 
     for (var year = 1900; year <= 2022; year++) {
       this.year_options.push(year);
@@ -361,7 +402,12 @@ export default {
       this.region1_options.push(index);
     }
     this.region1_options.sort();
-    this.SetCategory();
+    this.SetParentCategory();
+    this.selected_category.push({
+      parentCategory: null,
+      childCategory: null,
+      childCategory_options: null,
+    });
   },
   computed: {},
 };
