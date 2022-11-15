@@ -9,13 +9,15 @@
         <b-img style="width:40px;height:36px; border-radius: 45%;" :src="require('@/assets/plus.png')"></b-img>
       </b-col>
     </b-row>
-    <div id="listBox" v-for="list in moimlist" :key="list">
-      <b-row id="listTitle" align-v="center" align-h="between"> 
-        <b-col cols="auto" style="padding: 0 0 0 15px">
-          <div style="font-size:18px">{{ list["모임이름"] }}</div>
-          <div id="moiminfo">{{ list["모임정보"] }}</div>
-        </b-col>
-      </b-row>
+    <div v-for="(list,index) in moimlist" :key="list">
+      <div id="listBox" v-if="index<4">
+        <b-row id="listTitle" align-v="center" align-h="between"> 
+          <b-col cols="auto" style="padding: 0 0 0 15px">
+            <div style="font-size:18px">{{ list["모임이름"] }}</div>
+            <div id="moiminfo">{{ list["모임정보"] }}</div>
+          </b-col>
+        </b-row>
+      </div>
     </div>
   </div>
  </div>
@@ -27,9 +29,13 @@ export default {
   data() {
     return {
       moimlist:calendar["내모임"],
+      maxlist:4,
     };
   },
   methods:{
+    nextlist(){
+      this.maxlist +=4;
+    }
   }
 }
 </script>
