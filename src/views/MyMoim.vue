@@ -21,24 +21,6 @@
       </b-row>
     </div>
   </div>
-  <div id="listbackground">
-    <b-row id="MymoimTitle">맞춤 추천 모임
-      <b-col id="plus">
-        <b-img style="width:40px;height:36px; border-radius: 45%;" :src="require('@/assets/plus.png')"></b-img>
-      </b-col>
-    </b-row>
-    <div id="listBox" v-for="list in moimlist" :key="list">
-      <b-row id="listTitle" align-v="center">
-        <b-col cols="auto" style="padding: 0 0 0 15px">
-          <b-img style="width:40px;height:36px; border-radius: 45%;" :src="require('@/assets/test.jpg')"></b-img>
-        </b-col>
-        <b-col cols="auto" style="padding: 0 0 0 15px">
-          <div style="font-size:18px">{{ list["모임이름"] }}</div>
-          <div id="moiminfo">{{ list["모임정보"] }}</div>
-        </b-col>
-      </b-row>
-    </div>
-  </div>
  </div>
 </template>
 
