@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import calendar from "@/components/캘린더.json"
+import calendar from "@/data/캘린더.json"
 export default {
   data() {
     return {
