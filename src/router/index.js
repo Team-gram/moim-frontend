@@ -9,6 +9,7 @@ import MoimSearchList from '@/views/moimSearchList'
 import UserSetting from '@/views/userSetting'
 import MoimCalendar from '@/views/MoimCalendar'
 import MyMoim from '@/views/MyMoim'
+import MoimIntro from '@/views/moimIntro'
 Vue.use(VueRouter);
 
 const routes = 
@@ -52,6 +53,11 @@ const routes =
     path:"/mymoim",
     name: 'MyMoim',
     component: MyMoim
+  },
+  {
+    path:"/moimintro",
+    name: 'MoimIntro',
+    component: MoimIntro
   }
 ]
 
