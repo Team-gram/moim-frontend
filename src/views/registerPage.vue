@@ -289,10 +289,10 @@ export default {
         this.region3_options.sort();
       }
     },
-
     async clickCompleteButton() {
       var text = "";
-      if (this.nickname.split(" ").join("") == "") {
+      // let data = new Object();
+      if (this.nickname.split(' ').join('') == "") {
         text += "'닉네임'";
       }
       if (
@@ -334,8 +334,9 @@ export default {
         console.log(birthday);
         console.log(categories);
         // let joinUser = await registerUser(
-        //   "id",
+        //   this.$store.kakaouserinfo.id,
         //   this.nickname,
+        //   this.$store.kakaouserinfo.properties.profile_image,
         //   this.region1_selected,
         //   this.region2_selected,
         //   this.region3_selected,
@@ -348,6 +349,23 @@ export default {
         // if(joinUser.status === 200) {
         //   this.$router.replace("/");
         // }
+
+        //
+        // data.id = this.$store.kakaouserinfo.id;
+        // data.name = this.nickname;
+        // data.profileImage = this.$store.kakaouserinfo.properties.profile_image;
+        // data.sido = this.region1_selected;
+        // data.sigungu = this.region2_selected;
+        // data.dong = this.region3_selected;
+        // if(this.$store.kakaouserinfo.kakao_account.has_gender)
+        //   data.gender = this.$store.kakaouserinfo.gender;
+        // else
+        //   data.gender = "";
+        // data.birthday = this.year_selected + "-" + this.month_selected + "-" + this.day_selected;
+        // data.categories = this.selected_category_list;
+        // console.log(data);
+        // this.RegisterCall(data);
+        // this.$router.replace("/");
       }
     },
     async SetParentCategory() {
@@ -383,8 +401,18 @@ export default {
     DeleteSelectedCategory: function (index) {
       if (this.selected_category.length > 1) {
         this.selected_category.splice(index, 1);
+
       }
     },
+    async RegisterCall(data){
+        let res = ''
+        await this.axios.post('/join',data)
+        .then(result=>{
+          res = result;
+        })
+        return res;
+
+    }
   },
   created() {
     // this.childCategory_options = [];
@@ -408,6 +436,8 @@ export default {
       childCategory: null,
       childCategory_options: null,
     });
+    if(this.$store.kakaouserinfo.kakao_account.has_gender)
+          this.gender_selected = this.$store.kakaouserinfo.gender;
   },
   computed: {},
 };

@@ -23,7 +23,7 @@
           <b-col>
             <b-navbar-nav :fill="width <= 600">
               <b-nav-item href="/">홈</b-nav-item>
-              <b-nav-item href="#">MY모임</b-nav-item>
+              <b-nav-item href="/mymoim">MY모임</b-nav-item>
               <b-nav-item href="/calendar">일정관리</b-nav-item>
               <b-nav-item href="/setting">설정</b-nav-item>
             </b-navbar-nav>
@@ -49,7 +49,6 @@
 </template>
 
 <script>
-import EventBus from '@/event'
 export default {
   data() {
     return {
@@ -73,10 +72,6 @@ export default {
   created() {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
-    EventBus.$on('username', (res)=>{
-      this.userID = res + "님";
-      console.log("이벤트 작동");
-    });
   },
   mounted() {
     window.addEventListener("resize", this.handleResize);

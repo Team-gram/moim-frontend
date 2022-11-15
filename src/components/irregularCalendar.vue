@@ -2,10 +2,10 @@
 <template>
   <div id="listbackground">
     <b-row align-v="center">
-      <b-col v-on:click="onClickPrev(currentMonth)">◀</b-col>
+      <b-col  v-on:click="onClickPrev(currentMonth)" style="cursor:pointer">◀</b-col>
         <!-- <div>{{currentYear}}년</div> -->
         <div id="title">{{currentMonth}}월</div>
-      <b-col v-on:click="onClickNext(currentMonth)">▶</b-col>
+      <b-col  v-on:click="onClickNext(currentMonth)" style="cursor:pointer">▶</b-col>
     </b-row>
     <b-row>
       <b-col id="daytitle" v-for="(weekName, index) in weekNames" v-bind:key="index">

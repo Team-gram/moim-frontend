@@ -5,14 +5,14 @@
   >
   <div id ="selectcalendar">
     <b-row align-v="center" align-h="center">
-      <b-col cols="auto" style="padding: 5px 20px 5px 0" :class="{bold: isRegular}" @click="regular">정기 일정</b-col>
+      <b-col cols="auto" style="padding: 5px 20px 5px 0; cursor:pointer" :class="{bold: isRegular}" @click="regular">정기 일정</b-col>
       <b-col cols="auto" style="padding: 0 0 0 0">|</b-col>
-      <b-col cols="auto" style="padding: 0 0 0 20px" :class="{bold: !isRegular}" @click="irregular">비정기 일정</b-col>
+      <b-col cols="auto" style="padding: 0 0 0 20px; cursor:pointer" :class="{bold: !isRegular}" @click="irregular">비정기 일정</b-col>
     </b-row>
   </div>
   <regularCalendar :class="{display: !isRegular}"></regularCalendar>
   <irregularCalendar :class="{display: isRegular}"></irregularCalendar>
-  <b-button id="newbutton">새로운 일정 등록하기</b-button>
+  <b-button id="newbutton" v-on:click="newCalendar">새로운 일정 등록하기</b-button>
   </div>
 </template>
 <script>
@@ -34,6 +34,13 @@ export default {
     },
     irregular(){
       this.isRegular = false;
+    },
+    newCalendar(){
+      if(this.isRegular){
+        console.log(this.isRegular);
+      }else{
+        console.log(this.isRegular);
+      } 
     }
   }
 }
