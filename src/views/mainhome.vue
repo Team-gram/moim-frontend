@@ -88,6 +88,19 @@ export default {
   },
   created() {
     this.SetCategory();
+    let id = this.$route.query.id;
+        let jwt = this.$route.query.jwt;
+        console.log(id, jwt);
+
+        if (id !== undefined && jwt !== undefined) {
+            this.axios.get('/user/' + id)
+                .then((response) => {
+                    console.log(response.data);
+                    // response 데이터 스토어에 저장하는 로직 작성
+                });
+            //스토어에 저장 완료되면 메인이나 추가정보 입력창으로 리다이렉트 하면 됨
+            //window.location.href = '/';
+        }
   },
 };
 </script>
