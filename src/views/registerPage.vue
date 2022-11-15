@@ -21,46 +21,18 @@
         </b-row>
 
         <b-row class="mb-3">
-          <b-col id="subtitle">전화번호*</b-col>
+          <b-col id="subtitle">성별*</b-col>
           <div class="w-100"></div>
-          <b-col
-            cols="auto"
-            style="padding: 0 5px 0 15px; margin: 0px 5px 5px 0"
-          >
-            <b-form-select
-              id="form-input"
-              v-model="number1"
-              :options="number1_list"
-              style="width: 70px; text-align: center"
-            ></b-form-select>
-          </b-col>
-          <b-col cols="auto" style="padding: 8px 0px 0 0; margin: 0px 5px 5px 0"
-            >-</b-col
-          >
-          <b-col
-            cols="auto"
-            style="padding: 0 5px 0 5px; margin: 0px 5px 5px 0"
-          >
-            <b-form-input
-              id="form-input"
-              v-model="number2"
-              aria-describedby="input-live-feedback"
-              style="width: 70px; text-align: center"
-            ></b-form-input>
-          </b-col>
-          <b-col cols="auto" style="padding: 8px 0px 0 0; margin: 0px 5px 5px 0"
-            >-</b-col
-          >
-          <b-col
-            cols="auto"
-            style="padding: 0 5px 0 5px; margin: 0px 5px 5px 0"
-          >
-            <b-form-input
-              id="form-input"
-              v-model="number3"
-              aria-describedby="input-live-feedback"
-              style="width: 70px; text-align: center"
-            ></b-form-input>
+          <b-col>
+            <b-form-radio-group
+              v-model="gender_selected"
+              :options="gender_options"
+              class="mb-3"
+              value-field="item"
+              text-field="name"
+              disabled-field="notEnabled"
+              style="float: left"
+            ></b-form-radio-group>
           </b-col>
         </b-row>
 
@@ -183,39 +155,54 @@
             >관심 카테고리<a id="subdescription">(최대 5개 선택 가능)</a></b-col
           >
         </b-row>
-        <b-row>
+        <b-row class="mb-2">
+          <b-col cols="auto" style="margin: 0px 5px 5px 0">
+            <b-form-select
+              id="form-input"
+              v-model="category1_selected"
+              :options="category1_options"
+              v-on:change="UpdateCategory($event)"
+              style="width: 200px; text-align: center"
+            >
+              <template #first>
+                <b-form-select-option :value="null" disabled
+                  >대분류</b-form-select-option
+                >
+              </template>
+            </b-form-select>
+          </b-col>
+          <b-col cols="auto" style="margin: 0px 5px 5px 0">
+            <b-form-select
+              id="form-input"
+              v-model="category2_selected"
+              :options="category2_options"
+              style="width: 200px; text-align: center"
+            >
+              <template #first>
+                <b-form-select-option :value="null" disabled
+                  >소분류</b-form-select-option
+                >
+              </template>
+            </b-form-select>
+          </b-col>
           <b-col>
-            <b-card id="form-input" style="max-width: 900px;">
-              <b-container>
-                <b-row>
-                  <b-col
-                    v-for="category in category_list"
-                    :key="category"
-                    cols="auto"
-                    id="button"
-                    @click="addSelectedCategory(category)"
-                  >
-                    <div
-                      id="category-button"
-                      :style="[
-                        selected_category_list.includes(category)
-                          ? { backgroundColor: '#9b9b9b' }
-                          : { backgroundColor: '#d9d9d9' },
-                      ]"
-                    >
-                      <img
-                        :src="require(`@/assets/category-icon/${category.replaceAll('/', '-')}.png`)"
-                        id="category-icon"
-                        style="width: 50px"
-                      />
-                      <div id="category-text">
-                        {{ category }}
-                      </div>
-                    </div>
-                  </b-col>
-                </b-row>
-              </b-container>
-            </b-card>
+            <b-button>추가</b-button>
+          </b-col>
+        </b-row>
+
+        <b-row class="mb-3">
+          <b-col id="subtitle">정보공개여부<a id="subdescription">(다른 사용자에게 나의 정보(일정 등)를 공개하는 것에 동의합니다.)</a></b-col>
+          <div class="w-100"></div>
+          <b-col>
+            <b-form-radio-group
+              v-model="data_selected"
+              :options="data_options"
+              class="mb-3"
+              value-field="item"
+              text-field="name"
+              disabled-field="notEnabled"
+              style="float: left"
+            ></b-form-radio-group>
           </b-col>
         </b-row>
       </b-container>
@@ -241,34 +228,16 @@ export default {
     return {
       nickname: "",
       selfIntro: "",
-      number1: null,
-      number1_list: [
-        "02",
-        "031",
-        "032",
-        "033",
-        "041",
-        "042",
-        "043",
-        "044",
-        "051",
-        "052",
-        "053",
-        "054",
-        "055",
-        "061",
-        "062",
-        "063",
-        "064",
-        "010",
-        "011",
-        "016",
-        "017",
-        "018",
-        "019",
+      gender_selected: "M",
+      gender_options: [
+        { item: "M", name: "남" },
+        { item: "W", name: "여" },
       ],
-      number2: "",
-      number3: "",
+      data_selected: "Y",
+      data_options: [
+        { item: "Y", name: "네" },
+        { item: "N", name: "아니요" },
+      ],
       year_selected: null,
       month_selected: null,
       day_selected: null,
@@ -283,13 +252,17 @@ export default {
       region3_options: [],
       category_list: [],
       selected_category_list: [],
+      category1_selected: null,
+      category2_selected: null,
+      category1_options: [],
+      category2_options: [],
     };
   },
   methods: {
     SetCategory: function () {
       this.category_list.splice(0);
       for (var index in categoryjson) {
-        this.category_list.push(index);
+        this.category1_options.push(index);
       }
     },
     UpdateLocation: function (num, event) {
@@ -307,6 +280,12 @@ export default {
           );
         }
         this.region3_options.sort();
+      }
+    },
+    UpdateCategory: function (event) {
+      this.category2_options.splice(0);
+      for (var index in categoryjson[event]) {
+        this.category2_options.push(categoryjson[this.category1_selected][index]);
       }
     },
     addSelectedCategory: function (category) {
@@ -327,11 +306,7 @@ export default {
       if (this.nickname.split(' ').join('') == "") {
         text += "'닉네임'";
       }
-      if (
-        this.number1 == null ||
-        this.number2 == "" ||
-        this.number3 == ""
-      ) {
+      if (this.number1 == null || this.number2 == "" || this.number3 == "") {
         if (text !== "") {
           text += ", ";
         }
