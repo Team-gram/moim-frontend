@@ -436,8 +436,6 @@ export default {
       childCategory: null,
       childCategory_options: null,
     });
-    if(this.$store.kakaouserinfo.kakao_account.has_gender)
-          this.gender_selected = this.$store.kakaouserinfo.gender;
   },
   computed: {},
 };

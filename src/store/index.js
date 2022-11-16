@@ -11,6 +11,9 @@ const store = new Vuex.Store({
   mutations:{
     KakaouserSet(state,data){
       this.kakaouserinfo=data;
+    },
+    Moimuserinfo(state,data){
+      this.userinfo = data;
     }
   },
   actions:{
