@@ -49,6 +49,7 @@
 </template>
 
 <script>
+import { getLogin } from '@/services/login';
 export default {
   data() {
     return {
@@ -58,11 +59,15 @@ export default {
     };
   },
   methods: {
-    kakaoLogin() {
-      this.axios.get('/login')
-        .then((response) => {
-            window.location.href = response.data;
-        })
+    async kakaoLogin() {
+      let login = await getLogin();
+      if(login.status===200) {
+        window.location.href = login.data;
+      }
+      // this.axios.get('/login')
+      //   .then((response) => {
+      //       window.location.href = response.data;
+      //   })
     },
     handleResize() {
       this.width = window.innerWidth;

@@ -42,6 +42,9 @@ export default {
         console.log(this.isRegular);
       } 
     }
+  },
+  created(){
+    //여기에 유저 일정 데이터를 받으면 됩니다.
   }
 }
 </script>
