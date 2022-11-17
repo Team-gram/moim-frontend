@@ -6,6 +6,12 @@
   <div id="listbackground">
   <div id="title">새로운 모임 개설하기</div>
   <b-row class="mb-3">
+    <b-col id="subtitle">제목</b-col>
+    <b-col>
+      <b-form-input id="form-input" v-model="moimtitle" placeholder="모임제목을 입력해주세요"></b-form-input>
+    </b-col>
+  </b-row>
+  <b-row class="mb-3">
     <b-col id="subtitle">카테고리</b-col>
     <b-col cols="auto" style="margin: 0px 5px 5px 0">
       <b-form-select
@@ -171,6 +177,8 @@ export default {
         { item: "N", name: "아니요" },
       ],
       Intro: "",
+      moimtitle: "",
+      number: 10,
       region1_selected: null,
       region2_selected: null,
       region3_selected: null,
@@ -226,6 +234,23 @@ export default {
           console.log(category)
         }
       }
+    },
+    clickCompleteButton: function(){
+      var data = Object();
+      // data.host = this.$store.userinfo.id;
+      data.title = this.moimtitle;
+      data.Intro = this.Intro;
+      data.sido = this.region1_selected;
+      data.sigungu = this.region2_selected;
+      data.dong = this.region3_selected;
+      data.free = this.free_selected;
+      data.open = this.open_selected;
+      data.regular = this.regular_selected;
+      data.number = this.number;
+      data.category1 = this.category1_selected;
+      data.category2 = this.category2_selected;
+      console.log(data);
+      //여기에 버튼 클릭시 json 보낼 데이터를 입력해주세요!
     },
   },
   created() {

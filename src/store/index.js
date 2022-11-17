@@ -7,14 +7,18 @@ const store = new Vuex.Store({
   state:{
     kakaouserinfo:"",
     userinfo:"",
+    jwt:"",
   },
   mutations:{
+    JwtSet(state,data){
+      this.jwt=data;
+    },
     KakaouserSet(state,data){
       this.kakaouserinfo=data;
     },
     Moimuserinfo(state,data){
       this.userinfo = data;
-    }
+    },
   },
   actions:{
   },

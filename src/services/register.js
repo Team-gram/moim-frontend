@@ -1,20 +1,21 @@
 import request from "@/services/request";
 
-export function registerUser(id, name, profileImage, sido, sigungu, dong, gender, birthday, detail, isPublish, categories) {
+export function registerUser(data) {
   return request({
     url: "/join",
     method: "post",
     data: {
-      "id": id,
-      "name": name,
-      "profileImage": profileImage,
-      "sido": sido,
-      "sigungu": sigungu,
-      "dong": dong,
-      "birthday": birthday,
-      "detail": detail,
-      "isPublish": isPublish,
-      "categories": categories
+      "id": data.id,
+      "name": data.name,
+      "profileImage": data.profileImage,
+      "sido": data.sido,
+      "sigungu": data.sigungu,
+      "dong": data.dong,
+      "birthday": data.birthday,
+      "detail": data.detail,
+      "isPublish": data.isPublish,
+      "categories": data.categories,
+      "gender": data.gender
     }
   });
 }
