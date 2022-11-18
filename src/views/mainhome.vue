@@ -76,6 +76,7 @@ export default {
       console.log(Data);
       this.$store.commit('searchStore/setSearchType',"keyword");
       this.$store.commit('searchStore/setSearchData', Data);
+      this.$store.commit('searchStore/initKeywordSearchOptions');
       this.$router.push({
         name: "MoimSearchList",
       });

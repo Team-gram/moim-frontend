@@ -27,10 +27,13 @@ export default {
   },
   methods: {
     searchKeyword: function (Data) {
-      this.$router.push({
-        name: "MoimSearchList",
-        query: { type: "keyword", data: Data },
-      });
+      this.$store.commit('searchStore/setSearchType',"keyword");
+      this.$store.commit('searchStore/setSearchData', Data);
+      this.$store.commit('searchStore/initKeywordSearchOptions');
+      this.$router.go(this.$router.currentRoute);
+      // this.$router.push({
+      //   name: "MoimSearchList",
+      // });
     },
   },
   created() {
