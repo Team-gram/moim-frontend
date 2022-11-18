@@ -14,9 +14,6 @@ const getters = {
     console.log(state.options.subCategory);
     return state.options.subCategory;
   },
-  getSearchKeyword(state) {
-    return state.options.keyword;
-  },
   getSearchLocation(state) {
     return state.options.location;
   }

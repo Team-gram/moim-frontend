@@ -71,7 +71,7 @@ export default {
       var searchData = new Object();
       if(this.$store.getters["searchStore/getSearchType"] === "keyword"){
         //title
-        searchData.title = this.$store.getters["searchStore/getSearchKeyword"];
+        searchData.title = this.$store.getters["searchStore/getSearchData"];
 
       }else if (this.$store.getters["searchStore/getSearchType"] === "category"){
         //categoryId
@@ -109,9 +109,6 @@ export default {
     subCategory: function() {
       return this.$store.getters["searchStore/getSelectedSubCategory"];
     },
-    keyword: function() {
-      return this.$store.getters["searchStore/getSearchKeyword"];
-    },
     location: function() {
       return this.$store.getters["searchStore/getSearchLocation"];
     }
@@ -121,9 +118,6 @@ export default {
       console.log("watch subcategory", value);
       this.changeSubCategory();
       this.getMoimSearchResult();
-    },
-    keyword(value) {
-      console.log("watch keyword", value);
     },
     location(value) {
       console.log("watch location", value);
