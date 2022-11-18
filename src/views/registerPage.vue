@@ -239,10 +239,11 @@
 import locationjson from "@/data/법정동.json";
 import { getAllParentCategory, getChildCategory } from "@/services/category.js";
 import { registerUser } from "@/services/register.js";
-
 export default {
   data() {
     return {
+      userid: this.$cookies.get("MoimUserId"),
+      profileImage:"",
       nickname: "",
       selfIntro: "",
       gender_selected: "M",
@@ -289,6 +290,36 @@ export default {
         this.region3_options.sort();
       }
     },
+    async SetParentCategory() {
+      this.parentCategory_options = [];
+      let parentCategory = await getAllParentCategory();
+      if (parentCategory.status === 200) {
+        this.parentCategory_options = parentCategory.data;
+      }
+    },
+    async SetChildCategory(parentId, index) {
+      this.selected_category[index].childCategory = null;
+
+      let childCategory = await getChildCategory(parentId);
+      if (childCategory.status === 200) {
+        this.selected_category[index].childCategory_options =
+          childCategory.data;
+      }
+    },
+    AddSelectedCategory: function () {
+      if (this.selected_category.length < 5) {
+        this.selected_category.push({
+          parentCategory: null,
+          childCategory: null,
+          childCategory_options: null,
+        });
+      }
+    },
+    DeleteSelectedCategory: function (index) {
+      if (this.selected_category.length > 1) {
+        this.selected_category.splice(index, 1);
+      }
+    },
     async clickCompleteButton() {
       var text = "";
       // let data = new Object();
@@ -332,9 +363,8 @@ export default {
           }
         }
         var data = Object();
-        data.id = this.$store.kakaouserinfo.data.id;
+        data.id = this.userid;
         data.name = this.nickname;
-        data.profileImage = this.$store.kakaouserinfo.data.profileImage;
         data.sido = this.region1_selected;
         data.sigungu = this.region2_selected;
         data.dong = this.region3_selected;
@@ -354,39 +384,6 @@ export default {
         
       }
     },
-    async SetParentCategory() {
-      this.parentCategory_options = [];
-      let parentCategory = await getAllParentCategory();
-      if (parentCategory.status === 200) {
-        this.parentCategory_options = parentCategory.data;
-      }
-    },
-    async SetChildCategory(parentId, index) {
-      this.selected_category[index].childCategory = null;
-
-      let childCategory = await getChildCategory(parentId);
-      if (childCategory.status === 200) {
-        this.selected_category[index].childCategory_options =
-          childCategory.data;
-      }
-    },
-    AddSelectedCategory: function () {
-      console.log("hello");
-      if (this.selected_category.length < 5) {
-        this.selected_category.push({
-          parentCategory: null,
-          childCategory: null,
-          childCategory_options: null,
-        });
-      }
-    },
-    DeleteSelectedCategory: function (index) {
-      if (this.selected_category.length > 1) {
-        this.selected_category.splice(index, 1);
-
-      }
-    },
-
   },
   created() {
     for (var year = 1900; year <= 2022; year++) {

@@ -16,10 +16,12 @@
     <b-col cols="auto" style="margin: 0px 5px 5px 0">
       <b-form-select
         id="form-input"
-        v-model="category1_selected"
-        :options="category1_options"
-        v-on:change="UpdateCategory($event)"
+        v-model="parentCategory"
+        :options="parentCategory_options"
+        v-on:change="SetChildCategory($event, 0)"
         style="width: 200px; text-align: center"
+        value-field="categoryId"
+        text-field="categoryName"
       >
       <template #first>
         <b-form-select-option :value="null" disabled>대분류</b-form-select-option>
@@ -27,16 +29,19 @@
       </b-form-select>
     </b-col>
       <b-col cols="auto" style="margin: 0px 5px 5px 0">
-      <b-form-select
-        id="form-input"
-        v-model="category2_selected"
-        :options="category2_options"
-        style="width: 200px; text-align: center"
-      >
-      <template #first>
-        <b-form-select-option :value="null" disabled>소분류</b-form-select-option>
-      </template>
-      </b-form-select></b-col>
+        <b-form-select
+          id="form-input"
+          v-model="childCategory"
+          :options="childCategory_options"
+          style="width: 200px; text-align: center"
+          value-field="categoryId"
+          text-field="categoryName"
+        >
+        <template #first>
+          <b-form-select-option :value="null" disabled>소분류</b-form-select-option>
+        </template>
+        </b-form-select>
+      </b-col>
   </b-row>
   <b-row>
     <b-col id="subtitle">활동지역</b-col>
@@ -51,7 +56,8 @@
       <template #first>
         <b-form-select-option :value="null" disabled>광역시/도</b-form-select-option>
       </template>
-      </b-form-select></b-col>
+      </b-form-select>
+    </b-col>
     <b-col>
       <b-form-select
       id="form-input"
@@ -77,28 +83,13 @@
       </b-form-select>
     </b-col>
   </b-row>
-  <b-row class="mb-3">
-    <b-col id="subtitle">정기모임 여부</b-col>
-    <div class="w-100"></div>
-    <b-col>
-      <b-form-radio-group
-        v-model="regular_selected"
-        :options="regular_options"
-        class="mb-3"
-        value-field="item"
-        text-field="name"
-        disabled-field="notEnabled"
-        style="float: left"
-      ></b-form-radio-group>
-    </b-col>
-  </b-row>
  <b-row class="mb-3">
     <b-col id="subtitle">장문 소개</b-col>
     <div class="w-100"></div>
     <b-col>
       <b-form-textarea
         id="form-input"
-        v-model="Intro"
+        v-model="content"
         placeholder="간단한 자기소개를 입력하세요"
         rows="3"
         max-rows="3"
@@ -108,7 +99,7 @@
   <b-row class="mb-3">
     <b-col id="subtitle">정원</b-col>
     <b-col>
-      <b-form-input id="form-input" v-model="number" placeholder="최대 정원을 입력해주세요"></b-form-input>
+      <b-form-input id="form-input" v-model="maxMember" placeholder="최대 정원을 입력해주세요"></b-form-input>
     </b-col>
   </b-row>
   <b-row class="mb-3">
@@ -116,8 +107,8 @@
     <div class="w-100"></div>
     <b-col>
       <b-form-radio-group
-        v-model="free_selected"
-        :options="free_options"
+        v-model="isFreeEnter_selected"
+        :options="isFreeEnter_options"
         class="mb-3"
         value-field="item"
         text-field="name"
@@ -131,8 +122,8 @@
     <div class="w-100"></div>
     <b-col>
       <b-form-radio-group
-        v-model="open_selected"
-        :options="open_options"
+        v-model="isPublish_selected"
+        :options="isPublish_options"
         class="mb-3"
         value-field="item"
         text-field="name"
@@ -157,28 +148,23 @@
 <script>
 import locationjson from "@/data/법정동.json";
 import categoryjson from "@/data/카테고리.json";
-
+import { getAllParentCategory, getChildCategory } from "@/services/category.js";
 export default {
   data() {
     return {
-      free_selected: "Y",
-      free_options: [
+      isFreeEnter_selected: "Y",
+      isFreeEnter_options: [
         { item: "Y", name: "자유 가입" },
         { item: "N", name: "승인 가입" },
       ],
-      open_selected: "Y",
-      open_options: [
+      isPublish_selected: "Y",
+      isPublish_options: [
         { item: "Y", name: "공개" },
         { item: "N", name: "비공개" },
       ],
-      regular_selected: "Y",
-      regular_options: [
-        { item: "Y", name: "네" },
-        { item: "N", name: "아니요" },
-      ],
-      Intro: "",
+      content: "",
       moimtitle: "",
-      number: 10,
+      maxMember: 10,
       region1_selected: null,
       region2_selected: null,
       region3_selected: null,
@@ -186,20 +172,27 @@ export default {
       region2_options: [],
       region3_options: [],
       category_list: [],
-      selected_category_list: [],
-      category1_selected: null,
-      category2_selected: null,
-      category1_options: [],
-      category2_options: [],
+      parentCategory_options: [],
+      selected_category: [],
     };
   },
   methods: {
-    SetCategory: function () {
-      this.category_list.splice(0);
-      for (var index in categoryjson) {
-        this.category1_options.push(index);
+    async SetParentCategory() {
+      this.parentCategory_options = [];
+      let parentCategory = await getAllParentCategory();
+      if (parentCategory.status === 200) {
+        this.parentCategory_options = parentCategory.data;
       }
     },
+    async SetChildCategory(parentId, index) {
+      this.selected_category[index].childCategory = null;
+      let childCategory = await getChildCategory(parentId);
+      if (childCategory.status === 200) {
+        this.selected_category[index].childCategory_options =
+          childCategory.data;
+      }
+    },
+
     UpdateLocation: function (num, event) {
       if (num == 1) {
         this.region2_options.splice(0);
@@ -237,18 +230,16 @@ export default {
     },
     clickCompleteButton: function(){
       var data = Object();
-      // data.host = this.$store.userinfo.id;
+      data.userId = this.$cookies.get("MoimUserId");
+      data.categoryId = this.category2_selected;
       data.title = this.moimtitle;
-      data.Intro = this.Intro;
+      data.content = this.content;
       data.sido = this.region1_selected;
       data.sigungu = this.region2_selected;
       data.dong = this.region3_selected;
-      data.free = this.free_selected;
-      data.open = this.open_selected;
-      data.regular = this.regular_selected;
-      data.number = this.number;
-      data.category1 = this.category1_selected;
-      data.category2 = this.category2_selected;
+      data.isPublish = this.isPublish_selected;
+      data.isFreeEnter = this.isFreeEnter_selected;
+      data.maxMember = this.maxMember;
       console.log(data);
       //여기에 버튼 클릭시 json 보낼 데이터를 입력해주세요!
     },
@@ -259,7 +250,12 @@ export default {
       this.region1_options.push(index);
     }
     this.region1_options.sort();
-    this.SetCategory();
+    this.SetParentCategory();
+    this.selected_category.push({
+      parentCategory: null,
+      childCategory: null,
+      childCategory_options: null,
+    });
   },
 };
 </script>
