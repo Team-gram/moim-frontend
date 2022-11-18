@@ -238,7 +238,7 @@
 <script>
 import locationjson from "@/data/법정동.json";
 import { getAllParentCategory, getChildCategory } from "@/services/category.js";
-// import { registerUser } from "@/services/register.js";
+import { registerUser } from "@/services/register.js";
 
 export default {
   data() {
@@ -331,41 +331,27 @@ export default {
             categories.push(this.selected_category[i].childCategory);
           }
         }
-        console.log(birthday);
-        console.log(categories);
-        // let joinUser = await registerUser(
-        //   this.$store.kakaouserinfo.id,
-        //   this.nickname,
-        //   this.$store.kakaouserinfo.properties.profile_image,
-        //   this.region1_selected,
-        //   this.region2_selected,
-        //   this.region3_selected,
-        //   this.gender_selected,
-        //   birthday,
-        //   this.selfIntro,
-        //   this.data_selected,
-        //   categories
-        // );
-        // if(joinUser.status === 200) {
-        //   this.$router.replace("/");
-        // }
-
-        //
-        // data.id = this.$store.kakaouserinfo.id;
-        // data.name = this.nickname;
-        // data.profileImage = this.$store.kakaouserinfo.properties.profile_image;
-        // data.sido = this.region1_selected;
-        // data.sigungu = this.region2_selected;
-        // data.dong = this.region3_selected;
-        // if(this.$store.kakaouserinfo.kakao_account.has_gender)
-        //   data.gender = this.$store.kakaouserinfo.gender;
-        // else
-        //   data.gender = "";
-        // data.birthday = this.year_selected + "-" + this.month_selected + "-" + this.day_selected;
-        // data.categories = this.selected_category_list;
-        // console.log(data);
-        // this.RegisterCall(data);
-        // this.$router.replace("/");
+        var data = Object();
+        data.id = this.$store.kakaouserinfo.data.id;
+        data.name = this.nickname;
+        data.profileImage = this.$store.kakaouserinfo.data.profileImage;
+        data.sido = this.region1_selected;
+        data.sigungu = this.region2_selected;
+        data.dong = this.region3_selected;
+        data.birthday = birthday;
+        data.detail = this.selfIntro;
+        data.isPublish = this.data_selected;
+        data.categories = categories;
+        data.gender = this.gender_selected;
+        const response = await registerUser(data);
+        if(response.status==200){
+          alert("가입해주셔서 감사합니다.")
+          this.$router.replace('/');
+        }else{
+          alert("네트워크 오류로 인해 가입에 실패했습니다.");
+          this.$router.replace('/');
+        }
+        
       }
     },
     async SetParentCategory() {
@@ -374,7 +360,6 @@ export default {
       if (parentCategory.status === 200) {
         this.parentCategory_options = parentCategory.data;
       }
-      console.log(this.parentCategory_options);
     },
     async SetChildCategory(parentId, index) {
       this.selected_category[index].childCategory = null;
@@ -384,8 +369,6 @@ export default {
         this.selected_category[index].childCategory_options =
           childCategory.data;
       }
-      console.log(this.selected_category[index].childCategory_options);
-      console.log(this.selected_category);
     },
     AddSelectedCategory: function () {
       console.log("hello");
@@ -396,7 +379,6 @@ export default {
           childCategory_options: null,
         });
       }
-      console.log(this.selected_category);
     },
     DeleteSelectedCategory: function (index) {
       if (this.selected_category.length > 1) {
@@ -404,19 +386,9 @@ export default {
 
       }
     },
-    async RegisterCall(data){
-        let res = ''
-        await this.axios.post('/join',data)
-        .then(result=>{
-          res = result;
-        })
-        return res;
 
-    }
   },
   created() {
-    // this.childCategory_options = [];
-
     for (var year = 1900; year <= 2022; year++) {
       this.year_options.push(year);
     }
@@ -436,8 +408,6 @@ export default {
       childCategory: null,
       childCategory_options: null,
     });
-    if(this.$store.kakaouserinfo.kakao_account.has_gender)
-          this.gender_selected = this.$store.kakaouserinfo.gender;
   },
   computed: {},
 };

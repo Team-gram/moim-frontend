@@ -54,7 +54,19 @@ export default {
     };
   },
   methods:{
-    
+    setData(){
+      // this.category_data1 =
+      // this.category_data2 =
+      // this.region = 
+      // this.regular =
+      // this.register =
+      // this.maximum =
+      // this.introduction =  
+    }
+  },
+  created(){
+    this.setData()
+    //모임id api에 요청 후 모임 세부정보 반환 내용을 넣으면 됩니다.
   }
 }
 </script>

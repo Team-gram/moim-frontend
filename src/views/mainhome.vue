@@ -51,6 +51,7 @@
 </template>
 
 <script>
+import { getUserinfo } from '@/services/login';
 import searchbar from "@/components/Search/SearchBar";
 import categoryjson from "@/data/카테고리.json";
 export default {
@@ -85,31 +86,26 @@ export default {
         query: { type: "category", data: Data },
       });
     },
-    async Userinfo(id){
-      let data = ''
-      await this.axios.get('/user',{params: {"id" : id}})
-          .then(response=>{
-            data = response;
-          })
-      return data;
-    }
   },
-  created() {
+ async created() {
     // 파라미터
     this.SetCategory();
     let id = this.$route.query.id;
-        let jwt = this.$route.query.jwt;
-        console.log(id, jwt);
-
-        if (id !== undefined && jwt !== undefined) {
-            this.axios.get('/user/' + id)
-                .then((response) => {
-                    console.log(response.data);
-                    // response 데이터 스토어에 저장하는 로직 작성
-                });
-            //스토어에 저장 완료되면 메인이나 추가정보 입력창으로 리다이렉트 하면 됨
-            //window.location.href = '/';
-        }
+    let jwt = this.$route.query.jwt;
+    if (id !== undefined && jwt !== undefined) {
+        this.$store.commit('JwtSet', jwt);
+        const result = await getUserinfo(id);
+        if(result.status==200){
+          this.$store.commit('KakaouserSet', result);
+          if(result.data["gender"]==null){
+            alert("회원가입이 필요합니다.");
+            this.$router.replace('/register');
+          }
+          else{
+            this.$router.replace('/').catch(()=>{});
+         }
+      }
+    }
   },
 };
 </script>
