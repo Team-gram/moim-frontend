@@ -1,7 +1,7 @@
 <template>
   <div style="margin-top: 30px;">
-    <Categorysearch v-if="$route.query.type==='category'"></Categorysearch>
-    <KeywordSearch v-if="$route.query.type==='keyword'"></KeywordSearch>
+    <Categorysearch v-if="this.$store.getters['searchStore/getSearchType'] ==='category'"></Categorysearch>
+    <KeywordSearch v-if="this.$store.getters['searchStore/getSearchType']==='keyword'"></KeywordSearch>
     <MoimList></MoimList>
   </div>
 </template>
