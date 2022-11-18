@@ -74,16 +74,18 @@ export default {
     },
     searchKeyword: function (Data) {
       console.log(Data);
+      this.$store.commit('searchStore/setSearchType',"keyword");
+      this.$store.commit('searchStore/setSearchData', Data);
       this.$router.push({
         name: "MoimSearchList",
-        query: { type: "keyword", data: Data },
       });
     },
     searchCategory: function (Data) {
       console.log(Data);
+      this.$store.commit('searchStore/setSearchType',"category");
+      this.$store.commit('searchStore/setSearchData', Data);
       this.$router.push({
         name: "MoimSearchList",
-        query: { type: "category", data: Data },
       });
     },
   },

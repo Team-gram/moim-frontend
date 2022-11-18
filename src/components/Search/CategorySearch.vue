@@ -41,8 +41,8 @@ export default {
     }
   },
   created() {
-    console.log(this.$route.query.data);
-    this.parentCategory = this.$route.query.data;
+    // console.log(this.$store.getters['searchStore/getSearchData']);
+    this.parentCategory = this.$store.getters['searchStore/getSearchData'];
     console.log(this.parentCategory);
     this.setSubCategory();
     // for (var cat_index in categoryjson[this.categoryName]) {
