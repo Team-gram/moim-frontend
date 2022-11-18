@@ -1,6 +1,7 @@
 const state = {
   type: null,
   data: null,
+  options: {},
 };
 const getters = {
   getSearchType(state) {
@@ -9,6 +10,16 @@ const getters = {
   getSearchData(state) {
     return state.data;
   },
+  getSelectedSubCategory(state) {
+    console.log(state.options.subCategory);
+    return state.options.subCategory;
+  },
+  getSearchKeyword(state) {
+    return state.options.keyword;
+  },
+  getSearchLocation(state) {
+    return state.options.location;
+  }
 };
 const mutations = {
   setSearchType(state, type) {
@@ -17,8 +28,21 @@ const mutations = {
   setSearchData(state, data) {
     state.data = data;
   },
+  modifySearchOptions(state, data) {
+    console.log(data);
+    state.options[data.key] = data.value;
+  },
+  initKeywordSearchOptions(state) {
+    state.options.location=null;
+    state.options.subCategory = null;
+  },
+  initCategorySearchOptions(state) {
+    state.options.location=null;
+    state.options.title = null;
+  },
 };
-const actions = {};
+const actions = {
+};
 
 export default {
   namespaced: true,

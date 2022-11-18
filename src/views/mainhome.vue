@@ -52,7 +52,7 @@
 
 <script>
 import { getUserinfo } from '@/services/login';
-import { getAllParentCategory } from '@/services/category';
+import { getAllParentCategory, getChildCategory } from '@/services/category';
 import searchbar from "@/components/Search/SearchBar";
 export default {
   name: "MainHome",
@@ -80,10 +80,13 @@ export default {
         name: "MoimSearchList",
       });
     },
-    searchCategory: function (Data) {
+    async searchCategory(Data) {
       console.log(Data);
       this.$store.commit('searchStore/setSearchType',"category");
       this.$store.commit('searchStore/setSearchData', Data);
+      let subCategory = await getChildCategory(Data.categoryId);
+      this.$store.commit('searchStore/modifySearchOptions',{key: 'subCategory', value: subCategory.data[0]});
+      this.$store.commit('searchStore/initCategorySearchOptions');
       this.$router.push({
         name: "MoimSearchList",
       });

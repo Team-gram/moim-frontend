@@ -21,7 +21,7 @@ export default {
   },
   data() {
     return {
-      oldSearchKeyword: "검색어",
+      oldSearchKeyword: null,
       newSearchKeyword: "",
     };
   },
@@ -34,7 +34,7 @@ export default {
     },
   },
   created() {
-    this.oldSearchKeyword = this.$route.query.data;
+    this.oldSearchKeyword = this.$store.getters['searchStore/getSearchData'];
   },
 };
 </script>

@@ -23,3 +23,16 @@ export function MoimCreate(data) {
         }
     });
 }
+export function SearchMoim(data) {
+    return request({
+        url: "/moim",
+        method: "get",
+        params: {
+            "categoryId": data.categoryId,
+            "sido": data.sido,
+            "sigungu": data.sigungu,
+            "dong": data.dong,
+            "title": data.title,
+        }
+    })
+}
