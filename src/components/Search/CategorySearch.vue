@@ -3,16 +3,16 @@
     align="center"
     style="margin-top: 20px; margin-left: 20px; margin-right: 20px"
   >
-    <h4 id="category-name">{{ this.categoryName }}</h4>
+    <h4 id="category-name">{{ this.parentCategory.categoryName }}</h4>
     <div id="optionBox">
       <b-row>
         <b-col
           v-for="subCategory in subCategoryList"
-          :key="subCategory"
+          :key="subCategory.categoryId"
           cols="auto"
           id="optionItem"
         >
-          {{ subCategory }}
+          {{ subCategory.categoryName }}
         </b-col>
       </b-row>
     </div>
@@ -21,27 +21,33 @@
 </template>
 
 <script>
-// import locationjson from "@/data/법정동.json";
-import categoryjson from "@/data/카테고리.json";
 import searchfilter from "@/components/Search/SearchFilter";
+import { getChildCategory } from "@/services/category";
 
 export default {
   data() {
     return {
-      categoryName: "",
+      parentCategory: null,
       subCategoryList: [],
     };
   },
   components: {
     searchfilter,
   },
-  methods: {},
-  created() {
-    this.categoryName = this.$route.query.data;
-    
-    for (var cat_index in categoryjson[this.categoryName]) {
-      this.subCategoryList.push(categoryjson[this.categoryName][cat_index]);
+  methods: {
+    async setSubCategory() {
+      let subCategory = await getChildCategory(this.parentCategory.categoryId);
+      this.subCategoryList = subCategory.data;
     }
+  },
+  created() {
+    console.log(this.$route.query.data);
+    this.parentCategory = this.$route.query.data;
+    console.log(this.parentCategory);
+    this.setSubCategory();
+    // for (var cat_index in categoryjson[this.categoryName]) {
+    //   this.subCategoryList.push(categoryjson[this.categoryName][cat_index]);
+    // }
     // this.subCategoryList.sort();
   },
 };
