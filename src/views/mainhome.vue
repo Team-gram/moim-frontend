@@ -93,15 +93,16 @@ export default {
     let id = this.$route.query.id;
     let jwt = this.$route.query.jwt;
     if (id !== undefined && jwt !== undefined) {
-        this.$store.commit('JwtSet', jwt);
+      this.$cookies.set('MoimJwt', jwt);
         const result = await getUserinfo(id);
         if(result.status==200){
-          this.$store.commit('KakaouserSet', result);
+          this.$cookies.set("MoimUserId",result.data.id);
           if(result.data["gender"]==null){
             alert("회원가입이 필요합니다.");
             this.$router.replace('/register');
           }
           else{
+            this.$store.commit('MoimUserInfo',result.data);
             this.$router.replace('/').catch(()=>{});
          }
       }

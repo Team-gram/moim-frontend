@@ -6,7 +6,7 @@
   <div id="listbackground">
     <b-row id="MymoimTitle">내 모임
       <b-col id="plus" >
-        <b-img style="width:40px;height:36px; border-radius: 45%;" :src="require('@/assets/plus.png')"></b-img>
+        <b-img @click="newmoim()" style="width:40px;height:36px; border-radius: 45%;" :src="require('@/assets/plus.png')"></b-img>
       </b-col>
     </b-row>
     <div v-for="(list,index) in moimlist" :key="index" @click="callMoim(index)">
@@ -16,31 +16,28 @@
             <b-img style="width:40px;height:36px; border-radius: 45%;" :src="require('@/assets/test.jpg')"></b-img>
           </b-col>
           <b-col cols="auto" style="padding: 0 0 0 15px">
-            <div style="font-size:18px">{{ list["모임이름"] }}</div>
-            <div id="moiminfo">{{ list["모임정보"] }}</div>
+            <div style="font-size:18px">{{ list["moim"] }}</div>
+            <div id="moiminfo">{{ list["info"] }}</div>
           </b-col>
         </b-row>
       </div>
     </div>
-    <b-row id="Mymoimselect">
+    <b-row id="Mymoimselect" align-h="center">
       <b-button @click="prevlist()">◀</b-button>
       <b-button @click="nextlist()">▶</b-button>
-      <div>{{(mylist+4)/4}}</div>
-      <div>/</div>
-      <div>{{parseInt(maxmylist/4)+1}}</div>
     </b-row>
   </div>
  </div>
 </template>
 
 <script>
-import calendar from "@/data/내모임.json"
+import { MyMoimList } from "@/services/moim";
 export default {
   data() {
     return {
-      moimlist:calendar["내모임"],
+      moimlist:"",
       mylist:0,
-      maxmylist:calendar["count"],
+      maxmylist:1,
     };
   },
   methods:{
@@ -54,8 +51,26 @@ export default {
     },
     callMoim(index){
       console.log(this.moimlist[index]["moimid"]);
+    },
+    newmoim(){
+      this.$router.replace('/newmoim');
     }
-  }
+  },
+ async created(){
+    let response = await MyMoimList(this.$cookies.get("MoimUserId"));
+    if(response.status==200){
+      if(response.data.length==0){
+        this.mylist=0;
+        var Nulldata = Object();
+        let data = [];
+        data.push({"moim":"모임 정보가 존재하지 않습니다.","info":""})
+        Nulldata=data;
+        this.moimlist = Nulldata;
+        console.log(this.moimlist);
+      }
+
+    }
+  },
 }
 </script>
 
@@ -74,7 +89,7 @@ export default {
   padding: 0px 0px 0px 10px;
 }
 #Mymoimselect{
-  align-items: left;
+  align-items: center;
 }
 #listbackground{
   background-color: #f3f3f3 !important;
