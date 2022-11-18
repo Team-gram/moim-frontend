@@ -7,10 +7,19 @@ export function MyMoimList(userid) {
 }
 export function MoimCreate(data) {
     return request({
-        url: "/moim/",
+        url: "/moim",
         method: "post",
         data: {
-            "userid" : data
+            "userId":data.userId,
+            "categoryId":data.categoryId,
+            "title":data.title,
+            "content":data.content,
+            "sido":data.sido,
+            "sigungu":data.sigungu,
+            "dong":data.dong,
+            "isPublish":data.isPublish,
+            "isFreeEnter":data.isFreeEnter,
+            "maxMember":data.maxMember
         }
     });
 }

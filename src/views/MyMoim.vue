@@ -5,7 +5,7 @@
   >
   <div id="listbackground">
     <b-row id="MymoimTitle">내 모임
-      <b-col id="plus" >
+      <b-col id="plus">
         <b-img @click="newmoim()" style="width:40px;height:36px; border-radius: 45%;" :src="require('@/assets/plus.png')"></b-img>
       </b-col>
     </b-row>
@@ -16,8 +16,9 @@
             <b-img style="width:40px;height:36px; border-radius: 45%;" :src="require('@/assets/test.jpg')"></b-img>
           </b-col>
           <b-col cols="auto" style="padding: 0 0 0 15px">
-            <div style="font-size:18px">{{ list["moim"] }}</div>
-            <div id="moiminfo">{{ list["info"] }}</div>
+            <div id="moiminfo" style="font-size:18px">{{ list["title"] }}</div>
+            <div id="moiminfo">{{ list["content"] }}</div>
+            <div id="moiminfo">{{ list["sido"] }} {{ list["sigungu"] }} {{ list["sidongdo"] }} {{ list["maxMember"] }}명</div>
           </b-col>
         </b-row>
       </div>
@@ -50,7 +51,7 @@ export default {
         this.mylist+=4;
     },
     callMoim(index){
-      console.log(this.moimlist[index]["moimid"]);
+      console.log(this.moimlist[index]["id"]);
     },
     newmoim(){
       this.$router.replace('/newmoim');
@@ -63,10 +64,29 @@ export default {
         this.mylist=0;
         var Nulldata = Object();
         let data = [];
-        data.push({"moim":"모임 정보가 존재하지 않습니다.","info":""})
+        data.push({"title":"모임 정보가 존재하지 않습니다.","info":""})
         Nulldata=data;
         this.moimlist = Nulldata;
         console.log(this.moimlist);
+      }
+      else{
+        this.moimlist = response.data;
+        /*
+        respose data는 다음과 같은 값을 가진다.
+          "id": 0,  (모임 고유 id)
+          "userId": 0, (방장)
+          "categoryId": 0,
+          "title": "string",
+          "content": "string",
+          "sido": "string",
+          "sigungu": "string",
+          "dong": "string",
+          "isPublish": "string",
+          "isFreeEnter": "string",
+          "maxMember": 0,
+          "createDate": "2022-11-18T09:33:59.914Z",
+          "moimLevel": 0
+        */
       }
 
     }
