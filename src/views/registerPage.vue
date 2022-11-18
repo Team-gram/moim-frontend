@@ -374,13 +374,14 @@ export default {
         data.categories = categories;
         data.gender = this.gender_selected;
         const response = await registerUser(data);
+        console.log(response);
         if(response.status==200){
           alert("가입해주셔서 감사합니다.")
           this.$router.replace('/');
         }else{
-          alert("네트워크 오류로 인해 가입에 실패했습니다.");
+          alert(response.data);
           this.$router.replace('/');
-        }
+        }0
         
       }
     },
