@@ -1,20 +1,25 @@
 import request from "@/services/request";
-
-export function MymoimCreate() {
+export function MyMoimList(userid) {
     return request({
-        url: "/login",
+        url: "/user/moim/" + userid,
+        method: "get"
+    });
+}
+export function MoimCreate(data) {
+    return request({
+        url: "/moim",
         method: "post",
         data: {
-            "userId":,
-            "categoryId":,
-            "title":,
-            "content":,
-            "sido":,
-            "sigungu":,
-            "dong":
-            "isPublish":
-            "isFreeEnter":
-            "maxMember":
+            "userId":data.userId,
+            "categoryId":data.categoryId,
+            "title":data.title,
+            "content":data.content,
+            "sido":data.sido,
+            "sigungu":data.sigungu,
+            "dong":data.dong,
+            "isPublish":data.isPublish,
+            "isFreeEnter":data.isFreeEnter,
+            "maxMember":data.maxMember
         }
     });
 }

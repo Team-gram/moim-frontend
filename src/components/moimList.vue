@@ -4,7 +4,7 @@
     style="margin-top: 10px; margin-left: 20px; margin-right: 20px"
   >
     <div id="listBox">
-      <div id="listItem" v-for="moimItem in moimList" :key="moimItem.name">
+      <div id="listItem" v-for="moimItem in moimList" :key="moimItem.title">
         <b-row align-v="center">
           <b-col cols="auto">
             <b-img
@@ -16,7 +16,7 @@
           <b-col>
             <b-row id="listTitle">
               <b-col>
-                <div>{{ moimItem.name }}</div>
+                <div>{{ moimItem.title }}</div>
               </b-col>
             </b-row>
             <b-row id="listData">
@@ -27,7 +27,7 @@
                 ></b-img>
               </b-col>
               <b-col cols="auto">
-                {{ moimItem.member }} 명
+                {{ moimItem.maxMember }} 명
               </b-col>
               <b-col cols="auto" style="padding: 0 0 0 15px">
                 <b-img
@@ -36,7 +36,7 @@
                 ></b-img>
               </b-col>
               <b-col cols="auto">
-                {{ moimItem.place }}
+                {{ moimItem.sido }} {{ moimItem.sigungu }} {{ moimItem.dong }}
               </b-col>
               <b-col cols="auto" style="padding: 0 0 0 15px">
                 <b-img
@@ -45,7 +45,7 @@
                 ></b-img>
               </b-col>
               <b-col cols="auto">
-                {{ moimItem.intro }}
+                {{ moimItem.content }}
               </b-col>
             </b-row>
           </b-col>
@@ -61,38 +61,48 @@ export default {
     return {
       moimList: [
         {
-          name: "모임1",
-          member: 5,
-          place: "경기도 수원시 영통구",
-          intro: "모임1에 대한 소개",
+          title: "모임1",
+          maxMember: 5,
+          sido: "경기도",
+          sigungu:"수원시",
+          dong:"영통구",
+          content: "모임1에 대한 소개",
           image: require(`@/assets/test.jpg`),
         },
         {
-          name: "모임2",
-          member: 5,
-          place: "경기도 수원시 영통구",
-          intro: "모임2에 대한 소개",
+          title: "모임2",
+          maxMember: 5,
+          sido: "경기도",
+          sigungu:"수원시",
+          dong:"영통구",
+          content: "모임2에 대한 소개",
           image: require(`@/assets/test.jpg`),
         },
         {
-          name: "모임3",
-          member: 5,
-          place: "경기도 수원시 영통구",
-          intro: "모임3에 대한 소개",
+          title: "모임3",
+          maxMember: 5,
+          sido: "경기도",
+          sigungu:"수원시",
+          dong:"영통구",
+          content: "모임3에 대한 소개",
           image: require(`@/assets/test.jpg`),
         },
         {
-          name: "모임4",
-          member: 5,
-          place: "경기도 수원시 영통구",
-          intro: "모임4에 대한 소개",
+          title: "모임4",
+          maxMember: 5,
+          sido: "경기도",
+          sigungu:"수원시",
+          dong:"영통구",
+          content: "모임4에 대한 소개",
           image: require(`@/assets/test.jpg`),
         },
         {
-          name: "모임5",
-          member: 5,
-          place: "경기도 수원시 영통구",
-          intro: "모임5에 대한 소개",
+          title: "모임5",
+          maxMember: 5,
+          sido: "경기도",
+          sigungu:"수원시",
+          dong:"영통구",
+          content: "모임5에 대한 소개",
           image: require(`@/assets/test.jpg`),
         },
       ],
