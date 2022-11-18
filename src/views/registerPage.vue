@@ -238,7 +238,7 @@
 <script>
 import locationjson from "@/data/법정동.json";
 import { getAllParentCategory, getChildCategory } from "@/services/category.js";
-// import { registerUser } from "@/services/register.js";
+import { registerUser } from "@/services/register.js";
 
 export default {
   data() {
@@ -332,9 +332,9 @@ export default {
           }
         }
         var data = Object();
-        // data.id = this.$store.kakaouserinfo.id;
+        data.id = this.$store.kakaouserinfo.data.id;
         data.name = this.nickname;
-        // data.profileImage = this.$store.kakaouserinfo.properties.profile_image;
+        data.profileImage = this.$store.kakaouserinfo.data.profileImage;
         data.sido = this.region1_selected;
         data.sigungu = this.region2_selected;
         data.dong = this.region3_selected;
@@ -343,8 +343,15 @@ export default {
         data.isPublish = this.data_selected;
         data.categories = categories;
         data.gender = this.gender_selected;
-        console.log(data);
-        // this.$router.replace("/");
+        const response = await registerUser(data);
+        if(response.status==200){
+          alert("가입해주셔서 감사합니다.")
+          this.$router.replace('/');
+        }else{
+          alert("네트워크 오류로 인해 가입에 실패했습니다.");
+          this.$router.replace('/');
+        }
+        
       }
     },
     async SetParentCategory() {
@@ -382,8 +389,6 @@ export default {
 
   },
   created() {
-    // this.childCategory_options = [];
-
     for (var year = 1900; year <= 2022; year++) {
       this.year_options.push(year);
     }

@@ -87,27 +87,24 @@ export default {
       });
     },
   },
-  created() {
+ async created() {
     // 파라미터
     this.SetCategory();
     let id = this.$route.query.id;
     let jwt = this.$route.query.jwt;
     if (id !== undefined && jwt !== undefined) {
         this.$store.commit('JwtSet', jwt);
-        const result = getUserinfo(id);
-        console.log(result);
-        if(result.state==200){
+        const result = await getUserinfo(id);
+        if(result.status==200){
+          this.$store.commit('KakaouserSet', result);
           if(result.data["gender"]==null){
             alert("회원가입이 필요합니다.");
             this.$router.replace('/register');
           }
           else{
-            this.$store.commit('Moimuserinfo', result);
-            this.$router.replace('/');
+            this.$router.replace('/').catch(()=>{});
          }
-        }
-        //스토어에 저장 완료되면 메인이나 추가정보 입력창으로 리다이렉트 하면 됨
-        //window.location.href = '/';
+      }
     }
   },
 };
