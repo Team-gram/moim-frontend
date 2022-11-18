@@ -88,15 +88,18 @@ export default {
           searchData.sido = this.$store.getters["searchStore/getSearchLocation"].sido;
         }
         if(location.sigungu) {
-          searchData.sido = this.$store.getters["searchStore/getSearchLocation"].sigungu;
+          searchData.sigungu = this.$store.getters["searchStore/getSearchLocation"].sigungu;
         }
         if(location.dong) {
-          searchData.sido = this.$store.getters["searchStore/getSearchLocation"].dong;
+          searchData.dong = this.$store.getters["searchStore/getSearchLocation"].dong;
         }
       }
       console.log(searchData);
       let result = await SearchMoim(searchData);
       this.moimList = result.data;
+    },
+    changeSubCategory() {
+      this.$store.commit('searchStore/initCategorySearchOptions');
     }
   },
   created() {
@@ -116,6 +119,7 @@ export default {
   watch: {
     subCategory(value) {
       console.log("watch subcategory", value);
+      this.changeSubCategory();
       this.getMoimSearchResult();
     },
     keyword(value) {
@@ -123,6 +127,7 @@ export default {
     },
     location(value) {
       console.log("watch location", value);
+      this.getMoimSearchResult();
     }
   },
 };

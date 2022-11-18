@@ -77,7 +77,7 @@
       </b-row>
       <b-row>
         <b-col>
-          <div id="form-input-button">필터 적용</div>
+          <div id="form-input-button" @click="applySearchFilter()">필터 적용</div>
         </b-col>
       </b-row>
     </div>
@@ -102,6 +102,11 @@ export default {
   methods: {
     turnOnOffFileter: function () {
       this.showFilter = !this.showFilter;
+      this.region1_selected= null;
+      this.region2_selected= null;
+      this.region3_selected= null;
+      this.region2_options.splice(0);
+      this.region3_options.splice(0);
     },
     UpdateLocation: function (num, event) {
       if (num == 1) {
@@ -130,6 +135,12 @@ export default {
         this.region3_options.sort();
       }
     },
+    applySearchFilter() {
+      var location = {'sido': this.region1_selected, 'sigungu': this.region2_selected, 'dong': this.region3_selected};
+      console.log(location);
+      this.$store.commit('searchStore/modifySearchOptions', {'key':"location", 'value': location});
+      this.turnOnOffFileter();
+    }
   },
   created() {
     this.oldSearchKeyword = this.$route.query.data;
