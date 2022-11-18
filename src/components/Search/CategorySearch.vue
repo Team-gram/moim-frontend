@@ -11,6 +11,12 @@
           :key="subCategory.categoryId"
           cols="auto"
           id="optionItem"
+          @click="selectSubCategory(subCategory)"
+          :style="[
+            isSelectedSubCategory(subCategory)
+              ? { backgroundColor: '#d9d9d9' }
+              : { backgroundColor: '#ffffff' },
+          ]"
         >
           {{ subCategory.categoryName }}
         </b-col>
@@ -29,6 +35,7 @@ export default {
     return {
       parentCategory: null,
       subCategoryList: [],
+      selectedSubCategory: null,
     };
   },
   components: {
@@ -38,11 +45,37 @@ export default {
     async setSubCategory() {
       let subCategory = await getChildCategory(this.parentCategory.categoryId);
       this.subCategoryList = subCategory.data;
-    }
+    },
+    selectSubCategory(subCategory) {
+      console.log(subCategory);
+      this.$store.commit("searchStore/modifySearchOptions", {
+        key: "subCategory",
+        value: subCategory,
+      });
+    },
+    isSelectedSubCategory(subCategory) {
+      let currentSelectedSubCategory = this.$store.getters["searchStore/getSelectedSubCategory"];
+      if ( currentSelectedSubCategory != null) {
+        if ( this.categoryObjectCompare(subCategory, currentSelectedSubCategory) )
+        {
+          console.log(subCategory);
+          return true;
+        }
+      }
+        return false;
+    },
+    categoryObjectCompare(obj1, obj2) {
+      if (obj1.categoryId === obj2.categoryId) {
+        return true;
+      }
+      return false;
+    },
   },
   created() {
     // console.log(this.$store.getters['searchStore/getSearchData']);
-    this.parentCategory = this.$store.getters['searchStore/getSearchData'];
+    this.parentCategory = this.$store.getters["searchStore/getSearchData"];
+    this.selectedSubCategory =
+      this.$store.getters["searchStore/getSelectedSubCategory"];
     console.log(this.parentCategory);
     this.setSubCategory();
     // for (var cat_index in categoryjson[this.categoryName]) {
@@ -72,7 +105,7 @@ export default {
   cursor: pointer;
   border-radius: 20px !important;
   border: 0px solid;
-  background-color: #ffffff !important;
+  background-color: #ffffff;
   float: center;
   width: max-content !important;
   padding: 5px 20px 5px 20px;
