@@ -21,46 +21,18 @@
         </b-row>
 
         <b-row class="mb-3">
-          <b-col id="subtitle">전화번호*</b-col>
+          <b-col id="subtitle">성별*</b-col>
           <div class="w-100"></div>
-          <b-col
-            cols="auto"
-            style="padding: 0 5px 0 15px; margin: 0px 5px 5px 0"
-          >
-            <b-form-select
-              id="form-input"
-              v-model="number1"
-              :options="number1_list"
-              style="width: 70px; text-align: center"
-            ></b-form-select>
-          </b-col>
-          <b-col cols="auto" style="padding: 8px 0px 0 0; margin: 0px 5px 5px 0"
-            >-</b-col
-          >
-          <b-col
-            cols="auto"
-            style="padding: 0 5px 0 5px; margin: 0px 5px 5px 0"
-          >
-            <b-form-input
-              id="form-input"
-              v-model="number2"
-              aria-describedby="input-live-feedback"
-              style="width: 70px; text-align: center"
-            ></b-form-input>
-          </b-col>
-          <b-col cols="auto" style="padding: 8px 0px 0 0; margin: 0px 5px 5px 0"
-            >-</b-col
-          >
-          <b-col
-            cols="auto"
-            style="padding: 0 5px 0 5px; margin: 0px 5px 5px 0"
-          >
-            <b-form-input
-              id="form-input"
-              v-model="number3"
-              aria-describedby="input-live-feedback"
-              style="width: 70px; text-align: center"
-            ></b-form-input>
+          <b-col>
+            <b-form-radio-group
+              v-model="gender_selected"
+              :options="gender_options"
+              class="mb-3"
+              value-field="item"
+              text-field="name"
+              disabled-field="notEnabled"
+              style="float: left"
+            ></b-form-radio-group>
           </b-col>
         </b-row>
 
@@ -179,43 +151,74 @@
         </b-row>
 
         <b-row>
-          <b-col id="subtitle"
+          <b-col id="subtitle" cols="auto"
             >관심 카테고리<a id="subdescription">(최대 5개 선택 가능)</a></b-col
           >
+          <b-col cols="auto">
+            <b-button @click="AddSelectedCategory">추가</b-button>
+          </b-col>
         </b-row>
-        <b-row>
+        <b-row
+          class="mb-2"
+          v-for="(item, index) in selected_category"
+          :key="item.childCategory"
+        >
+          <b-col cols="auto" style="margin: 0px 5px 5px 0">
+            <b-form-select
+              id="form-input"
+              v-model="item.parentCategory"
+              :options="parentCategory_options"
+              v-on:change="SetChildCategory($event, index)"
+              style="width: 200px; text-align: center"
+              value-field="categoryId"
+              text-field="categoryName"
+            >
+              <template #first>
+                <b-form-select-option :value="null" disabled
+                  >대분류</b-form-select-option
+                >
+              </template>
+            </b-form-select>
+          </b-col>
+          <b-col cols="auto" style="margin: 0px 5px 5px 0">
+            <b-form-select
+              id="form-input"
+              v-model="item.childCategory"
+              :options="item.childCategory_options"
+              style="width: 200px; text-align: center"
+              value-field="categoryId"
+              text-field="categoryName"
+            >
+              <template #first>
+                <b-form-select-option :value="null" disabled
+                  >소분류</b-form-select-option
+                >
+              </template>
+            </b-form-select>
+          </b-col>
+          <b-col cols="auto">
+            <b-button @click="DeleteSelectedCategory(index)">삭제</b-button>
+          </b-col>
+        </b-row>
+
+        <b-row class="mb-3">
+          <b-col id="subtitle"
+            >정보공개여부<a id="subdescription"
+              >(다른 사용자에게 나의 정보(일정 등)를 공개하는 것에
+              동의합니다.)</a
+            ></b-col
+          >
+          <div class="w-100"></div>
           <b-col>
-            <b-card id="form-input" style="max-width: 900px;">
-              <b-container>
-                <b-row>
-                  <b-col
-                    v-for="category in category_list"
-                    :key="category"
-                    cols="auto"
-                    id="button"
-                    @click="addSelectedCategory(category)"
-                  >
-                    <div
-                      id="category-button"
-                      :style="[
-                        selected_category_list.includes(category)
-                          ? { backgroundColor: '#9b9b9b' }
-                          : { backgroundColor: '#d9d9d9' },
-                      ]"
-                    >
-                      <img
-                        :src="require(`@/assets/category-icon/${category.replaceAll('/', '-')}.png`)"
-                        id="category-icon"
-                        style="width: 50px"
-                      />
-                      <div id="category-text">
-                        {{ category }}
-                      </div>
-                    </div>
-                  </b-col>
-                </b-row>
-              </b-container>
-            </b-card>
+            <b-form-radio-group
+              v-model="data_selected"
+              :options="data_options"
+              class="mb-3"
+              value-field="item"
+              text-field="name"
+              disabled-field="notEnabled"
+              style="float: left"
+            ></b-form-radio-group>
           </b-col>
         </b-row>
       </b-container>
@@ -234,41 +237,24 @@
 
 <script>
 import locationjson from "@/data/법정동.json";
-import categoryjson from "@/data/카테고리.json";
+import { getAllParentCategory, getChildCategory } from "@/services/category.js";
+// import { registerUser } from "@/services/register.js";
 
 export default {
   data() {
     return {
       nickname: "",
       selfIntro: "",
-      number1: null,
-      number1_list: [
-        "02",
-        "031",
-        "032",
-        "033",
-        "041",
-        "042",
-        "043",
-        "044",
-        "051",
-        "052",
-        "053",
-        "054",
-        "055",
-        "061",
-        "062",
-        "063",
-        "064",
-        "010",
-        "011",
-        "016",
-        "017",
-        "018",
-        "019",
+      gender_selected: "M",
+      gender_options: [
+        { item: "M", name: "남" },
+        { item: "W", name: "여" },
       ],
-      number2: "",
-      number3: "",
+      data_selected: "Y",
+      data_options: [
+        { item: "Y", name: "네" },
+        { item: "N", name: "아니요" },
+      ],
       year_selected: null,
       month_selected: null,
       day_selected: null,
@@ -281,17 +267,11 @@ export default {
       region1_options: [],
       region2_options: [],
       region3_options: [],
-      category_list: [],
-      selected_category_list: [],
+      parentCategory_options: [],
+      selected_category: [],
     };
   },
   methods: {
-    SetCategory: function () {
-      this.category_list.splice(0);
-      for (var index in categoryjson) {
-        this.category_list.push(index);
-      }
-    },
     UpdateLocation: function (num, event) {
       if (num == 1) {
         this.region2_options.splice(0);
@@ -309,33 +289,11 @@ export default {
         this.region3_options.sort();
       }
     },
-    addSelectedCategory: function (category) {
-      if (this.selected_category_list.includes(category)) {
-        this.selected_category_list = this.selected_category_list.filter(
-          (element) => element !== category
-        );
-      } else {
-        if (this.selected_category_list.length < 5) {
-          this.selected_category_list.push(category);
-          console.log(category)
-        }
-      }
-    },
-    clickCompleteButton: function () {
+    async clickCompleteButton() {
       var text = "";
-      let data = new Object();
+      // let data = new Object();
       if (this.nickname.split(' ').join('') == "") {
         text += "'닉네임'";
-      }
-      if (
-        this.number1 == null ||
-        this.number2 == "" ||
-        this.number3 == ""
-      ) {
-        if (text !== "") {
-          text += ", ";
-        }
-        text += "'전화번호'";
       }
       if (
         this.year_selected == null ||
@@ -366,21 +324,84 @@ export default {
           autoHideDelay: 3000,
         });
       } else {
-        data.id = this.$store.kakaouserinfo.id;
-        data.name = this.nickname;
-        data.profileImage = this.$store.kakaouserinfo.properties.profile_image;
-        data.sido = this.region1_selected;
-        data.sigungu = this.region2_selected;
-        data.dong = this.region3_selected;
-        if(this.$store.kakaouserinfo.kakao_account.has_gender)
-          data.gender = this.$store.kakaouserinfo.gender;
-        else
-          data.gender = "";
-        data.birthday = this.year_selected + "-" + this.month_selected + "-" + this.day_selected;
-        data.categories = this.selected_category_list;
-        console.log(data);
-        this.RegisterCall(data);
-        this.$router.replace("/");
+        var birthday = this.year_selected.toString()+'-'+this.month_selected.toString().padStart(2,'0')+'-'+this.day_selected.toString().padStart(2,'0');
+        var categories = [];
+        for(var i = 0 ; i <this.selected_category.length; i++) {
+          if(this.selected_category[i].childCategory != null) {
+            categories.push(this.selected_category[i].childCategory);
+          }
+        }
+        console.log(birthday);
+        console.log(categories);
+        // let joinUser = await registerUser(
+        //   this.$store.kakaouserinfo.id,
+        //   this.nickname,
+        //   this.$store.kakaouserinfo.properties.profile_image,
+        //   this.region1_selected,
+        //   this.region2_selected,
+        //   this.region3_selected,
+        //   this.gender_selected,
+        //   birthday,
+        //   this.selfIntro,
+        //   this.data_selected,
+        //   categories
+        // );
+        // if(joinUser.status === 200) {
+        //   this.$router.replace("/");
+        // }
+
+        //
+        // data.id = this.$store.kakaouserinfo.id;
+        // data.name = this.nickname;
+        // data.profileImage = this.$store.kakaouserinfo.properties.profile_image;
+        // data.sido = this.region1_selected;
+        // data.sigungu = this.region2_selected;
+        // data.dong = this.region3_selected;
+        // if(this.$store.kakaouserinfo.kakao_account.has_gender)
+        //   data.gender = this.$store.kakaouserinfo.gender;
+        // else
+        //   data.gender = "";
+        // data.birthday = this.year_selected + "-" + this.month_selected + "-" + this.day_selected;
+        // data.categories = this.selected_category_list;
+        // console.log(data);
+        // this.RegisterCall(data);
+        // this.$router.replace("/");
+      }
+    },
+    async SetParentCategory() {
+      this.parentCategory_options = [];
+      let parentCategory = await getAllParentCategory();
+      if (parentCategory.status === 200) {
+        this.parentCategory_options = parentCategory.data;
+      }
+      console.log(this.parentCategory_options);
+    },
+    async SetChildCategory(parentId, index) {
+      this.selected_category[index].childCategory = null;
+
+      let childCategory = await getChildCategory(parentId);
+      if (childCategory.status === 200) {
+        this.selected_category[index].childCategory_options =
+          childCategory.data;
+      }
+      console.log(this.selected_category[index].childCategory_options);
+      console.log(this.selected_category);
+    },
+    AddSelectedCategory: function () {
+      console.log("hello");
+      if (this.selected_category.length < 5) {
+        this.selected_category.push({
+          parentCategory: null,
+          childCategory: null,
+          childCategory_options: null,
+        });
+      }
+      console.log(this.selected_category);
+    },
+    DeleteSelectedCategory: function (index) {
+      if (this.selected_category.length > 1) {
+        this.selected_category.splice(index, 1);
+
       }
     },
     async RegisterCall(data){
@@ -394,7 +415,7 @@ export default {
     }
   },
   created() {
-    this.selected_category_list = [];
+    // this.childCategory_options = [];
 
     for (var year = 1900; year <= 2022; year++) {
       this.year_options.push(year);
@@ -409,7 +430,14 @@ export default {
       this.region1_options.push(index);
     }
     this.region1_options.sort();
-    this.SetCategory();
+    this.SetParentCategory();
+    this.selected_category.push({
+      parentCategory: null,
+      childCategory: null,
+      childCategory_options: null,
+    });
+    if(this.$store.kakaouserinfo.kakao_account.has_gender)
+          this.gender_selected = this.$store.kakaouserinfo.gender;
   },
   computed: {},
 };

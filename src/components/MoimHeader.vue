@@ -59,10 +59,10 @@ export default {
   },
   methods: {
     kakaoLogin() {
-      const params = {
-        redirectUri: "http://localhost:8080/kakaologin",
-      };
-      window.Kakao.Auth.authorize(params);
+      this.axios.get('/login')
+        .then((response) => {
+            window.location.href = response.data;
+        })
     },
     handleResize() {
       this.width = window.innerWidth;
