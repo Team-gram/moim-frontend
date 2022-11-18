@@ -16,23 +16,25 @@
     <b-col cols="auto" style="margin: 0px 5px 5px 0">
       <b-form-select
         id="form-input"
-        v-model="parentCategory"
+        v-model="selected_category.parentCategory"
         :options="parentCategory_options"
-        v-on:change="SetChildCategory($event, 0)"
+        v-on:change="SetChildCategory($event)"
         style="width: 200px; text-align: center"
         value-field="categoryId"
         text-field="categoryName"
       >
       <template #first>
-        <b-form-select-option :value="null" disabled>대분류</b-form-select-option>
+        <b-form-select-option :value="null" disabled
+          >대분류</b-form-select-option
+        >
       </template>
-      </b-form-select>
-    </b-col>
+        </b-form-select>
+      </b-col>
       <b-col cols="auto" style="margin: 0px 5px 5px 0">
         <b-form-select
           id="form-input"
-          v-model="childCategory"
-          :options="childCategory_options"
+          v-model="selected_category.childCategory"
+          :options="selected_category.childCategory_options"
           style="width: 200px; text-align: center"
           value-field="categoryId"
           text-field="categoryName"
@@ -184,11 +186,11 @@ export default {
         this.parentCategory_options = parentCategory.data;
       }
     },
-    async SetChildCategory(parentId, index) {
-      this.selected_category[index].childCategory = null;
+    async SetChildCategory(parentId) {
+      this.selected_category.childCategory = null;
       let childCategory = await getChildCategory(parentId);
       if (childCategory.status === 200) {
-        this.selected_category[index].childCategory_options =
+        this.selected_category.childCategory_options =
           childCategory.data;
       }
     },
