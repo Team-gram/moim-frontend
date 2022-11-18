@@ -10,6 +10,7 @@ import MoimCalendar from '@/views/MoimCalendar'
 import MyMoim from '@/views/MyMoim'
 import MoimIntro from '@/views/MoimIntro'
 import NewMoim from '@/views/newMoim'
+import RegisterSchedule from '@/views/RegisterSchedule'
 Vue.use(VueRouter);
 
 const routes = 
@@ -58,6 +59,11 @@ const routes =
     path:"/newmoim",
     name: 'NewMoim',
     component: NewMoim
+  },
+  {
+    path:"/schedule/register",
+    name: 'RegisterSchedule',
+    component: RegisterSchedule,
   }
 ]
 
