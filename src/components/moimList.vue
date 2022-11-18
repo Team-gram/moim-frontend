@@ -4,7 +4,7 @@
     style="margin-top: 10px; margin-left: 20px; margin-right: 20px"
   >
     <div id="listBox">
-      <div id="listItem" v-for="moimItem in moimList" :key="moimItem.title">
+      <div id="listItem" v-for="moimItem in moimList" :key="moimItem.title" @click="moimDetail()">
         <b-row align-v="center">
           <b-col cols="auto">
             <b-img
@@ -100,6 +100,9 @@ export default {
     },
     changeSubCategory() {
       this.$store.commit('searchStore/initCategorySearchOptions');
+    },
+    moimDetail() {
+      this.$router.push({name: "MoimIntro"});
     }
   },
   created() {
