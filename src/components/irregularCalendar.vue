@@ -7,17 +7,17 @@
         <div id="title">{{currentMonth}}월</div>
       <b-col  v-on:click="onClickNext(currentMonth)" style="cursor:pointer">▶</b-col>
     </b-row>
-    <b-row>
+    <b-row class="no-gutters">
       <b-col id="daytitle" v-for="(weekName, index) in weekNames" v-bind:key="index">
         {{weekName}}
       </b-col>
     </b-row>
-    <b-row class="daylist" v-for="(row, index) in currentCalendarMatrix" :key="index">
+    <b-row class="no-gutters" v-for="(row, index) in currentCalendarMatrix" :key="index">
       <b-col v-for="(day, index2) in row" :key="index2">
-        <div id="day" class="today" v-if="isToday(currentYear, currentMonth, day)">
+        <div id="day" @click="callday(currentYear,currentMonth,day)" class="today" v-if="isToday(currentYear, currentMonth, day)">
           {{day}}
         </div>
-        <div id="day" v-else>
+        <div id="day" @click="callday(currentYear,currentMonth,day)" v-else>
           {{day}}
         </div>
       </b-col>
@@ -65,6 +65,7 @@ export default {
             }
             else{
               calendarRow.push("");
+              i=7;
             }
           }
           this.currentCalendarMatrix.push(calendarRow);
@@ -145,6 +146,9 @@ export default {
       isToday: function(year, month, day){
         let date = new Date();
         return year == date.getFullYear() && month == date.getMonth()+1 && day == date.getDate(); 
+      },
+      callday(year, month, day){
+        console.log(year, month, day);
       }
   }
 }
@@ -155,24 +159,27 @@ export default {
 #listbackground{
   background-color: #f3f3f3 !important;
   border-radius: 20px !important; 
-  padding: 10px 20px 10px 20px;
-  margin: 10px 0 10px 0;
+  padding: 5px 10px 5px 10px;
 }
 #title{
   font-weight: bold !important;
   font-size: 20px;
-  padding: 10px 90px 10px 90px;
+  padding: 5px 0px 5px 0px;
 }
 #daytitle{
   font-weight: bold !important;
   font-size: 17px;
+  padding: 10px 0px 10px 0px;
 }
 #day{
-  padding: 10px 10px 10px 10px;
-  height: 5em;
+  padding: 5px 0px 5px 0px;
 }
 .today{
   background-color: #e8e5e5 !important;
   border-radius: 50% !important; 
 }
+div{
+  text-align: center;
+}
+
 </style>
