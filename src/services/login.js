@@ -1,6 +1,6 @@
 import request from "@/services/request";
-export async function getLogin() {
-    return await request({
+export function getLogin() {
+    return request({
         url: "/login",
         method: "get"
     });
