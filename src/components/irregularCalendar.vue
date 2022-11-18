@@ -12,9 +12,9 @@
         {{weekName}}
       </b-col>
     </b-row>
-    <b-row v-for="(row, index) in currentCalendarMatrix" :key="index">
+    <b-row class="daylist" v-for="(row, index) in currentCalendarMatrix" :key="index">
       <b-col v-for="(day, index2) in row" :key="index2">
-        <div id="day" v-if="isToday(currentYear, currentMonth, day)">
+        <div id="day" class="today" v-if="isToday(currentYear, currentMonth, day)">
           {{day}}
         </div>
         <div id="day" v-else>
@@ -166,9 +166,13 @@ export default {
 #daytitle{
   font-weight: bold !important;
   font-size: 17px;
-  padding: 10px 0px 10px 0px;
 }
 #day{
-  padding: 10px 0px 10px 0px;
+  padding: 10px 10px 10px 10px;
+  height: 5em;
+}
+.today{
+  background-color: #e8e5e5 !important;
+  border-radius: 50% !important; 
 }
 </style>
