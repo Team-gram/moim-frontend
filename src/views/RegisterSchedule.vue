@@ -213,6 +213,7 @@
 </template>
 
 <script>
+import { regularSet } from "@/services/calendar";
 export default {
   data() {
     return {
@@ -282,7 +283,7 @@ export default {
       }
       
     },
-    registerSchedule() {
+  async  registerSchedule() {
       //요일, 시작 및 종료시간, 이름, 설명이 다 입력되었는지 확인
       var isValidSchedule = true;
       //시간 입력 문제
@@ -308,6 +309,25 @@ export default {
 
       if(isValidSchedule == true) {
         if(this.type_selected==="Regular") {
+          const start_time = this.start_hour_selected.toString()+":"+this.start_minute_selected.toString();
+          const end_time = this.end_hour_selected.toString()+":"+this.end_minute_selected.toString();
+          var data = Object();
+          data.userId = this.$cookies.get("MoimUserId");
+          data.day = this.regular_day_selected;
+          data.startTime = start_time;
+          data.endTime = end_time;
+          data.title = this.schedule_name;
+          data.detail = this.schedule_description;
+          console.log(data);
+          const response = await regularSet(data);
+          if(response.status==200){
+            this.$bvToast.toast(data.title+': 개인일정이 등록되었습니다.', {
+            // title: "회원 정보 등록 실패",
+            toaster: "b-toaster-top-right",
+            appendToast: false,
+            autoHideDelay: 3000,
+        });
+          }
           //정기 일정 등록 api 호출
         }
         else {
