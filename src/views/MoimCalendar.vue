@@ -37,9 +37,9 @@ export default {
     },
     newCalendar(){
       if(this.isRegular){
-        console.log(this.isRegular);
+        this.$router.replace('/schedule/register');
       }else{
-        console.log(this.isRegular);
+          this.$router.replace('/schedule/register');
       } 
     }
   },
