@@ -6,7 +6,7 @@
   <div id="listbackground">
     <b-row id="MymoimTitle">내 모임
       <b-col id="plus" >
-        <b-img style="width:40px;height:36px; border-radius: 45%;" :src="require('@/assets/plus.png')"></b-img>
+        <b-img @click="newmoim()" style="width:40px;height:36px; border-radius: 45%;" :src="require('@/assets/plus.png')"></b-img>
       </b-col>
     </b-row>
     <div v-for="(list,index) in moimlist" :key="index" @click="callMoim(index)">
@@ -54,6 +54,9 @@ export default {
     },
     callMoim(index){
       console.log(this.moimlist[index]["moimid"]);
+    },
+    newmoim(){
+      this.$router.replace('/newmoim');
     }
   }
 }
