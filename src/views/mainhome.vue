@@ -14,7 +14,7 @@
             <b-row>
               <b-col
                 v-for="category in category_list"
-                :key="category"
+                :key="category.categoryId"
                 cols="auto"
                 id="button"
               >
@@ -29,7 +29,7 @@
                 >
                   <img
                     :src="
-                      require(`@/assets/category-icon/${category.replaceAll(
+                      require(`@/assets/category-icon/${category.categoryName.replaceAll(
                         '/',
                         '-'
                       )}.png`)
@@ -38,7 +38,7 @@
                     style="width: 50px"
                   />
                   <div id="category-text">
-                    {{ category }}
+                    {{ category.categoryName }}
                   </div>
                 </div>
               </b-col>
@@ -52,8 +52,8 @@
 
 <script>
 import { getUserinfo } from '@/services/login';
+import { getAllParentCategory, getChildCategory } from '@/services/category';
 import searchbar from "@/components/Search/SearchBar";
-import categoryjson from "@/data/카테고리.json";
 export default {
   name: "MainHome",
   components: {
@@ -66,24 +66,30 @@ export default {
     };
   },
   methods: {
-    SetCategory: function () {
+    async SetCategory() {
       this.category_list.splice(0);
-      for (var index in categoryjson) {
-        this.category_list.push(index);
-      }
+      let category = await getAllParentCategory();
+      this.category_list = category.data;
+      console.log(this.category_list);
     },
     searchKeyword: function (Data) {
       console.log(Data);
+      this.$store.commit('searchStore/setSearchType',"keyword");
+      this.$store.commit('searchStore/setSearchData', Data);
+      this.$store.commit('searchStore/initKeywordSearchOptions');
       this.$router.push({
         name: "MoimSearchList",
-        query: { type: "keyword", data: Data },
       });
     },
-    searchCategory: function (Data) {
+    async searchCategory(Data) {
       console.log(Data);
+      this.$store.commit('searchStore/setSearchType',"category");
+      this.$store.commit('searchStore/setSearchData', Data);
+      let subCategory = await getChildCategory(Data.categoryId);
+      this.$store.commit('searchStore/modifySearchOptions',{key: 'subCategory', value: subCategory.data[0]});
+      this.$store.commit('searchStore/initCategorySearchOptions');
       this.$router.push({
         name: "MoimSearchList",
-        query: { type: "category", data: Data },
       });
     },
   },

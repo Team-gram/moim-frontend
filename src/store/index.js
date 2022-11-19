@@ -1,12 +1,18 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { getUserinfo } from '@/services/login';
+import createPersistedState from "vuex-persistedstate";
 
 Vue.use(Vuex);
+
+import searchStore from '@/store/modules/searchStore';
 
 const store = new Vuex.Store({
   state:{
     userinfo:"",
+  },
+  getters: {
+
   },
   mutations:{
     MoimUserInfo(state,data){
@@ -21,6 +27,10 @@ const store = new Vuex.Store({
       }
     }
   },
+  modules: {searchStore},
+  plugins: [createPersistedState({
+    paths: ['searchStore'],
+  })],
 });
 
 export default store;

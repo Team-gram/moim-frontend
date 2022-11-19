@@ -4,7 +4,7 @@
     style="margin-top: 10px; margin-left: 20px; margin-right: 20px"
   >
     <div id="listBox">
-      <div id="listItem" v-for="moimItem in moimList" :key="moimItem.title">
+      <div id="listItem" v-for="moimItem in moimList" :key="moimItem.title" @click="moimDetail()">
         <b-row align-v="center">
           <b-col cols="auto">
             <b-img
@@ -51,62 +51,81 @@
           </b-col>
         </b-row>
       </div>
+      <div v-if="!this.moimList.length">검색 결과가 없습니다.</div>
     </div>
   </div>
 </template>
 
 <script>
+
+import {SearchMoim} from "@/services/moim";
+
 export default {
   data() {
     return {
-      moimList: [
-        {
-          title: "모임1",
-          maxMember: 5,
-          sido: "경기도",
-          sigungu:"수원시",
-          dong:"영통구",
-          content: "모임1에 대한 소개",
-          image: require(`@/assets/test.jpg`),
-        },
-        {
-          title: "모임2",
-          maxMember: 5,
-          sido: "경기도",
-          sigungu:"수원시",
-          dong:"영통구",
-          content: "모임2에 대한 소개",
-          image: require(`@/assets/test.jpg`),
-        },
-        {
-          title: "모임3",
-          maxMember: 5,
-          sido: "경기도",
-          sigungu:"수원시",
-          dong:"영통구",
-          content: "모임3에 대한 소개",
-          image: require(`@/assets/test.jpg`),
-        },
-        {
-          title: "모임4",
-          maxMember: 5,
-          sido: "경기도",
-          sigungu:"수원시",
-          dong:"영통구",
-          content: "모임4에 대한 소개",
-          image: require(`@/assets/test.jpg`),
-        },
-        {
-          title: "모임5",
-          maxMember: 5,
-          sido: "경기도",
-          sigungu:"수원시",
-          dong:"영통구",
-          content: "모임5에 대한 소개",
-          image: require(`@/assets/test.jpg`),
-        },
-      ],
+      moimList: [],
     };
+  },
+  methods: {
+    async getMoimSearchResult(){
+      var searchData = new Object();
+      if(this.$store.getters["searchStore/getSearchType"] === "keyword"){
+        //title
+        searchData.title = this.$store.getters["searchStore/getSearchData"];
+
+      }else if (this.$store.getters["searchStore/getSearchType"] === "category"){
+        //categoryId
+        if(this.$store.getters["searchStore/getSelectedSubCategory"] !== null) {
+        searchData.categoryId = this.$store.getters["searchStore/getSelectedSubCategory"].categoryId;
+        }
+        else {
+          searchData.categoryId = this.$store.getters["searchStore/getSearchData"].categoryId;
+        }
+      }
+      var location = this.$store.getters["searchStore/getSearchLocation"];
+      if(location){
+        if(location.sido) {
+          searchData.sido = this.$store.getters["searchStore/getSearchLocation"].sido;
+        }
+        if(location.sigungu) {
+          searchData.sigungu = this.$store.getters["searchStore/getSearchLocation"].sigungu;
+        }
+        if(location.dong) {
+          searchData.dong = this.$store.getters["searchStore/getSearchLocation"].dong;
+        }
+      }
+      console.log(searchData);
+      let result = await SearchMoim(searchData);
+      this.moimList = result.data;
+    },
+    changeSubCategory() {
+      this.$store.commit('searchStore/initCategorySearchOptions');
+    },
+    moimDetail() {
+      this.$router.push({name: "MoimIntro"});
+    }
+  },
+  created() {
+    this.getMoimSearchResult();
+  },
+  computed: {
+    subCategory: function() {
+      return this.$store.getters["searchStore/getSelectedSubCategory"];
+    },
+    location: function() {
+      return this.$store.getters["searchStore/getSearchLocation"];
+    }
+  },
+  watch: {
+    subCategory(value) {
+      console.log("watch subcategory", value);
+      this.changeSubCategory();
+      this.getMoimSearchResult();
+    },
+    location(value) {
+      console.log("watch location", value);
+      this.getMoimSearchResult();
+    }
   },
 };
 </script>
