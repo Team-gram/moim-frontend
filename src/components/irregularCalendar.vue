@@ -178,8 +178,5 @@ export default {
   background-color: #e8e5e5 !important;
   border-radius: 50% !important; 
 }
-div{
-  text-align: center;
-}
 
 </style>
