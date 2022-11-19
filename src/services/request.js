@@ -3,8 +3,7 @@ import axios from "axios";
 
 // create an axios instance
 const service = axios.create({
-  baseURL: "http://ec2-52-78-104-79.ap-northeast-2.compute.amazonaws.com:8080", //"https://dev-api-bgl.geeksloft.com", // url = base url + request url
-  // baseURL: "http://127.0.0.1:8000",
+  baseURL: "http://ec2-52-78-104-79.ap-northeast-2.compute.amazonaws.com:8080", // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 15000, // request timeout
 });
