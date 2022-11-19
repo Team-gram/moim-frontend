@@ -4,7 +4,7 @@
       <b-container class="navbar-container">
         <b-row align-v="center" style="width: 100vw; margin-top: 20px">
           <b-col>
-            <b-navbar-brand href="/" style="margin-left: 10px">
+            <b-navbar-brand @click="home()" style="margin-left: 10px">
               <img src="../assets/moim_logo_fullname.png" width="120" />
             </b-navbar-brand>
           </b-col>
