@@ -14,3 +14,9 @@ export function regularSet(data) {
       }
     });
   }
+  export function regularget(id) {
+    return request({
+      url: "/user/schedule/"+id+"/1",
+      method: "get",
+    });
+  }
