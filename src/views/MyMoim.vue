@@ -10,7 +10,7 @@
       </b-col>
     </b-row>
     <div v-for="(list,index) in moimlist" :key="index" @click="callMoim(index)">
-      <div id="listBox" v-show="index<mylist+4 && index>=mylist">
+      <div v-if="list!==null" id="listBox" v-show="index<mylist+4 && index>=mylist">
         <b-row id="listTitle" align-v="center">
           <b-col cols="auto" style="padding: 0 0 0 15px">
             <b-img style="width:40px;height:36px; border-radius: 45%;" :src="require('@/assets/test.jpg')"></b-img>

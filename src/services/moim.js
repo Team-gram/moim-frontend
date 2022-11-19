@@ -36,3 +36,35 @@ export function SearchMoim(data) {
         }
     })
 }
+export function MoimDetail(id) {
+    return request({
+        url: "/moim/"+id,
+        method: "get",
+        params: {
+            "id": id,
+        }
+    })
+}
+
+export function JoinFreeMoim(id, userId){
+    return request({
+        url: "/moim/free",
+        method: "post",
+        data: {
+            "moimId": id,
+            "userId": userId,
+        }
+    })
+}
+
+export function JoinPassMoim(id, userId, message){
+    return request({
+        url: "/moim/pass",
+        method: "post",
+        data: {
+            "moimId": id,
+            "userId": userId,
+            "message": message,
+        }
+    })
+}

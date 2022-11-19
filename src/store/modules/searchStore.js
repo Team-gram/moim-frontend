@@ -2,6 +2,7 @@ const state = {
   type: null,
   data: null,
   options: {},
+  details: {},
 };
 const getters = {
   getSearchType(state) {
@@ -16,6 +17,12 @@ const getters = {
   },
   getSearchLocation(state) {
     return state.options.location;
+  },
+  getSelectedMoimId(state) {
+    return state.details.id;
+  },
+  getSelectedMoimData(state) {
+    return state.details.data;
   }
 };
 const mutations = {
@@ -37,6 +44,12 @@ const mutations = {
     state.options.location=null;
     state.options.title = null;
   },
+  setSelectedMoimId(state, id) {
+    state.details.id = id;
+  },
+  setSelectedMoimDate(state, data) {
+    state.details.data = data;
+  }
 };
 const actions = {
 };
