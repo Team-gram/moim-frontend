@@ -1,16 +1,16 @@
  <template>
   <div id="listbackground">
-    <div id="listBox" v-for="day in dayindex" :key="day">
+    <div id="listBox" v-for="item,index in calendar" :key="index">
       <b-row id="listTitle" align-v="center" align-h="between">
         <b-col cols="auto" style="padding: 0 0 0 15px">
-          <div id="listTitle" >{{ day }}</div>
+          <div id="listTitle" >{{ day[item.day] }}</div>
         </b-col>
         <b-col cols="auto">
-          <div id="listnodata" v-if="calendardata[day] === 'NULL'">
+          <div id="listnodata" v-if="calendardata === ''">
             등록된 정기 일정이 없습니다.
           </div>
-          <div v-else id="listdata" v-for="(item,index)  in calendardata[day]" :key="index">
-            {{item.time}} | {{item.data}}
+          <div v-else id="listdata" v-for="item,index  in calendar" :key="index">
+            {{item.startTime.slice(0,-3)}} - {{item.endTime.slice(0,-3)}} | {{item.title}}
           </div>
         </b-col>
       </b-row>
@@ -19,12 +19,21 @@
 </template>
 
 <script>
-import calendar from "@/data/캘린더.json"
+import { regularget } from "@/services/calendar";
 export default {
   data() {
     return {
-      calendardata : calendar["221002"],
-      dayindex : ["월","화","수","목","금","토","일"],
+      calendar : "",
+      day:["월","화","수","목","금","토","일"],
+      day_options: [
+          { item: "0", name: "월" },
+          { item: "1", name: "화" },
+          { item: "2", name: "수" },
+          { item: "3", name: "목" },
+          { item: "4", name: "금" },
+          { item: "5", name: "토" },
+          { item: "6", name: "일" },
+        ],
       isRegular: true,
     };
   },
@@ -35,6 +44,15 @@ export default {
     irregular(){
       this.isRegular = false;
     }
+  },
+ async created(){
+    const response = await regularget(this.$cookies.get("MoimUserId"));
+    if(response.status==200)
+      this.calendar = response.data;
+    else{
+      alert('로그인이 필요합니다.');
+    }
+
   }
 }
 </script>
