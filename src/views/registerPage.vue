@@ -381,8 +381,7 @@ export default {
         }else{
           alert(response.data);
           this.$router.replace('/');
-        }0
-        
+        } 
       }
     },
   },
