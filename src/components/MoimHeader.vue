@@ -14,7 +14,7 @@
               variant="light"
               id="show-btn"
               class="ml-auto login-button"
-              @click="$bvModal.show('bv-modal-example')"
+              @click="[$bvModal.show('bv-modal-example'), logout()]"
               style="float: right; margin-right: 10px"
               >{{userID}}
             </b-button>
@@ -30,12 +30,12 @@
           </b-col>
         </b-row>
       </b-container>
-      <b-modal id="bv-modal-example" size="sm" hide-footer hide-header centered>
+      <b-modal v-if="!islogin" id="bv-modal-example" size="sm" hide-footer hide-header centered>
         <div
           class="d-block text-center"
           style="margin-bottom: 20px; margin-top: 20px"
         >
-          <h5>로그인 | 회원가입</h5>
+          <h5>{{logintext}}</h5>
         </div>
         <div class="d-block text-center" style="margin-bottom: 20px">
           <img
@@ -56,6 +56,8 @@ export default {
       width: 0,
       height: 0,
       userID: "로그인",
+      logintext: "로그인 | 회원가입",
+      islogin:false ,
     };
   },
   methods: {
@@ -85,12 +87,20 @@ export default {
       this.width = window.innerWidth;
       this.height = window.innerHeight;
     },
+    logout(){
+      if(this.islogin){
+        this.$cookies.remove("MoimUserId");
+        this.$router.go();
+      }
+    },
   },
   created() {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
     if(this.$cookies.get("MoimUserId")!=undefined){
-      this.userID="로그아웃"
+      this.userID="로그아웃";
+      this.islogin=true;
+      this.logintext = "로그아웃";
     }
   },
   mounted() {

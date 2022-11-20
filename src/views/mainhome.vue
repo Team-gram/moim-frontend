@@ -109,7 +109,8 @@ export default {
           }
           else{
             this.$store.commit('MoimUserInfo',result.data);
-            this.$router.go();
+            history.replaceState({}, null, location.pathname);
+            this.$router.go('/');
          }
       }
     }

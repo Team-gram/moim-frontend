@@ -28,9 +28,10 @@ export default {
 				day_starts_at: 6,
 				day_ends_at: 24,
 				overlap: true,
-				hide_dates: ['2019-08-09'],
+				hide_dates: [],
 				hide_days: [],
 				past_event_creation: true,
+        formatDayTitle: '월',
 			},
 			new_appointment: {},
       
