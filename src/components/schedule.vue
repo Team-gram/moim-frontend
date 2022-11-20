@@ -12,7 +12,7 @@
       <b-th class="notdrag">{{hour}}</b-th>
       <b-td class="no-padding" v-for="(day,index) in day_options" :key="index">
         <ul style="margin-bottom: 0px">
-          <li class="minute notdrag" :class="{'check': check===0}"  v-for="minute in minute_options" :key="minute"
+          <li class="minute notdrag" :class="{'check': mouseover(day.item,hour,minute)}"  v-for="minute in minute_options" :key="minute"
           @mouseover="mouseover(day.item,hour,minute)"
           @mouseup="mouseup(day.item)" 
           @mousedown="mousedown(day.item)"></li>
@@ -58,7 +58,9 @@
     mouseover(day,hour,minute){
       if(this.drag==1 && day==this.current){
         console.log(this.day_options[day].name,hour +"시 ",minute+"분");
+        return true;
       }
+      return false;
     },
     mouseup(){
       this.drag=-1;

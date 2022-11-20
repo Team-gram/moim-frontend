@@ -89,6 +89,9 @@ export default {
   created() {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
+    if(this.$cookies.get("MoimUserId")!=undefined){
+      this.userID="로그아웃"
+    }
   },
   mounted() {
     window.addEventListener("resize", this.handleResize);
