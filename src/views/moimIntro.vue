@@ -172,7 +172,9 @@ export default {
       }
     },
     async joinMoim() {
-      if (!this.checkJoinedMoim(this.moimData.id)) {
+      var isJoinAble = await this.checkNotJoinedMoim(this.moimData.id);
+      console.log(isJoinAble);
+      if (isJoinAble) {
         let joinRequest;
         if (this.moimData.isFreeEnter === "Y") {
           //자유가입api
@@ -205,30 +207,20 @@ export default {
       } else {
         alert("이미 가입한 모임입니다.");
         if (this.moimData.isFreeEnter === "Y") {
-        this.$bvModal.hide("moimFreeJoinModal");
-      } else {
-        this.$bvModal.hide("moimApplyJoinModal");
-      }
+          this.$bvModal.hide("moimFreeJoinModal");
+        } else {
+          this.$bvModal.hide("moimApplyJoinModal");
+        }
       }
     },
 
-    async checkJoinedMoim(id) {
+    async checkNotJoinedMoim(id) {
+
       let myMoim = await MyMoimList(this.$cookies.get("MoimUserId"));
       if (myMoim.status === 200) {
         console.log(myMoim.data);
-        myMoim.data.forEach(function (moim) {
-          console.log(moim);
-          if (moim !== null) {
-            console.log(moim.id);
-            console.log(id);
-            // console.log(moim.id);
-            if (moim.id === id) {
-              return true;
-            }
-          }
-        });
+        return myMoim.data.every(moim => moim.id !== id);
       }
-      return false;
     },
   },
   created() {
