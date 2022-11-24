@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import regularCalendar from "@/components/regularCalendar.vue"
+import regularCalendar from "@/components/irrCalendarchild.vue"
 import { irregularGet } from "@/services/calendar";
 export default {
   components:{

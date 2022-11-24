@@ -1,99 +1,243 @@
- <template>
-  <div id="regularbackground">
-    <div id="regularBox" @click="[$bvModal.show('bv-modal-example'),irrselected(item) ]" v-for="(item,index) in parentdata" :key="index">
-      <b-row id="regularTitle" align-v="center" align-h="center">
-        <b-col cols="auto">
-          <div id="regularTitle" >{{ item.title }} :</div>
-        </b-col>
-        <b-col cols="auto">
-          <div id="regulardetail" >{{ item.detail }}</div>
-        </b-col>
-        <b-col cols="auto">
-          <div id="regulardata">
-            {{item.startTime.slice(0,5)}} - {{item.endTime.slice(0,5)}}
-          </div>
-        </b-col>
-      </b-row>
-    </div>
-    <b-modal id="bv-modal-example" size="sm" hide-footer hide-header centered>
-        <div
-          class="d-block text-center"
-          style="margin-bottom: 20px; margin-top: 20px"
-        >
-          <h5>비정기 일정 삭제하기</h5>
-        </div>
-        <div class="d-block text-center" style="margin-bottom: 20px">
-          <b-button variant="danger" @click="irrdelete">삭제하기</b-button>
-        </div>
-      </b-modal>
-  </div>
+<template>
+	<div>
+		<kalendar v-if="startKalendar>0" :configuration="calendar_settings" :events="events">
+		<div
+			slot="created-card"
+			slot-scope="{ event_information }"
+			class="details-card"
+		>
+			<h5 class="appointment-title appfont">
+				{{ event_information.data.title }}
+			</h5>
+			<h6 class="appsubfont" style="padding: 10px 0 0 0">
+				{{ event_information.data.description }}
+			</h6>
+      <span class="time">
+					{{ event_information.start_time.substr(11,5)}}
+					<br>
+					{{ event_information.end_time.substr(11,5)}}
+				</span>
+			<button @click="removeEvent(event_information)" class="details-button"></button>
+		</div>
+		<div slot="creating-card">
+			<h4 class="appointment-title" style="text-align: left;">
+				새 일정
+			</h4>
+		</div>
+		<div
+				slot="popup-form"
+				slot-scope="{ popup_information }"
+				style="display: flex; flex-direction: column;"
+			>
+			<h4 style="margin-bottom: 10px">
+					새 일정
+			</h4>
+				<input
+					v-model="new_appointment['title']"
+					type="text"
+					name="title"
+					placeholder="Title"
+				/>
+				<textarea
+					v-model="new_appointment['description']"
+					type="text"
+					name="description"
+					placeholder="Description"
+					rows="2"
+				></textarea>
+				<div class="buttons popup-event">
+          <button class="add" @click="addAppointment(popup_information)">
+						추가
+					</button>
+					<button class="cancel" @click="closePopups()">
+						취소
+					</button>
+				</div>
+			</div>
+		</kalendar>
+	</div>
 </template>
-
 <script>
-import { irregularRemove } from "@/services/calendar";
+import Kalendar from '@/lib-components/kalendar-container.vue';
+import { regularGet, regularSet, regularRemove} from "@/services/calendar";
+import moment from "moment";
 export default {
-  props:['parentdata'],
-  data() {
-    return {
-      irrid : 0,
-      day_options: [
-          { item: "0", name: "월" },
-          { item: "1", name: "화" },
-          { item: "2", name: "수" },
-          { item: "3", name: "목" },
-          { item: "4", name: "금" },
-          { item: "5", name: "토" },
-          { item: "6", name: "일" },
-        ],
-      isRegular: true,
-    };
-  },
-  methods:{
-  async irrdelete(){
-      const response = await irregularRemove(this.$cookies.get("MoimUserId"),this.irrid);
-      console.log(response); 
-    },
-    irrselected(item){
-      this.irrid=item.id;
-      
+  name: "MoimTest",
+	components: {
+		Kalendar,
+	},
+	data() {
+		return {
+			startKalendar:0,
+      events:[
+      ],
+			calendar_settings: {
+				view_type: 'week',
+				cell_height: 10,
+				scrollToNow: false,
+				hourlySelection: false,
+				start_day: new Date().toISOString(),
+				military_time: false,
+				read_only: false,
+				day_starts_at: 0,
+				day_ends_at: 24,
+				overlap: true,
+				hide_dates: [],
+				hide_days: [],
+				past_event_creation: true,
+			},
+			new_appointment: {},
+		};
+	},
+  async created(){
+		const response = await regularGet(this.$cookies.get("MoimUserId"));
+		if(response.status==200)
+      this.calendar = response.data;
+    else{
+      alert('로그인이 필요합니다.');
     }
+		for (var item in response.data){
+			this.setEvent(response.data[item]);
+		}
+		this.startKalendar=1;
   },
-  created(){
-  }
-}
+	methods: {
+		setEvent(item){
+			var calen = Object();
+			var data = Object();
+			calen['from'] = moment().day(item.day+1).format().slice(0,11).toString() + item.startTime + "+09:00"
+			calen['to'] = moment().day(item.day+1).format().slice(0,11).toString() + item.endTime + "+09:00"
+			calen['id'] = item.id;
+			data['title'] = item.title;
+			data['description'] = item.detail;
+			calen["data"] = data;
+			this.events.push(calen);
+		},
+	async	addAppointment(popup_info) {
+			let payload = {
+				data: {
+					title: this.new_appointment.title,
+					description: this.new_appointment.description,
+				},
+				from: popup_info.start_time,
+				to: popup_info.end_time,
+			};
+			if(payload.data.title==null){
+				this.$bvToast.toast("실패했습니다. 제목을 입력해주세요", {
+        toaster: "b-toaster-top-right",
+        appendToast: false,
+        autoHideDelay: 3000,
+        });
+				return;
+			}
+			var data = Object();
+			data["day"] = moment(payload.from).day()-1;
+			data["day"] = (data["day"]< 0) ? 6 : data["day"];
+      data["startTime"] = payload.from.slice(11,19);
+      data["endTime"] = payload.to.slice(11,19);
+      data["title"] = payload.data.title;
+      data["detail"] = payload.data.description;
+      data["userId"] = this.$cookies.get("MoimUserId");
+			let response = await regularSet(data);
+      if(response.status==200){
+        this.$bvToast.toast(data.title+': 개인일정이 등록되었습니다.', {
+        // title: "회원 정보 등록 실패",
+        toaster: "b-toaster-top-right",
+        appendToast: false,
+        autoHideDelay: 3000,
+        });
+      }
+			response = await regularGet(this.$cookies.get("MoimUserId"));
+			if(response.status==200){
+				for(var index in response.data){
+					if(response.data[index].startTime == data.startTime && response.data[index].endTime == data.endTime){
+						payload.id = response.data[index].id;
+					}
+				}
+			}
+			this.$kalendar.addNewEvent(payload);
+			this.$kalendar.closePopups();
+			this.clearFormData(); 
+		},
+		closePopups() {
+			this.$kalendar.closePopups();
+		},
+		clearFormData() {
+			this.new_appointment = {
+				description: null,
+				title: null,
+			};
+		},
+	async	removeEvent(kalendarEvent) {
+			console.log('KalendarEvent', kalendarEvent);
+			let day = kalendarEvent.start_time.slice(0, 10);
+			this.$kalendar.removeEvent({
+				day,
+				key: kalendarEvent.key,
+				id: kalendarEvent.kalendar_id,
+			});
+			const data = await regularRemove(this.$cookies.get("MoimUserId"),kalendarEvent.kalendar_id);
+			if(data.status==200){
+				this.$bvToast.toast('개인일정이 삭제되었습니다.', {
+					// title: "회원 정보 등록 실패",
+					toaster: "b-toaster-top-right",
+					appendToast: false,
+					autoHideDelay: 3000,
+				});
+			}
+		},
+	},
+};
 </script>
 
 <style>
-#regularbackground{
-  background-color: #f3f3f3 !important;
-  border-radius: 20px !important; 
-  padding: 0px 10px 0px 10px;
-  margin: 0px 0 0px 0;
+
+.appointment-title{
+	color:black;
+	width:100%;
 }
-#regularTitle {
-  font-weight: bold !important;
-  font-size: 17px;
-  padding: 0px 0px 0px 0px;
+.details-card{
+	display: flex;
+	flex-direction: column;
+	width: 100px;
+	height: 100%;
 }
-#regulardetail{
-  font-weight:normal;
-  font-size: 16px;
-  padding: 0px 0px 0px 0px;
+.details-button{
+	margin: 0;
+	border: none;
+	color: #4c4b4b;
+	position: absolute;
+	padding-right: 0px;
+	top: 5px;
+	right: 5px;
+	cursor: pointer;
+	background: transparent;
 }
-#regulardata {
-  font-size: 14px;
-  background-color: #f3f3f3;
-  border-radius: 10px !important;
-  padding: 5px 10px 5px 10px;
-  text-align: center;
+svg{
+	width: 18px;
+	height: 18px;
+	fill: white;
 }
-#regularBox {
-  border-radius: 10px !important;
-  border: 0px solid;
-  background-color: #d9d9d9 !important;
-  float: center;
-  max-width: 1000px;
-  padding: 10px 10px 10px 10px;
-  margin: 10px 0 10px 0;
+.popup-event{
+	display: flex;
+	justify-content: space-between;
+}
+.add{
+	border: none;
+	color: #29771c;
+	background-color:rgba(0, 128, 0, 0.399);
+	padding: 5px 10px;
+}
+.cancel {
+  border: none;
+  background-color: rgba(255, 0, 0, 0.399);
+  color: red;
+  padding: 5px 10px;
+}
+.appfont{
+	font-size: 16px;
+}
+.appsubfont{
+	font-size: 13px;	
 }
 </style>

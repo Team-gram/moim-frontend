@@ -41,7 +41,12 @@ service.interceptors.response.use(
    */
   (response) => {
     console.log(response);
-    return response;
+    if(response.status==200)
+      return response;
+    else{
+      alert(response.status)
+    }
+    return null;
   },
   (error) => {
     if (error.response.status === 401) {
