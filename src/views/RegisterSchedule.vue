@@ -266,8 +266,6 @@ export default {
       var day = ("0" + date.getDate()).slice(-2);
       let today = year + "-" + month + "-" + day;
 
-      console.log(today);
-
       let start_time = this.start_hour_selected.toString()+":"+this.start_minute_selected.toString()+":"+"00";
       let end_time = this.end_hour_selected.toString()+":"+this.end_minute_selected.toString()+":"+"00";
 

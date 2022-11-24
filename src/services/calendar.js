@@ -46,3 +46,9 @@ export function regularSet(data) {
       method: "get",
     });
   }
+  export function irregularRemove(userID,scheduleId){
+    return request({
+      url: "/user/irregular/"+userID+"/" +scheduleId,
+      method: "delete",
+    });
+  }

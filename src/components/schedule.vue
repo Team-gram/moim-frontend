@@ -2,40 +2,22 @@
 	<div>
 		<kalendar v-if="startKalendar>0" :configuration="calendar_settings" :events="events">
 		<div
-				slot="created-card"
-				slot-scope="{ event_information }"
-				class="details-card"
-			>
-			<h4 class="appointment-title">
+			slot="created-card"
+			slot-scope="{ event_information }"
+			class="details-card"
+		>
+			<h5 class="appointment-title appfont">
 				{{ event_information.data.title }}
-			</h4>
-			<h5>
-				{{ event_information.data.description }}
 			</h5>
+			<h6 class="appsubfont" style="padding: 10px 0 0 0">
+				{{ event_information.data.description }}
+			</h6>
       <span class="time">
 					{{ event_information.start_time.substr(11,5)}}
 					<br>
 					{{ event_information.end_time.substr(11,5)}}
 				</span>
-			<button @click="removeEvent(event_information)" class="details-button">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="24"
-						height="24"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						aria-hidden="true"
-						data-reactid="1326"
-					>
-						<circle cx="12" cy="12" r="10"></circle>
-						<line x1="15" y1="9" x2="9" y2="15"></line>
-						<line x1="9" y1="9" x2="15" y2="15"></line>
-					</svg>
-				</button>
+			<button @click="removeEvent(event_information)" class="details-button"></button>
 		</div>
 		<div slot="creating-card">
 			<h4 class="appointment-title" style="text-align: left;">
@@ -251,5 +233,11 @@ svg{
   background-color: rgba(255, 0, 0, 0.399);
   color: red;
   padding: 5px 10px;
+}
+.appfont{
+	font-size: 16px;
+}
+.appsubfont{
+	font-size: 13px;	
 }
 </style>

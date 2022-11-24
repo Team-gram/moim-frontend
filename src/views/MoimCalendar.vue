@@ -39,7 +39,7 @@ export default {
     },
     newCalendar(){
       if(this.isRegular){
-        this.$router.replace('/schedule/register');
+        this.$router.push('/schedule/register');
       }else{
           this.$router.replace('/schedule/register');
       } 
