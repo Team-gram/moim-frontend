@@ -1,91 +1,255 @@
 <template>
-<div>
-<b-table-simple class="sched" responsive>
-  <b-thead>
-    <b-tr>
-      <b-th class="text-center">시간</b-th>
-      <b-th class="text-center notdrag" v-for="(item,index) in day_options" :key="index">{{ item.name }}</b-th>
-    </b-tr>
-  </b-thead>
-  <b-tbody>
-    <b-tr class="text-center" v-for="hour in hour_options" :key="hour">
-      <b-th class="notdrag">{{hour}}</b-th>
-      <b-td class="no-padding" v-for="(day,index) in day_options" :key="index">
-        <ul style="margin-bottom: 0px">
-          <li class="minute notdrag" :class="{'check': mouseover(day.item,hour,minute)}"  v-for="minute in minute_options" :key="minute"
-          @mouseover="mouseover(day.item,hour,minute)"
-          @mouseup="mouseup(day.item)" 
-          @mousedown="mousedown(day.item)"></li>
-        </ul>
-      </b-td>
-    </b-tr>
-  </b-tbody>
-</b-table-simple>
-</div>
+	<div>
+		<kalendar v-if="startKalendar>0" :configuration="calendar_settings" :events="events">
+		<div
+				slot="created-card"
+				slot-scope="{ event_information }"
+				class="details-card"
+			>
+			<h4 class="appointment-title">
+				{{ event_information.data.title }}
+			</h4>
+			<h5>
+				{{ event_information.data.description }}
+			</h5>
+      <span class="time">
+					{{ event_information.start_time.substr(11,5)}}
+					<br>
+					{{ event_information.end_time.substr(11,5)}}
+				</span>
+			<button @click="removeEvent(event_information)" class="details-button">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="24"
+						height="24"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						aria-hidden="true"
+						data-reactid="1326"
+					>
+						<circle cx="12" cy="12" r="10"></circle>
+						<line x1="15" y1="9" x2="9" y2="15"></line>
+						<line x1="9" y1="9" x2="15" y2="15"></line>
+					</svg>
+				</button>
+		</div>
+		<div slot="creating-card">
+			<h4 class="appointment-title" style="text-align: left;">
+				새 일정
+			</h4>
+		</div>
+		<div
+				slot="popup-form"
+				slot-scope="{ popup_information }"
+				style="display: flex; flex-direction: column;"
+			>
+			<h4 style="margin-bottom: 10px">
+					새 일정
+			</h4>
+				<input
+					v-model="new_appointment['title']"
+					type="text"
+					name="title"
+					placeholder="Title"
+				/>
+				<textarea
+					v-model="new_appointment['description']"
+					type="text"
+					name="description"
+					placeholder="Description"
+					rows="2"
+				></textarea>
+				<div class="buttons popup-event">
+          <button class="add" @click="addAppointment(popup_information)">
+						추가
+					</button>
+					<button class="cancel" @click="closePopups()">
+						취소
+					</button>
+				</div>
+			</div>
+		</kalendar>
+	</div>
 </template>
-
 <script>
-  export default {
-    name:"MoimSchedule",
-    data(){
-    return{
-      drag:-1,
-      current:0,
-      check:1,
-      day_options: [
-        { item: 0, name: "월" },
-        { item: 1, name: "화" },
-        { item: 2, name: "수" },
-        { item: 3, name: "목" },
-        { item: 4, name: "금" },
-        { item: 5, name: "토" },
-        { item: 6, name: "일" },
+import Kalendar from '@/lib-components/kalendar-container.vue';
+import { regularGet, regularSet, regularRemove} from "@/services/calendar";
+import moment from "moment";
+export default {
+  name: "MoimTest",
+	components: {
+		Kalendar,
+	},
+	data() {
+		return {
+			startKalendar:0,
+      events:[
       ],
-      hour_options: [
-        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
-        20, 21, 22, 23,
-      ],
-      minute_options:[
-        0, 10, 20, 30, 40, 50
-      ]
-    };
+			calendar_settings: {
+				view_type: 'week',
+				cell_height: 10,
+				scrollToNow: false,
+				hourlySelection: false,
+				start_day: new Date().toISOString(),
+				military_time: false,
+				read_only: false,
+				day_starts_at: 0,
+				day_ends_at: 24,
+				overlap: true,
+				hide_dates: [],
+				hide_days: [],
+				past_event_creation: true,
+			},
+			new_appointment: {},
+		};
+	},
+  async created(){
+		const response = await regularGet(this.$cookies.get("MoimUserId"));
+		if(response.status==200)
+      this.calendar = response.data;
+    else{
+      alert('로그인이 필요합니다.');
+    }
+		for (var item in response.data){
+			this.setEvent(response.data[item]);
+		}
+		this.startKalendar=1;
   },
-  methods:{
-    mousedown(item){
-      this.drag=1;
-      this.current=item;
-    },
-    mouseover(day,hour,minute){
-      if(this.drag==1 && day==this.current){
-        console.log(this.day_options[day].name,hour +"시 ",minute+"분");
-        return true;
+	methods: {
+		setEvent(item){
+			var calen = Object();
+			var data = Object();
+			calen['from'] = moment().day(item.day+1).format().slice(0,11).toString() + item.startTime + "+09:00"
+			calen['to'] = moment().day(item.day+1).format().slice(0,11).toString() + item.endTime + "+09:00"
+			calen['id'] = item.id;
+			data['title'] = item.title;
+			data['description'] = item.detail;
+			calen["data"] = data;
+			this.events.push(calen);
+		},
+	async	addAppointment(popup_info) {
+			let payload = {
+				data: {
+					title: this.new_appointment.title,
+					description: this.new_appointment.description,
+				},
+				from: popup_info.start_time,
+				to: popup_info.end_time,
+			};
+			if(payload.data.title==null){
+				this.$bvToast.toast("실패했습니다. 제목을 입력해주세요", {
+        toaster: "b-toaster-top-right",
+        appendToast: false,
+        autoHideDelay: 3000,
+        });
+				return;
+			}
+			var data = Object();
+			data["day"] = moment(payload.from).day()-1;
+			data["day"] = (data["day"]< 0) ? 6 : data["day"];
+      data["startTime"] = payload.from.slice(11,19);
+      data["endTime"] = payload.to.slice(11,19);
+      data["title"] = payload.data.title;
+      data["detail"] = payload.data.description;
+      data["userId"] = this.$cookies.get("MoimUserId");
+			let response = await regularSet(data);
+      if(response.status==200){
+        this.$bvToast.toast(data.title+': 개인일정이 등록되었습니다.', {
+        // title: "회원 정보 등록 실패",
+        toaster: "b-toaster-top-right",
+        appendToast: false,
+        autoHideDelay: 3000,
+        });
       }
-      return false;
-    },
-    mouseup(){
-      this.drag=-1;
-    },
-  }
-}
+			response = await regularGet(this.$cookies.get("MoimUserId"));
+			if(response.status==200){
+				for(var index in response.data){
+					if(response.data[index].startTime == data.startTime && response.data[index].endTime == data.endTime){
+						payload.id = response.data[index].id;
+					}
+				}
+			}
+			this.$kalendar.addNewEvent(payload);
+			this.$kalendar.closePopups();
+			this.clearFormData(); 
+		},
+		closePopups() {
+			this.$kalendar.closePopups();
+		},
+		clearFormData() {
+			this.new_appointment = {
+				description: null,
+				title: null,
+			};
+		},
+	async	removeEvent(kalendarEvent) {
+			console.log('KalendarEvent', kalendarEvent);
+			let day = kalendarEvent.start_time.slice(0, 10);
+			this.$kalendar.removeEvent({
+				day,
+				key: kalendarEvent.key,
+				id: kalendarEvent.kalendar_id,
+			});
+			const data = await regularRemove(this.$cookies.get("MoimUserId"),kalendarEvent.kalendar_id);
+			if(data.status==200){
+				this.$bvToast.toast('개인일정이 삭제되었습니다.', {
+					// title: "회원 정보 등록 실패",
+					toaster: "b-toaster-top-right",
+					appendToast: false,
+					autoHideDelay: 3000,
+				});
+			}
+		},
+	},
+};
 </script>
-<style>
-.notdrag{
-  -webkit-user-select:none;
-  -moz-user-select:none;
-  -ms-user-select:none;
-  user-select:none
-}
-.minute{
-  height: 10px;
-  list-style:none;
-  padding-left:0px;
-}
-.no-padding {
-  padding: 0 !important;
-}
-ul,li {margin:0; padding:0;}
-.check{
-  background-color: #928f8f;
 
+<style>
+
+.appointment-title{
+	color:black;
+	width:100%;
+}
+.details-card{
+	display: flex;
+	flex-direction: column;
+	width: 100px;
+	height: 100%;
+}
+.details-button{
+	margin: 0;
+	border: none;
+	color: #4c4b4b;
+	position: absolute;
+	padding-right: 0px;
+	top: 5px;
+	right: 5px;
+	cursor: pointer;
+	background: transparent;
+}
+svg{
+	width: 18px;
+	height: 18px;
+	fill: white;
+}
+.popup-event{
+	display: flex;
+	justify-content: space-between;
+}
+.add{
+	border: none;
+	color: #29771c;
+	background-color:rgba(0, 128, 0, 0.399);
+	padding: 5px 10px;
+}
+.cancel {
+  border: none;
+  background-color: rgba(255, 0, 0, 0.399);
+  color: red;
+  padding: 5px 10px;
 }
 </style>

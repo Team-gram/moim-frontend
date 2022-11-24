@@ -10,17 +10,19 @@
       <b-col cols="auto" style="padding: 0 0 0 20px; cursor:pointer" :class="{bold: !isRegular}" @click="irregular">비정기 일정</b-col>
     </b-row>
   </div>
-  <regularCalendar :class="{display: !isRegular}"></regularCalendar>
+  <schedule :class="{display: !isRegular}"></schedule>
   <irregularCalendar :class="{display: isRegular}"></irregularCalendar>
-  <b-button id="newbutton" v-on:click="newCalendar">새로운 일정 등록하기</b-button>
+  <b-button v-show="!isRegular" id="newbutton" v-on:click="newCalendar">새로운 일정 등록하기</b-button>
+  <div style="padding: 10px 0 0 0;"></div>
   </div>
 </template>
 <script>
-import regularCalendar from "@/components/regularCalendar.vue"
+
 import irregularCalendar from "@/components/irregularCalendar.vue"
+import schedule from "@/components/schedule.vue"
 export default {
   components: {
-    regularCalendar,
+    schedule,
     irregularCalendar,
   },
   data() {
