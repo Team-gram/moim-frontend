@@ -14,21 +14,29 @@
     </b-row>
     <b-row class="no-gutters" v-for="(row, index) in currentCalendarMatrix" :key="index">
       <b-col v-for="(day, index2) in row" :key="index2">
-        <div id="day" @click="callday(currentYear,currentMonth,day)" class="today" v-if="isToday(currentYear, currentMonth, day)">
+        <div id="day" :class="{Calendar: isCalendar(currentYear, currentMonth, day)}"  @click="callday(currentYear,currentMonth,day)" class="today" v-if="isToday(currentYear, currentMonth, day)">
           {{day}}
         </div>
-        <div id="day" @click="callday(currentYear,currentMonth,day)" v-else>
+        <div id="day" :class="{Calendar: isCalendar(currentYear, currentMonth, day)}"  @click="callday(currentYear,currentMonth,day)" v-else>
           {{day}}
         </div>
       </b-col>
     </b-row>
+    <regularCalendar :parentdata="parentdata" v-if="dayflag"></regularCalendar>
   </div>
 </template>
 
 <script>
+import regularCalendar from "@/components/regularCalendar.vue"
+import { irregularGet } from "@/services/calendar";
 export default {
+  components:{
+    regularCalendar,
+  },
   data () {
     return {
+      parentdata:[],
+      calendardata:"",
       weekNames: ["월", "화", "수","목", "금", "토", "일"],
       rootYear: 1904,
       rootDayOfWeekIndex: 4, // 2000년 1월 1일은 토요일
@@ -39,8 +47,17 @@ export default {
       currentCalendarMatrix: [],
       endOfDay: null,
       memoDatas: [],
+      dayflag: false,
     }
   },
+ async created(){
+    const response = await irregularGet(this.$cookies.get("MoimUserId"));
+    if(response.status==200)
+      this.calendardata=response.data;
+    else{
+      alert('로그인이 필요합니다.');
+    }
+  }, 
   mounted(){
       this.init();
   },
@@ -147,8 +164,24 @@ export default {
         let date = new Date();
         return year == date.getFullYear() && month == date.getMonth()+1 && day == date.getDate(); 
       },
-      callday(year, month, day){
-        console.log(year, month, day);
+      callday(Year, Month, day){
+        this.dayflag=false;
+        this.parentdata = [];
+        const date = Year + "-" + Month + "-" + day;
+        for(var index in this.calendardata){
+          if(String(this.calendardata[index].date).slice(0,10)==date){
+            this.parentdata.push(this.calendardata[index]);
+            this.dayflag=true;
+          }
+        }
+      },
+      isCalendar(Year, Month, day){
+        const date = Year + "-" + Month + "-" + day;
+        for(var index in this.calendardata){
+          if(String(this.calendardata[index].date).slice(0,10)==date)
+            return true;
+        }
+        return false;
       }
   }
 }
@@ -178,5 +211,9 @@ export default {
   background-color: #e8e5e5 !important;
   border-radius: 50% !important; 
 }
-
+.Calendar{
+  text-decoration-line: underline;
+  text-decoration-color: red;
+  text-decoration-thickness: 3px;
+}
 </style>

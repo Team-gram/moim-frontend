@@ -11,7 +11,6 @@ import MyMoim from '@/views/MyMoim'
 import MoimIntro from '@/views/moimIntro'
 import NewMoim from '@/views/newMoim'
 import RegisterSchedule from '@/views/RegisterSchedule'
-import Test from '@/components/test'
 Vue.use(VueRouter);
 
 const routes = 
@@ -66,11 +65,6 @@ const routes =
     name: 'RegisterSchedule',
     component: RegisterSchedule,
   },
-  {
-    path:"/test",
-    name: 'Test',
-    component: Test,
-  }
 ]
 
 const router = new VueRouter({

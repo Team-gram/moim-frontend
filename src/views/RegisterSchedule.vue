@@ -213,7 +213,7 @@
 </template>
 
 <script>
-import { regularSet } from "@/services/calendar";
+import { regularSet, irregularSet } from "@/services/calendar";
 export default {
   data() {
     return {
@@ -306,32 +306,40 @@ export default {
         });
         isValidSchedule = false;
       }
+      var data = Object();
+      const start_time = this.start_hour_selected.toString()+":"+this.start_minute_selected.toString();
+      const end_time = this.end_hour_selected.toString()+":"+this.end_minute_selected.toString();
+      data.userId = this.$cookies.get("MoimUserId"); 
+      data.startTime = start_time;
+      data.endTime = end_time;
+      data.title = this.schedule_name;
+      data.detail = this.schedule_description;
 
       if(isValidSchedule == true) {
         if(this.type_selected==="Regular") {
-          const start_time = this.start_hour_selected.toString()+":"+this.start_minute_selected.toString();
-          const end_time = this.end_hour_selected.toString()+":"+this.end_minute_selected.toString();
-          var data = Object();
-          data.userId = this.$cookies.get("MoimUserId");
           data.day = this.regular_day_selected;
-          data.startTime = start_time;
-          data.endTime = end_time;
-          data.title = this.schedule_name;
-          data.detail = this.schedule_description;
-          console.log(data);
           const response = await regularSet(data);
           if(response.status==200){
-            this.$bvToast.toast(data.title+': 개인일정이 등록되었습니다.', {
+            this.$bvToast.toast(data.title+': 개인일정(정기)가 등록되었습니다.', {
             // title: "회원 정보 등록 실패",
             toaster: "b-toaster-top-right",
             appendToast: false,
             autoHideDelay: 3000,
-        });
+            });
           }
-          //정기 일정 등록 api 호출
         }
         else {
-          // 비정기 일정 등록 api 호출
+          data.date = this.year_selected + "-" + this.month_selected + "-" + this.date_selected;
+          console.log(data);
+          const response = await irregularSet(data);
+          if(response.status==200){
+            this.$bvToast.toast(data.title+': 개인일정(비정기)가 등록되었습니다.', {
+            // title: "회원 정보 등록 실패",
+            toaster: "b-toaster-top-right",
+            appendToast: false,
+            autoHideDelay: 3000,
+            });
+          }
         }
       }
       

@@ -9,7 +9,7 @@
         @touchstart="scrollable = false"
         @touchend="scrollable = true"
     >
-        <div class="week-navigator">
+        <!-- <div class="week-navigator">
             <div
                 class="nav-wrapper"
                 v-if="kalendar_options.view_type === 'week'"
@@ -92,7 +92,7 @@
                     </svg>
                 </button>
             </div>
-        </div>
+        </div> -->
         <kalendar-week-view :current_day="current_day" />
         <portal to="event-creation" class="slotable">
             <div slot-scope="information" class="creating-event">
