@@ -1,6 +1,6 @@
  <template>
   <div id="regularbackground">
-    <div id="regularBox" v-for="(item,index) in parentdata" :key="index">
+    <div id="regularBox" @click="[$bvModal.show('bv-modal-example'),irrselected(item) ]" v-for="(item,index) in parentdata" :key="index">
       <b-row id="regularTitle" align-v="center" align-h="center">
         <b-col cols="auto">
           <div id="regularTitle" >{{ item.title }} :</div>
@@ -15,15 +15,27 @@
         </b-col>
       </b-row>
     </div>
+    <b-modal id="bv-modal-example" size="sm" hide-footer hide-header centered>
+        <div
+          class="d-block text-center"
+          style="margin-bottom: 20px; margin-top: 20px"
+        >
+          <h5>비정기 일정 삭제하기</h5>
+        </div>
+        <div class="d-block text-center" style="margin-bottom: 20px">
+          <b-button variant="danger" @click="irrdelete">삭제하기</b-button>
+        </div>
+      </b-modal>
   </div>
 </template>
 
 <script>
+import { irregularRemove } from "@/services/calendar";
 export default {
   props:['parentdata'],
   data() {
     return {
-      calendar : "",
+      irrid : 0,
       day_options: [
           { item: "0", name: "월" },
           { item: "1", name: "화" },
@@ -37,7 +49,14 @@ export default {
     };
   },
   methods:{
-
+  async irrdelete(){
+      const response = await irregularRemove(this.$cookies.get("MoimUserId"),this.irrid);
+      console.log(response); 
+    },
+    irrselected(item){
+      this.irrid=item.id;
+      
+    }
   },
   created(){
   }

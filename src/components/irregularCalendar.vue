@@ -14,10 +14,10 @@
     </b-row>
     <b-row class="no-gutters" v-for="(row, index) in currentCalendarMatrix" :key="index">
       <b-col v-for="(day, index2) in row" :key="index2">
-        <div id="day" :class="{Calendar: isCalendar(currentYear, currentMonth, day)}"  @click="callday(currentYear,currentMonth,day)" class="today" v-if="isToday(currentYear, currentMonth, day)">
+        <div id="day" :class="{Calendar: isCalendar(currentYear, currentMonth, day-1)}"  @click="callday(currentYear,currentMonth,day-1)" class="today" v-if="isToday(currentYear, currentMonth, day)">
           {{day}}
         </div>
-        <div id="day" :class="{Calendar: isCalendar(currentYear, currentMonth, day)}"  @click="callday(currentYear,currentMonth,day)" v-else>
+        <div id="day" :class="{Calendar: isCalendar(currentYear, currentMonth, day-1)}"  @click="callday(currentYear,currentMonth,day-1)" v-else>
           {{day}}
         </div>
       </b-col>
@@ -165,11 +165,15 @@ export default {
         return year == date.getFullYear() && month == date.getMonth()+1 && day == date.getDate(); 
       },
       callday(Year, Month, day){
-        this.dayflag=false;
+        if(this.dayflag){
+          this.dayflag=false;
+          return;
+        }
         this.parentdata = [];
         const date = Year + "-" + Month + "-" + day;
         for(var index in this.calendardata){
           if(String(this.calendardata[index].date).slice(0,10)==date){
+            console.log(this.calendardata[index].date.slice(0,10),date);
             this.parentdata.push(this.calendardata[index]);
             this.dayflag=true;
           }
@@ -215,5 +219,6 @@ export default {
   text-decoration-line: underline;
   text-decoration-color: red;
   text-decoration-thickness: 3px;
+  cursor:pointer;
 }
 </style>
