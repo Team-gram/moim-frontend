@@ -12,7 +12,7 @@
             <span class="letters-date" >{{
               kalendar_options.formatDayTitle(value)[0]
             }}</span>
-            <span class="number-date" :class="{ 'Dday': _isToday(value)}">{{
+            <span class="number-date" :class="{ 'Dday': _isToday(value), 'aDay': !_isToday(value)}">{{
               kalendar_options.formatDayTitle(value)[1]
             }}</span>
           </div>
@@ -101,7 +101,7 @@ export default {
   inject: ["kalendar_options", "kalendar_events"],
   data: () => ({
     hours: null,
-    days: []
+    days: [],
   }),
   computed: {
     hoursVisible() {

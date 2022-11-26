@@ -10,6 +10,8 @@ import searchStore from '@/store/modules/searchStore';
 const store = new Vuex.Store({
   state:{
     userinfo:"",
+    width:400,
+    height:650,
   },
   getters: {
 
@@ -18,6 +20,10 @@ const store = new Vuex.Store({
     MoimUserInfo(state,data){
       state.userinfo = data;
     },
+    Resize(state,width,height){
+      state.width = width;
+      state.height = height;
+    }
   },
   actions:{
    async UpdateUserInfo(state){

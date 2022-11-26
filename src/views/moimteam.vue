@@ -3,7 +3,7 @@
     <img src="@/assets/test.jpg" style="width:40%;">
     <b-row align-v="center" align-h="center">
       <b-col id="teammenu" cols="auto" style="cursor:pointer" :class="{menuselect: memuindex==0}" @click="menu(0)"><div>정보</div></b-col>
-      <b-col id="teammenu" cols="auto" style="cursor:pointer" :class="{menuselect: memuindex==1}" @click="menu(1)"><div> 채팅</div></b-col>
+      <b-col id="teammenu" cols="auto" style="cursor:pointer" :class="{menuselect: memuindex==1}" @click="menu(1)"><div>채팅</div></b-col>
       <b-col id="teammenu" cols="auto" style="cursor:pointer" :class="{menuselect: memuindex==2}" @click="menu(2)"><div>일정</div></b-col>
       <b-col id="teammenu" cols="auto" style="cursor:pointer" :class="{menuselect: memuindex==3}" @click="menu(3)"><div>설정</div></b-col>
     </b-row>

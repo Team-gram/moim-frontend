@@ -19,7 +19,7 @@ data(검색 데이터) : category 검색인 경우, 선택한 상위 카테고�
 options(검색 추가 옵션) : {subCategory(카테고리 검색 내에서 선택한 하위 카테고리 정보(Object)), location(지역필터정보(Object))}
 
 * 모듈로 분리된 store 사용 시,
-1. getters 사용할 경우, thid.$sore.getters['모듈이름/함수이름'] 사용
+1. getters 사용할 경우, thid.$store.getters['모듈이름/함수이름'] 사용
 2. mutations 사용할 경우, this.$store.commit('모듈이름/함수이름') 사용
 
 
