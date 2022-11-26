@@ -52,6 +52,8 @@ export default {
     },
     callMoim(index){
       console.log(this.moimlist[index]["id"]);
+      this.$store.commit('searchStore/setSelectedMoimId', this.moimlist[index]["id"]);
+      this.$router.push({name: "MoimTeam"});
     },
     newmoim(){
       this.$router.replace('/newmoim');
