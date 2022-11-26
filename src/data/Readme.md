@@ -13,6 +13,8 @@ Userdata가 필요해요(유저 Id만 쓰고 싶으면 Cookies에서 가져올 �
 this.$store.dispatch("UpdateUserInfo");
 var Userinfo = this.$store.userinfo;
 
+사용자가 모임 Host인지 궁금해요 : this.$store.getters["searchStore/getSelectedMoimHostId"](사용자 id)
+=> 참 거짓 반환
 검색 data가 필요해요(store/modules/searchStore.js (모듈로 분리후, 해당 모듈만 localStorage에서 보이도록 설정(store/index.js참고)))
 type(검색 타입) : category / keyword
 data(검색 데이터) : category 검색인 경우, 선택한 상위 카테고리 정보(Object) / keyword 검색인 경우, 입력한 검색어(String)

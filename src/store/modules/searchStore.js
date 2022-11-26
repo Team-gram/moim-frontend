@@ -23,6 +23,9 @@ const getters = {
   },
   getSelectedMoimData(state) {
     return state.details.data;
+  },
+  getSelectedMoimHostId(state) {
+    return state.details.userId;
   }
 };
 const mutations = {

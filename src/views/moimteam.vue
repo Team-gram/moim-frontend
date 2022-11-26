@@ -1,17 +1,26 @@
 <template>
   <div align="center" class="teamfirst">
-    <img src="@/assets/test.jpg" style="width:40%;">
     <b-row align-v="center" align-h="center">
-      <b-col id="teammenu" cols="auto" style="cursor:pointer" :class="{menuselect: memuindex==0}" @click="menu(0)"><div>정보</div></b-col>
-      <b-col id="teammenu" cols="auto" style="cursor:pointer" :class="{menuselect: memuindex==1}" @click="menu(1)"><div>채팅</div></b-col>
-      <b-col id="teammenu" cols="auto" style="cursor:pointer" :class="{menuselect: memuindex==2}" @click="menu(2)"><div>일정</div></b-col>
-      <b-col id="teammenu" cols="auto" style="cursor:pointer" :class="{menuselect: memuindex==3}" @click="menu(3)"><div>설정</div></b-col>
+      <b-col id="teammenu" cols="auto" style="cursor:pointer" :class="{menuselect: memuindex==0}" @click="memuindex=0"><div>정보</div></b-col>
+      <b-col id="teammenu" cols="auto" style="cursor:pointer" :class="{menuselect: memuindex==1}" @click="memuindex=1"><div>채팅</div></b-col>
+      <b-col id="teammenu" cols="auto" style="cursor:pointer" :class="{menuselect: memuindex==2}" @click="memuindex=2"><div>일정</div></b-col>
+      <b-col id="teammenu" cols="auto" style="cursor:pointer" :class="{menuselect: memuindex==3}" @click="memuindex=3"><div>설정</div></b-col>
     </b-row>
+  <TeamInfo style="width:80%" :class="{display: memuindex!=0}"></TeamInfo>
+  <TeamMoimCalendar style="width:80%" :class="{display: memuindex!=2}"></TeamMoimCalendar>
+  <TeamSetting style="width:80%" :class="{display: memuindex!=3}"></TeamSetting>
   </div>
 </template> 
 <script>
-
+import TeamSetting from "@/components/team/TeamSetting.vue";
+import TeamInfo from "@/components/team/TeamInfo.vue";
+import TeamMoimCalendar from "@/components/team/TeamMoimCalendar.vue";
 export default {
+   components: {
+    TeamMoimCalendar,
+    TeamInfo,
+    TeamSetting,
+  },
   name: "MoimTeam",
   data() {
     return {
@@ -19,13 +28,8 @@ export default {
     };
   },
   methods:{
-    menu(index){
-      this.memuindex = index;
-      console.log(this.memuindex);
-    }
   },
   created(){
-    //여기에 유저 일정 데이터를 받으면 됩니다.
   }
 }
 </script>
