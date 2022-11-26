@@ -95,7 +95,7 @@
         </div> -->
         <kalendar-week-view :current_day="current_day" />
         <portal to="event-creation" class="slotable">
-            <div slot-scope="information" class="creating-event">
+            <div slot-scope="information" class="creating-event" id="creating-event">
                 <slot name="creating-card" :event_information="information">
                     <h4 class="appointment-title" style="text-align: left;">
                         새 일정
@@ -140,7 +140,7 @@
             </div>
         </portal>
         <portal to="event-details" class="slotable">
-            <div slot-scope="information" class="created-event">
+            <div slot-scope="information" class="created-event" id="created-event">
                 <slot name="created-card" :event_information="information">
                     <h4 style="margin-bottom: 5px">{{ information.data }}</h4>
                     <p>

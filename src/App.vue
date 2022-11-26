@@ -15,7 +15,16 @@ export default {
     MoimHeader,
   },
   methods: {
+    
   },
+  created(){
+    this.$store.commit('Resize',window.innerWidth,window.innerHeight);
+  },
+  mounted(){
+    window.addEventListener('resize',() =>{
+      this.$store.commit('Resize',window.innerWidth,window.innerHeight);
+    });
+  }
 }
 </script>
 

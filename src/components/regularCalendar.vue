@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div id="Calendar">
 		<kalendar v-if="startKalendar>0" :configuration="calendar_settings" :events="events">
 		<div
 			slot="created-card"
@@ -68,6 +68,7 @@ export default {
 	},
 	data() {
 		return {
+			colorlist : ['red','white','gray','blue'],
 			startKalendar:0,
       events:[
       ],
@@ -90,6 +91,7 @@ export default {
 		};
 	},
   async created(){
+		this.setScreen();
 		const response = await regularGet(this.$cookies.get("MoimUserId"));
 		if(response.status==200)
       this.calendar = response.data;
@@ -101,7 +103,31 @@ export default {
 		}
 		this.startKalendar=1;
   },
+	mounted(){
+		window.addEventListener('resize',() =>{
+			this.startKalendar=0;
+    });
+		window.addEventListener('resize',() =>{
+			this.setScreen();
+    });
+	},
 	methods: {
+		setScreen(){
+			let hide = [0,1,2,3];	
+      if(this.$store.state.width<250){
+				this.calendar_settings.hide_days = hide;
+				this.startKalendar=1
+			}
+			else if(this.$store.state.width<450){
+				hide[0,1,2];
+				this.calendar_settings.hide_days = hide;
+				this.startKalendar=1
+			}
+			else{
+				this.calendar_settings.hide_days = [];
+				this.startKalendar=1
+			}
+		},
 		setEvent(item){
 			var calen = Object();
 			var data = Object();
@@ -114,6 +140,8 @@ export default {
 			this.events.push(calen);
 		},
 	async	addAppointment(popup_info) {
+		const IDcolor = document.getElementById("creating-event");
+		IDcolor.style.backgroundColor = this.colorlist[Math.floor(Math.random() * 4)];
 			let payload = {
 				data: {
 					title: this.new_appointment.title,
@@ -191,7 +219,6 @@ export default {
 </script>
 
 <style>
-
 .appointment-title{
 	color:black;
 	width:100%;
@@ -239,5 +266,11 @@ svg{
 }
 .appsubfont{
 	font-size: 13px;	
+}
+.creating-event{
+	background-color: rgba(100, 100, 100, 0.403);
+}
+.created-event{
+	background-color: rgba(100, 100, 100, 0.403);
 }
 </style>
