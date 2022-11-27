@@ -17,17 +17,6 @@
     </b-row>
     <b-row>
       <b-col>
-        <div
-          id="category-button"
-          @click="searchCategory(category)"
-        >
-          <img
-            :src="require(`@/assets/category-icon/게임-오락.png`)"
-            id="category-icon"
-            style="width: 50px"
-          />
-          <div id="category-text">게임/오락</div>
-        </div>
         <b-card id="category" style="max-width: 900px">
           <b-container>
             <b-row>

@@ -2,6 +2,7 @@
   <div>
     <MoimHeader></MoimHeader>
     <router-view :key="$route.fullPath"/>
+    <MoimFooter class="footer"></MoimFooter>
   </div>
   
 </template>
@@ -9,10 +10,12 @@
 
 <script>
 import MoimHeader from './components/MoimHeader.vue'
+import MoimFooter from './components/MoimFooter.vue'
 export default {
   name: 'App',
   components: {
     MoimHeader,
+    MoimFooter,
   },
   methods: {
     
