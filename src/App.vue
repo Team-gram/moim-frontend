@@ -47,4 +47,16 @@ export default {
   src: url('assets/fonts/NanumBarunGothicBold.ttf') format('truetype');
   font-weight: 700;
 }
+#main-text {
+  float: center;
+  max-width: 700px;
+  height: 40px;
+  margin: 10px 0 10px 0;
+  font-size: 25px;
+  /* background:linear-gradient(180deg, transparent 60%, yellow 60%); */
+  font-family: "NanumBarunGothic";
+}
+#main-text-highlight {
+  background:linear-gradient(180deg, transparent 60%, #4FB26F 60%);
+}
 </style>
