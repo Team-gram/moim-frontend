@@ -4,21 +4,28 @@
       style="float: center; max-width: 1000px; height: 30px"
       v-if="showFilter == false"
     >
-      <div id="filter-button" @click="turnOnOffFileter()">
+      <div
+        id="option-button"
+        style="cursor: pointer"
+        @click="turnOnOffFileter()"
+      >
         <b-row>
-          <b-col cols="auto" style="padding: 0px; margin: 0 2px 0 0">
-            <b-img
-              style="width: 15px"
-              :src="require('@/assets/filter.png')"
-            ></b-img>
+          <b-col cols="auto" style="padding-right: 5px">
+            <i class="fa-solid fa-filter" style="color: #ffffff"></i>
           </b-col>
-          <b-col cols="auto" style="padding: 0px; margin: 0 0 0 2px">
-            필터
-          </b-col>
+          <b-col cols="auto" style="padding-left: 0"> 필터 </b-col>
         </b-row>
       </div>
     </div>
-    <div id="optionBox" v-if="showFilter == true">
+    <div
+      id="default-item"
+      style="
+        max-width: 1000px;
+        padding: 20px 20px 20px 20px;
+        margin: 10px 0 10px 0;
+      "
+      v-if="showFilter == true"
+    >
       <b-row>
         <b-col>
           <b-img
@@ -36,7 +43,7 @@
             :options="region1_options"
             class="mb-3"
             v-on:change="UpdateLocation(1, $event)"
-            id="form-input"
+            id="default-item"
           >
             <template #first>
               <b-form-select-option :value="null" disabled
@@ -51,7 +58,7 @@
             :options="region2_options"
             class="mb-3"
             v-on:change="UpdateLocation(2, $event)"
-            id="form-input"
+            id="default-item"
           >
             <template #first>
               <b-form-select-option :value="null" disabled
@@ -65,7 +72,7 @@
             v-model="region3_selected"
             :options="region3_options"
             class="mb-3"
-            id="form-input"
+            id="default-item"
           >
             <template #first>
               <b-form-select-option :value="null" disabled
@@ -77,7 +84,9 @@
       </b-row>
       <b-row>
         <b-col>
-          <div id="form-input-button" @click="applySearchFilter()">필터 적용</div>
+          <div id="option-button" style="cursor: pointer" @click="applySearchFilter()">
+            필터 적용
+          </div>
         </b-col>
       </b-row>
     </div>
@@ -102,9 +111,9 @@ export default {
   methods: {
     turnOnOffFileter: function () {
       this.showFilter = !this.showFilter;
-      this.region1_selected= null;
-      this.region2_selected= null;
-      this.region3_selected= null;
+      this.region1_selected = null;
+      this.region2_selected = null;
+      this.region3_selected = null;
       this.region2_options.splice(0);
       this.region3_options.splice(0);
     },
@@ -136,11 +145,18 @@ export default {
       }
     },
     applySearchFilter() {
-      var location = {'sido': this.region1_selected, 'sigungu': this.region2_selected, 'dong': this.region3_selected};
+      var location = {
+        sido: this.region1_selected,
+        sigungu: this.region2_selected,
+        dong: this.region3_selected,
+      };
       console.log(location);
-      this.$store.commit('searchStore/modifySearchOptions', {'key':"location", 'value': location});
+      this.$store.commit("searchStore/modifySearchOptions", {
+        key: "location",
+        value: location,
+      });
       this.turnOnOffFileter();
-    }
+    },
   },
   created() {
     this.oldSearchKeyword = this.$route.query.data;
@@ -159,6 +175,7 @@ export default {
   border-radius: 10px !important;
   border: 0px solid;
   background-color: #d9d9d9 !important;
+  color: #ffffff;
   float: right;
   padding: 5px 30px 5px 30px;
   width: max-content !important;
@@ -172,10 +189,6 @@ export default {
   margin: 10px 10px 20px 0;
 }
 #optionBox {
-  border-radius: 20px !important;
-  border: 0px solid;
-  background-color: #f3f3f3 !important;
-  float: center;
   max-width: 1000px;
   padding: 20px 20px 20px 20px;
   margin: 10px 0 10px 0;
