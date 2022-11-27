@@ -3,8 +3,8 @@
     align="center"
     style="margin-top: 10px; margin-left: 20px; margin-right: 20px"
   >
-    <div id="listBox">
-      <div id="listItem" v-for="moimItem in moimList" :key="moimItem.title" @click="moimDetail(moimItem)">
+    <div id="moim-list-box">
+      <div id="moim-list-item" v-for="moimItem in moimList" :key="moimItem.title" @click="moimDetail(moimItem)">
         <b-row align-v="center">
           <b-col cols="auto">
             <b-img

@@ -1,5 +1,5 @@
 <template>
-  <div style="margin-top: 30px;">
+  <div style="margin-top: 80px;">
     <Categorysearch v-if="this.$store.getters['searchStore/getSearchType'] ==='category'"></Categorysearch>
     <KeywordSearch v-if="this.$store.getters['searchStore/getSearchType']==='keyword'"></KeywordSearch>
     <MoimList></MoimList>

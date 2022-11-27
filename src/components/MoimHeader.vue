@@ -1,41 +1,70 @@
 <template>
   <body>
-    <b-navbar type="dark" variant="dark" class="shadow">
+    <b-navbar type="dark" variant="dark">
       <b-container class="navbar-container">
-        <b-row align-v="center" style="width: 100vw; margin-top: 20px">
+        <b-row align-v="center" style="width: 100vw; margin: 10px 0 10px 0">
           <b-col>
             <b-navbar-brand @click="home()" style="margin-left: 10px">
-              <img src="../assets/moim_logo_fullname.png" width="120" />
+              <img src="../assets/new_logo.png" width="40" />
             </b-navbar-brand>
           </b-col>
+          <b-col cols="auto">
+            <b-navbar-nav :fill="width <= 600">
+              <div id="header-item" @click="home()">홈</div>
+              <div id="header-item" @click="mymoim()">MY모임</div>
+              <div id="header-item" @click="calender()">일정관리</div>
+              <div id="header-item" @click="settle()">설정</div>
+            </b-navbar-nav>
+          </b-col>
           <b-col>
+            <div style="float: right; margin-right: 10px">
+              <b-dropdown
+                size="lg"
+                variant="link"
+                toggle-class="text-decoration-none"
+                no-caret
+                style="margin: 0; padding: 0"
+              >
+                <template #button-content
+                  ><img src="../assets/default-profile.png" width="40"
+                /></template>
+                <b-dropdown-item
+                  v-if="!islogin"
+                  @click="[$bvModal.show('login-modal')]"
+                  >로그인/회원가입</b-dropdown-item
+                >
+                <b-dropdown-item v-else @click="[logout()]"
+                  >로그아웃</b-dropdown-item
+                >
+              </b-dropdown>
+            </div>
+          </b-col>
+          <!-- <b-col>
             <b-button
               pill
               variant="light"
               id="show-btn"
               class="ml-auto login-button"
-              @click="[$bvModal.show('bv-modal-example'), logout()]"
+              @click="[$bvModal.show('login-modal'), logout()]"
               style="float: right; margin-right: 10px"
-              >{{userID}}
+              >{{ userID }}
             </b-button>
-          </b-col>
-          <div class="w-100"></div>
-          <b-col>
-            <b-navbar-nav :fill="width <= 600">
-              <b-nav-item @click="home()">홈</b-nav-item>
-              <b-nav-item @click="mymoim()">MY모임</b-nav-item>
-              <b-nav-item @click="calender()">일정관리</b-nav-item>
-              <b-nav-item @click="settle()">설정</b-nav-item>
-            </b-navbar-nav>
-          </b-col>
+          </b-col> -->
         </b-row>
       </b-container>
-      <b-modal v-if="!islogin" id="bv-modal-example" size="sm" hide-footer hide-header centered>
+      <b-modal
+        v-if="!islogin"
+        id="login-modal"
+        size="sm"
+        hide-footer
+        hide-header
+        centered
+      >
         <div
           class="d-block text-center"
           style="margin-bottom: 20px; margin-top: 20px"
         >
-          <h5>{{logintext}}</h5>
+          <h5>{{ logintext }}</h5>
         </div>
         <div class="d-block text-center" style="margin-bottom: 20px">
           <img
@@ -45,11 +74,12 @@
         </div>
       </b-modal>
     </b-navbar>
+    <hr id="header" />
   </body>
 </template>
 
 <script>
-import { getLogin } from '@/services/login';
+import { getLogin } from "@/services/login";
 export default {
   data() {
     return {
@@ -57,25 +87,25 @@ export default {
       height: 0,
       userID: "로그인",
       logintext: "로그인 | 회원가입",
-      islogin:false ,
+      islogin: false,
     };
   },
   methods: {
-    home(){
+    home() {
       this.$router.push("/");
     },
-    mymoim(){
+    mymoim() {
       this.$router.push("/mymoim");
     },
-    calender(){
+    calender() {
       this.$router.push("/calendar");
     },
-    settle(){
+    settle() {
       this.$router.push("/setting");
     },
     async kakaoLogin() {
       let login = await getLogin();
-      if(login.status===200) {
+      if (login.status === 200) {
         window.location.href = login.data;
       }
       // this.axios.get('/login')
@@ -87,8 +117,8 @@ export default {
       this.width = window.innerWidth;
       this.height = window.innerHeight;
     },
-    logout(){
-      if(this.islogin){
+    logout() {
+      if (this.islogin) {
         this.$cookies.remove("MoimUserId");
         this.$router.go();
       }
@@ -97,9 +127,9 @@ export default {
   created() {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
-    if(this.$cookies.get("MoimUserId")!=undefined){
-      this.userID="로그아웃";
-      this.islogin=true;
+    if (this.$cookies.get("MoimUserId") != undefined) {
+      this.userID = "로그아웃";
+      this.islogin = true;
       this.logintext = "로그아웃";
     }
   },
@@ -110,16 +140,37 @@ export default {
     window.removeEventListener("resize", this.handleResize);
   },
 };
-
 </script>
 <style scoped>
 .navbar.navbar-dark.bg-dark {
-  background-color: #b6d884 !important;
+  background-color: #ffffff !important;
 }
 .login-button {
   width: 110px !important;
 }
 h5 {
   font-weight: bold;
+}
+#header-item {
+  cursor: pointer;
+  color: #000000 !important;
+  margin: 0 10px 0 10px;
+  padding: 8px;
+  vertical-align: text-bottom;
+  /* font-weight: bold; */
+  font-family: "NanumBarunGothic";
+}
+#header-item:hover {
+  cursor: pointer;
+  color: #4fb26f !important;
+  margin: 0 10px 0 10px;
+  padding: 8px;
+  vertical-align: text-bottom;
+  font-family: "NanumBarunGothic";
+  /* font-weight: bold; */
+}
+#header {
+  margin: 0;
+  background-color : #eeeeee;
 }
 </style>
