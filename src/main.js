@@ -7,6 +7,7 @@ import VueAxios from 'vue-axios'
 import store from "./store";
 import VueCookies from "vue-cookies";
 import PortalVue from "portal-vue";
+import '@fortawesome/fontawesome-free/js/all.js'
 
 //쿠키의 만료일은 7일이다. (글로벌 세팅)
 
