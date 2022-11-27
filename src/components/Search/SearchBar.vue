@@ -6,7 +6,7 @@
           id="searchInput"
           type="text"
           v-model="searchKeyword"
-          placeholder="검색어를 입력하세요."
+          placeholder="키워드를 통해 원하는 모임방을 찾아보세요."
           @keyup.enter="Submit()"
         ></b-form-input>
       </b-col>
@@ -42,11 +42,13 @@ export default {
 #searchBox {
   border-radius: 20px !important;
   border: 0px solid;
-  background-color: #f3f3f3 !important;
+  box-shadow: 0px 0px 5px #ccc;
+  background-color: #ffffff;
   float: center;
   max-width: 700px;
   height: 40px;
   margin: 10px 0 10px 0;
+  font-family: "NanumBarunGothic";
 }
 #searchInput {
   float: left;

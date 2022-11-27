@@ -1,14 +1,33 @@
 <template>
   <div
     align="center"
-    style="margin-top: 20px; margin-left: 20px; margin-right: 20px"
+    style="margin-top: 80px; margin-left: 20px; margin-right: 20px"
   >
-    <h4 style="margin-top: 20px; margin-bottom: 40px">
-      <b>어떤 모임을 찾고 있나요?</b>
-    </h4>
-    <searchbar v-on:searchKeyword="searchKeyword"></searchbar>
     <b-row>
       <b-col>
+        <div id="main-text">
+          <b id="main-text-highlight">어떤 모임을 찾고 있나요?</b>
+        </div>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col>
+        <searchbar v-on:searchKeyword="searchKeyword"></searchbar>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col>
+        <div
+          id="category-button"
+          @click="searchCategory(category)"
+        >
+          <img
+            :src="require(`@/assets/category-icon/게임-오락.png`)"
+            id="category-icon"
+            style="width: 50px"
+          />
+          <div id="category-text">게임/오락</div>
+        </div>
         <b-card id="category" style="max-width: 900px">
           <b-container>
             <b-row>
@@ -20,11 +39,6 @@
               >
                 <div
                   id="category-button"
-                  :style="[
-                    selected_category_list.includes(category)
-                      ? { backgroundColor: '#9b9b9b' }
-                      : { backgroundColor: '#d9d9d9' },
-                  ]"
                   @click="searchCategory(category)"
                 >
                   <img
@@ -47,17 +61,32 @@
         </b-card>
       </b-col>
     </b-row>
+    <b-row>
+      <b-col>
+        <div id="main-text">
+          <b id="main-text-highlight">'김모임' 님을 위한 추천 모임</b>
+        </div>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col>
+        <recommendMoim></recommendMoim>
+      </b-col>
+    </b-row>
   </div>
 </template>
 
 <script>
-import { getUserinfo } from '@/services/login';
-import { getAllParentCategory, getChildCategory } from '@/services/category';
+import { getUserinfo } from "@/services/login";
+import { getAllParentCategory, getChildCategory } from "@/services/category";
 import searchbar from "@/components/Search/SearchBar";
+import recommendMoim from "@/components/MoimRecommend";
+
 export default {
   name: "MainHome",
   components: {
     searchbar,
+    recommendMoim,
   },
   data() {
     return {
@@ -74,44 +103,46 @@ export default {
     },
     searchKeyword: function (Data) {
       console.log(Data);
-      this.$store.commit('searchStore/setSearchType',"keyword");
-      this.$store.commit('searchStore/setSearchData', Data);
-      this.$store.commit('searchStore/initKeywordSearchOptions');
+      this.$store.commit("searchStore/setSearchType", "keyword");
+      this.$store.commit("searchStore/setSearchData", Data);
+      this.$store.commit("searchStore/initKeywordSearchOptions");
       this.$router.push({
         name: "MoimSearchList",
       });
     },
     async searchCategory(Data) {
       console.log(Data);
-      this.$store.commit('searchStore/setSearchType',"category");
-      this.$store.commit('searchStore/setSearchData', Data);
+      this.$store.commit("searchStore/setSearchType", "category");
+      this.$store.commit("searchStore/setSearchData", Data);
       let subCategory = await getChildCategory(Data.categoryId);
-      this.$store.commit('searchStore/modifySearchOptions',{key: 'subCategory', value: subCategory.data[0]});
-      this.$store.commit('searchStore/initCategorySearchOptions');
+      this.$store.commit("searchStore/modifySearchOptions", {
+        key: "subCategory",
+        value: subCategory.data[0],
+      });
+      this.$store.commit("searchStore/initCategorySearchOptions");
       this.$router.push({
         name: "MoimSearchList",
       });
     },
   },
- async created() {
+  async created() {
     // 파라미터
     this.SetCategory();
     let id = this.$route.query.id;
     let jwt = this.$route.query.jwt;
     if (id !== undefined && jwt !== undefined) {
-      this.$cookies.set('MoimJwt', jwt);
-        const result = await getUserinfo(id);
-        if(result.status==200){
-          this.$cookies.set("MoimUserId",result.data.id);
-          if(result.data["gender"]==null){
-            alert("회원가입이 필요합니다.");
-            this.$router.replace('/register');
-          }
-          else{
-            this.$store.commit('MoimUserInfo',result.data);
-            history.replaceState({}, null, location.pathname);
-            this.$router.go('/');
-         }
+      this.$cookies.set("MoimJwt", jwt);
+      const result = await getUserinfo(id);
+      if (result.status == 200) {
+        this.$cookies.set("MoimUserId", result.data.id);
+        if (result.data["gender"] == null) {
+          alert("회원가입이 필요합니다.");
+          this.$router.replace("/register");
+        } else {
+          this.$store.commit("MoimUserInfo", result.data);
+          history.replaceState({}, null, location.pathname);
+          this.$router.go("/");
+        }
       }
     }
   },
@@ -123,6 +154,8 @@ export default {
   border: none;
 }
 #category-button {
+  box-shadow: 0px 0px 5px #ccc;
+  background-color: #ffffff;
   cursor: pointer;
   width: 80px !important;
   height: 80px !important;
@@ -131,8 +164,7 @@ export default {
   margin: 5px 5px 10px 5px;
   padding: 0;
   align-content: center;
-  /* background-color: #d9d9d9 !important; */
-  /* float: left; */
+  font-family: "NanumBarunGothic";
 }
 div #button {
   padding: 0;
