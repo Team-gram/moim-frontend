@@ -77,7 +77,7 @@ export default {
 				cell_height: 10,
 				scrollToNow: false,
 				hourlySelection: false,
-				start_day: new moment().toISOString(),
+				start_day: new Date().toISOString(),
 				military_time: false,
 				read_only: false,
 				day_starts_at: 0,
@@ -116,22 +116,19 @@ export default {
 			let hide = [0,1,2,3];	
       if(this.$store.state.width<250){
 				this.calendar_settings.hide_days = hide;
-				this.startKalendar=1
 			}
 			else if(this.$store.state.width<450){
 				hide[0,1,2];
 				this.calendar_settings.hide_days = hide;
-				this.startKalendar=1
 			}
 			else{
 				this.calendar_settings.hide_days = [];
-				this.startKalendar=1
 			}
 		},
 		setEvent(item){
 			var calen = Object();
 			var data = Object();
-			console.log(moment())
+			console.log(item.day);
 			calen['from'] = moment().day(item.day+1).format().slice(0,11).toString() + item.startTime + "+09:00"
 			calen['to'] = moment().day(item.day+1).format().slice(0,11).toString() + item.endTime + "+09:00"
 			calen['id'] = item.id;
@@ -169,9 +166,6 @@ export default {
       data["detail"] = payload.data.description;
       data["userId"] = this.$cookies.get("MoimUserId");
 			console.log(moment(payload.from))
-			var test=1;
-			if(test==1)
-				return;
 			let response = await regularSet(data);
       if(response.status==200){
         this.$bvToast.toast(data.title+': 개인일정이 등록되었습니다.', {
