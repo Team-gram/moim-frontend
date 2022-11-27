@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="recommend-type">
+    <div id="option-button">
       <span @click="changePrevRecommendType()">
         <i class="fa-solid fa-angle-left" id="recommend-type-change-button"></i>
       </span>
@@ -14,9 +14,9 @@
         ></i>
       </span>
     </div>
-    <div id="recommend-moim-list-box">
+    <div id="moim-list-box">
       <div
-        id="moimItem"
+        id="moim-list-item"
         v-for="moimItem in currentRecommendMoimData.moimList"
         :key="moimItem.title"
         @click="moimDetail(moimItem)"
@@ -251,23 +251,5 @@ export default {
 }
 #recommend-type-change-button {
   cursor: pointer;
-}
-#recommend-moim-list-box {
-  float: center;
-  max-width: 700px;
-  height: max-content;
-  margin: 20px 0 20px 0;
-}
-#moimItem {
-  border-radius: 20px !important;
-  border: 0px solid;
-  box-shadow: 0px 0px 5px #ccc;
-  background-color: #ffffff;
-  float: center;
-  max-width: 700px;
-  height: 80px;
-  padding: 5px 5x 5px 5px;
-  margin: 10px 0 10px 0;
-  font-family: "NanumBarunGothic";
 }
 </style>

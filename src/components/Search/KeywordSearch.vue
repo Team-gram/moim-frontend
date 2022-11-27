@@ -3,7 +3,11 @@
     align="center"
     style="margin-top: 20px; margin-left: 20px; margin-right: 20px"
   >
-    <h4 id="keyword-name">'{{ this.oldSearchKeyword }}'에 대한 검색 결과</h4>
+    <div id="main-text">
+      <b id="main-text-highlight"
+        >'{{ this.oldSearchKeyword }}'에 대한 검색 결과</b
+      >
+    </div>
     <searchbar v-on:searchKeyword="searchKeyword"></searchbar>
     <searchfilter></searchfilter>
   </div>
@@ -27,9 +31,9 @@ export default {
   },
   methods: {
     searchKeyword: function (Data) {
-      this.$store.commit('searchStore/setSearchType',"keyword");
-      this.$store.commit('searchStore/setSearchData', Data);
-      this.$store.commit('searchStore/initKeywordSearchOptions');
+      this.$store.commit("searchStore/setSearchType", "keyword");
+      this.$store.commit("searchStore/setSearchData", Data);
+      this.$store.commit("searchStore/initKeywordSearchOptions");
       this.$router.go(this.$router.currentRoute);
       // this.$router.push({
       //   name: "MoimSearchList",
@@ -37,7 +41,7 @@ export default {
     },
   },
   created() {
-    this.oldSearchKeyword = this.$store.getters['searchStore/getSearchData'];
+    this.oldSearchKeyword = this.$store.getters["searchStore/getSearchData"];
   },
 };
 </script>
