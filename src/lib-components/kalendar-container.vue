@@ -9,90 +9,6 @@
         @touchstart="scrollable = false"
         @touchend="scrollable = true"
     >
-        <!-- <div class="week-navigator">
-            <div
-                class="nav-wrapper"
-                v-if="kalendar_options.view_type === 'week'"
-            >
-                <button class="week-navigator-button" @click="changeDay(-7)">
-                    <svg
-                        style="transform: rotate(180deg)"
-                        viewBox="0 0 24 24"
-                        width="24"
-                        height="24"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        fill="none"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        class="css-i6dzq1"
-                    >
-                        <polyline points="9 18 15 12 9 6"></polyline>
-                    </svg>
-                </button>
-                <div>
-                    <span>{{
-                        kalendar_options.formatWeekNavigator(current_day)
-                    }}</span>
-                </div>
-                <button class="week-navigator-button" @click="changeDay(7)">
-                    <svg
-                        viewBox="0 0 24 24"
-                        width="24"
-                        height="24"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        fill="none"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        class="css-i6dzq1"
-                    >
-                        <polyline points="9 18 15 12 9 6"></polyline>
-                    </svg>
-                </button>
-            </div>
-            <div
-                class="nav-wrapper"
-                v-if="kalendar_options.view_type === 'day'"
-            >
-                <button class="week-navigator-button" @click="changeDay(-1)">
-                    <svg
-                        style="transform: rotate(180deg)"
-                        viewBox="0 0 24 24"
-                        width="24"
-                        height="24"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        fill="none"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        class="css-i6dzq1"
-                    >
-                        <polyline points="9 18 15 12 9 6"></polyline>
-                    </svg>
-                </button>
-                <div>
-                    <span>{{
-                        kalendar_options.formatDayNavigator(current_day)
-                    }}</span>
-                </div>
-                <button class="week-navigator-button" @click="changeDay(1)">
-                    <svg
-                        viewBox="0 0 24 24"
-                        width="24"
-                        height="24"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        fill="none"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        class="css-i6dzq1"
-                    >
-                        <polyline points="9 18 15 12 9 6"></polyline>
-                    </svg>
-                </button>
-            </div>
-        </div> -->
         <kalendar-week-view :current_day="current_day" />
         <portal to="event-creation" class="slotable">
             <div slot-scope="information" class="creating-event" id="creating-event">
@@ -273,7 +189,6 @@ export default {
         },
     },
     created() {
-        this.current_day = this.kalendar_options.start_day;
         this.kalendar_events = this.events.map(event => ({
             ...event,
             id: event.id || generateUUID(),
