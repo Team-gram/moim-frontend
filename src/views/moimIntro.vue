@@ -215,7 +215,6 @@ export default {
     },
 
     async checkNotJoinedMoim(id) {
-
       let myMoim = await MyMoimList(this.$cookies.get("MoimUserId"));
       if (myMoim.status === 200) {
         console.log(myMoim.data);
