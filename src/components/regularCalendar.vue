@@ -1,6 +1,6 @@
 <template>
 	<div id="Calendar">
-		<kalendar v-if="startKalendar>0" :configuration="calendar_settings" :events="events">
+		<kalendar v-if="startKalendar>0" :configuration="calendar_settings" :events="events" style="width:80%;">
 		<div
 			slot="created-card"
 			slot-scope="{ event_information }"
@@ -77,7 +77,7 @@ export default {
 				cell_height: 10,
 				scrollToNow: false,
 				hourlySelection: false,
-				start_day: new Date().toISOString(),
+				start_day: new moment().toISOString(),
 				military_time: false,
 				read_only: false,
 				day_starts_at: 0,
@@ -98,8 +98,8 @@ export default {
     else{
       alert('로그인이 필요합니다.');
     }
-		for (var item in response.data){
-			this.setEvent(response.data[item]);
+		for (var item in response.data.regular){
+			this.setEvent(response.data.regular[item]);
 		}
 		this.startKalendar=1;
   },
@@ -131,12 +131,14 @@ export default {
 		setEvent(item){
 			var calen = Object();
 			var data = Object();
+			console.log(moment())
 			calen['from'] = moment().day(item.day+1).format().slice(0,11).toString() + item.startTime + "+09:00"
 			calen['to'] = moment().day(item.day+1).format().slice(0,11).toString() + item.endTime + "+09:00"
 			calen['id'] = item.id;
 			data['title'] = item.title;
 			data['description'] = item.detail;
 			calen["data"] = data;
+			console.log(calen)
 			this.events.push(calen);
 		},
 	async	addAppointment(popup_info) {
@@ -166,6 +168,10 @@ export default {
       data["title"] = payload.data.title;
       data["detail"] = payload.data.description;
       data["userId"] = this.$cookies.get("MoimUserId");
+			console.log(moment(payload.from))
+			var test=1;
+			if(test==1)
+				return;
 			let response = await regularSet(data);
       if(response.status==200){
         this.$bvToast.toast(data.title+': 개인일정이 등록되었습니다.', {

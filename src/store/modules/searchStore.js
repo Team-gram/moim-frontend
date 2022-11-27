@@ -25,7 +25,7 @@ const getters = {
     return state.details.data;
   },
   getSelectedMoimHostId(state) {
-    return state.details.userId;
+    return state.details.Hostid;
   }
 };
 const mutations = {
@@ -49,6 +49,9 @@ const mutations = {
   },
   setSelectedMoimId(state, id) {
     state.details.id = id;
+  },
+  setSelectedMoimHostId(state, hostid) {
+    state.details.Hostid = hostid;
   },
   setSelectedMoimDate(state, data) {
     state.details.data = data;

@@ -4,7 +4,7 @@
     style="margin-top: 20px; margin-left: 20px; margin-right: 20px"
   >
     <b-card id="schedule-card" style="max-width: 1000px">
-      <h4 id="schedule-title">개인 일정 등록</h4>
+      <h4 id="schedule-title">모임 시간 생성</h4>
       <b-container class="bv-example-row">
         <b-row class="mb-3">
           <b-col id="subtitle">일정 유형*</b-col>

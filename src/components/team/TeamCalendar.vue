@@ -58,6 +58,7 @@
 	</div>
 </template>
 <script>
+import { regularMoimGet, regularMoimSet, regularMoimRemove} from "@/services/teamcalendar";
 import Kalendar from '@/lib-components/kalendar-container.vue';
 import moment from "moment";
 export default {
@@ -67,7 +68,9 @@ export default {
 	},
 	data() {
 		return {
-			colorlist : ['red','white','gray','blue'],
+			moimid: "",
+			moimhostid: "",
+			colorlist: ['red','white','gray','blue'],
 			startKalendar:0,
       events:[
       ],
@@ -90,35 +93,31 @@ export default {
 		};
 	},
   async created(){
+		this.moimid = this.$store.getters["searchStore/getSelectedMoimId"];
+		this.moimhostid = this.$store.getters["searchStore/getSelectedMoimHostId"];
 		this.setScreen();
-		// for (var item in response.data){
-		// 	this.setEvent(response.data[item]);
-		// }
+		const response = await regularMoimGet(this.moimid);
+		if(response.status==200)
+      this.calendar = response.data;
+		for (var item in response.data.regular){
+			this.setEvent(response.data.regular[item]);
+		}
 		this.startKalendar=1;
   },
 	mounted(){
-		window.addEventListener('resize',() =>{
-			this.startKalendar=0;
-    });
-		window.addEventListener('resize',() =>{
-			this.setScreen();
-    });
 	},
 	methods: {
 		setScreen(){
 			let hide = [0,1,2,3];	
       if(this.$store.state.width<250){
 				this.calendar_settings.hide_days = hide;
-				this.startKalendar=1
 			}
 			else if(this.$store.state.width<450){
 				hide[0,1,2];
 				this.calendar_settings.hide_days = hide;
-				this.startKalendar=1
 			}
 			else{
 				this.calendar_settings.hide_days = [];
-				this.startKalendar=1
 			}
 		},
 		setEvent(item){
@@ -127,9 +126,10 @@ export default {
 			calen['from'] = moment().day(item.day+1).format().slice(0,11).toString() + item.startTime + "+09:00"
 			calen['to'] = moment().day(item.day+1).format().slice(0,11).toString() + item.endTime + "+09:00"
 			calen['id'] = item.id;
-			data['title'] = item.title;
-			data['description'] = item.detail;
+			data['title'] = item.scheduleName;
+			data['description'] = item.scheduleDetail;
 			calen["data"] = data;
+			console.log(calen);
 			this.events.push(calen);
 		},
 	async	addAppointment(popup_info) {
@@ -143,7 +143,7 @@ export default {
 				from: popup_info.start_time,
 				to: popup_info.end_time,
 			};
-			if(this.$store.getters["getSelectedMoimHostId"]!=this.$cookies.get("MoimUserId")){
+			if(this.moimhostid!=this.$cookies.get("MoimUserId")){
 				this.$bvToast.toast("모임일정을 등록할 권한이 없습니다.", {
         toaster: "b-toaster-top-right",
         appendToast: false,
@@ -164,26 +164,26 @@ export default {
 			data["day"] = (data["day"]< 0) ? 6 : data["day"];
       data["startTime"] = payload.from.slice(11,19);
       data["endTime"] = payload.to.slice(11,19);
-      data["title"] = payload.data.title;
-      data["detail"] = payload.data.description;
-      data["userId"] = this.$cookies.get("MoimUserId");
-			// let response = await regularSet(data);
-      // if(response.status==200){
-      //   this.$bvToast.toast(data.title+': 개인일정이 등록되었습니다.', {
-      //   // title: "회원 정보 등록 실패",
-      //   toaster: "b-toaster-top-right",
-      //   appendToast: false,
-      //   autoHideDelay: 3000,
-      //   });
-      // }
-			// response = await regularGet(this.$cookies.get("MoimUserId"));
-			// if(response.status==200){
-			// 	for(var index in response.data){
-			// 		if(response.data[index].startTime == data.startTime && response.data[index].endTime == data.endTime){
-			// 			payload.id = response.data[index].id;
-			// 		}
-			// 	}
-			// }
+      data["scheduleName"] = payload.data.title;
+      data["scheduleDetail"] = payload.data.description;
+      data["moimId"] = this.moimid;
+			let response = await regularMoimSet(data);
+      if(response.status==200){
+        this.$bvToast.toast(data.scheduleName+': 모임 정기 일정이 등록되었습니다.', {
+        // title: "회원 정보 등록 실패",
+        toaster: "b-toaster-top-right",
+        appendToast: false,
+        autoHideDelay: 3000,
+        });
+      }
+			response = await regularMoimGet(this.moimid);
+			if(response.status==200){
+				for(var index in response.data){
+					if(response.data[index].startTime == data.startTime && response.data[index].endTime == data.endTime){
+						payload.id = response.data[index].id;
+					}
+				}
+			}
 			this.$kalendar.addNewEvent(payload);
 			this.$kalendar.closePopups();
 			this.clearFormData(); 
@@ -205,15 +205,15 @@ export default {
 				key: kalendarEvent.key,
 				id: kalendarEvent.kalendar_id,
 			});
-			// const data = await regularRemove(this.$cookies.get("MoimUserId"),kalendarEvent.kalendar_id);
-			// if(data.status==200){
-			// 	this.$bvToast.toast('개인일정이 삭제되었습니다.', {
-			// 		// title: "회원 정보 등록 실패",
-			// 		toaster: "b-toaster-top-right",
-			// 		appendToast: false,
-			// 		autoHideDelay: 3000,
-			// 	});
-			// }
+			const data = await regularMoimRemove(this.moimid,kalendarEvent.kalendar_id);
+			if(data.status==200){
+				this.$bvToast.toast('모임 일정이 삭제되었습니다.', {
+					// title: "회원 정보 등록 실패",
+					toaster: "b-toaster-top-right",
+					appendToast: false,
+					autoHideDelay: 3000,
+				});
+			}
 		},
 	},
 };

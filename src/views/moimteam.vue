@@ -6,18 +6,18 @@
       <b-col id="teammenu" cols="auto" style="cursor:pointer" :class="{menuselect: memuindex==2}" @click="memuindex=2"><div>일정</div></b-col>
       <b-col id="teammenu" cols="auto" style="cursor:pointer" :class="{menuselect: memuindex==3}" @click="memuindex=3"><div>설정</div></b-col>
     </b-row>
-  <TeamInfo style="width:80%" :class="{display: memuindex!=0}"></TeamInfo>
-  <TeamMoimCalendar style="width:80%" :class="{display: memuindex!=2}"></TeamMoimCalendar>
-  <TeamSetting style="width:80%" :class="{display: memuindex!=3}"></TeamSetting>
+  <TeamInfo style="width:80%" v-if="memuindex==0"></TeamInfo>
+  <TeamCalendar style="width:80%" v-if="memuindex==2"></TeamCalendar>
+  <TeamSetting style="width:80%" v-if="memuindex==3"></TeamSetting>
   </div>
 </template> 
 <script>
 import TeamSetting from "@/components/team/TeamSetting.vue";
 import TeamInfo from "@/components/team/TeamInfo.vue";
-import TeamMoimCalendar from "@/components/team/TeamMoimCalendar.vue";
+import TeamCalendar from "@/components/team/TeamCalendar.vue";
 export default {
    components: {
-    TeamMoimCalendar,
+    TeamCalendar,
     TeamInfo,
     TeamSetting,
   },

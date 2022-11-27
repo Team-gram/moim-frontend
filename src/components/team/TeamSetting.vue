@@ -47,8 +47,8 @@
   </div>
 </template>
 <script>
-import UserCalendar from "@/components/team/UserCalendar.vue";
-import HostCalendar from "@/components/team/HostCalendar.vue";
+import UserCalendar from "@/components/team/setting/UserCalendar";
+import HostCalendar from "@/components/team/setting/HostCalendar";
 export default {
   components: {
     HostCalendar,
