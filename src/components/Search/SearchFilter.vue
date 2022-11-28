@@ -5,7 +5,7 @@
       v-if="showFilter == false"
     >
       <div
-        id="option-button"
+        id="green-colored-option-button"
         style="cursor: pointer"
         @click="turnOnOffFileter()"
       >
@@ -84,7 +84,7 @@
       </b-row>
       <b-row>
         <b-col>
-          <div id="option-button" style="cursor: pointer" @click="applySearchFilter()">
+          <div id="green-colored-option-button" style="cursor: pointer" @click="applySearchFilter()">
             필터 적용
           </div>
         </b-col>

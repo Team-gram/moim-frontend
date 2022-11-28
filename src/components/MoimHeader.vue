@@ -39,17 +39,6 @@
               </b-dropdown>
             </div>
           </b-col>
-          <!-- <b-col>
-            <b-button
-              pill
-              variant="light"
-              id="show-btn"
-              class="ml-auto login-button"
-              @click="[$bvModal.show('login-modal'), logout()]"
-              style="float: right; margin-right: 10px"
-              >{{ userID }}
-            </b-button>
-          </b-col> -->
         </b-row>
       </b-container>
       <b-modal
