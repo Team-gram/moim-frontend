@@ -26,10 +26,7 @@
                 cols="auto"
                 id="button"
               >
-                <div
-                  id="category-button"
-                  @click="searchCategory(category)"
-                >
+                <div id="category-button" @click="searchCategory(category)">
                   <img
                     :src="
                       require(`@/assets/category-icon/${category.categoryName.replaceAll(
@@ -48,13 +45,6 @@
             </b-row>
           </b-container>
         </b-card>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col>
-        <div id="main-text">
-          <b id="main-text-highlight">'김모임' 님을 위한 추천 모임</b>
-        </div>
       </b-col>
     </b-row>
     <b-row>

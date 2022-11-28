@@ -14,11 +14,14 @@ const store = new Vuex.Store({
     height:650,
   },
   getters: {
-
+    getUserData(state) {
+      return state.userinfo;
+    }
   },
   mutations:{
     MoimUserInfo(state,data){
       state.userinfo = data;
+      console.log(data);
     },
     Resize(state,width,height){
       state.width = width;
@@ -26,10 +29,12 @@ const store = new Vuex.Store({
     }
   },
   actions:{
-   async UpdateUserInfo(state){
-      if(state.userinfo==null){
-        var data = await getUserinfo(this.$cookies.get("MoimUserId"));
-        state.commit('MoimUserInfo',data);
+   async UpdateUserInfo(state, userId){
+      console.log("hi?");
+      if(state.userinfo==undefined){
+
+        var data = await getUserinfo(userId);
+        state.commit('MoimUserInfo',data.data);
       }
     }
   },
