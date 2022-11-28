@@ -62,13 +62,13 @@ export default {
 #main-text-highlight {
   background:linear-gradient(180deg, transparent 60%, #4FB26F 60%);
 }
-#moim-list-box { /*모임 리스트를 감싸는 박스에 대한 id*/
+#list-box { /*모임 리스트를 감싸는 박스에 대한 id*/
   float: center;
   max-width: 700px;
   height: max-content;
   margin: 20px 0 20px 0;
 }
-#moim-list-item {  /*모임 리스트 내 개별 요소에 대한 id*/
+#list-item {  /*모임 리스트 내 개별 요소에 대한 id*/
   cursor: pointer;
   border-radius: 20px !important;
   border: 0px solid;
@@ -81,13 +81,29 @@ export default {
   margin: 10px 0 10px 0;
   font-family: "NanumBarunGothic";
 }
-#option-button {  /*초록색 옵션 버튼 id*/
+#green-colored-option-button {  /*초록색 옵션 버튼 id*/
   background-color: #4fb26f;
   border-radius: 20px !important;
   border: 0px solid;
   color: #ffffff;
   font-family: "NanumBarunGothic";
   padding: 5px 20px 5px 20px;
+  width: fit-content;
+}
+#green-outline-option-button {  /*초록색 외곽 옵션 버튼 id*/
+  background-color: #ffffff;
+  border-radius: 20px !important;
+  border: 1px solid #4fb26f;
+  font-family: "NanumBarunGothic";
+  padding: 2px 20px 2px 20px;
+  width: fit-content;
+}
+#gray-outline-option-button {  /*회색 외곽 옵션 버튼 id*/
+  background-color: #ffffff;
+  border-radius: 20px !important;
+  border: 1px solid #aaaaaa;
+  font-family: "NanumBarunGothic";
+  padding: 2px 20px 2px 20px;
   width: fit-content;
 }
 #default-item {  /*기본 요소에 대한 id*/
@@ -97,5 +113,8 @@ export default {
   background-color: #ffffff;
   float: center;
   font-family: "NanumBarunGothic";
+}
+#gray-icon {  /*회색 아이콘*/
+  color: #aaaaaa;
 }
 </style>
