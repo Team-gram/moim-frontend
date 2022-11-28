@@ -19,10 +19,6 @@
       v-if="isToday"
       :style="`top:${passedTime}px`"
     >
-      <span
-        class="line"
-        v-show="kalendar_options.style === 'material_design'"
-      ></span>
     </div>
     <kalendar-cell
       v-for="(cell, index) in day_cells"

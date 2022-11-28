@@ -1,10 +1,11 @@
 <template>
-	<div id="Calendar" style="margin-top: 20px;">
+	<div id="Calendar" style="margin-top: 0px;">
+		<b-button @click="[startKalendar=0,MoimAllCall()]" variant="outline-success" style="margin:0 0 10px 80%">모임 일정 조율</b-button>
 		<kalendar v-if="startKalendar>0" :configuration="calendar_settings" :events="events">
 		<div
 			slot="created-card"
 			slot-scope="{ event_information }"
-			class="details-card"
+			class="details-card" @click="startitem(event_information)"
 		>
 			<h5 class="appointment-title appfont">
 				{{ event_information.data.title }}
@@ -59,6 +60,7 @@
 </template>
 <script>
 import { regularMoimGet, regularMoimSet, regularMoimRemove} from "@/services/teamcalendar";
+import { AllMeet } from "@/services/meet";
 import Kalendar from '@/lib-components/kalendar-container.vue';
 import moment from "moment";
 export default {
@@ -76,7 +78,7 @@ export default {
       ],
 			calendar_settings: {
 				view_type: 'week',
-				cell_height: 10,
+				cell_height: 7,
 				scrollToNow: false,
 				hourlySelection: false,
 				start_day: new Date().toISOString(),
@@ -86,7 +88,7 @@ export default {
 				day_ends_at: 24,
 				overlap: true,
 				hide_dates: [],
-				hide_days: [],
+				hide_days: [0,1,2],
 				past_event_creation: true,
 			},
 			new_appointment: {},
@@ -96,29 +98,23 @@ export default {
 		this.moimid = this.$store.getters["searchStore/getSelectedMoimId"];
 		this.moimhostid = this.$store.getters["searchStore/getSelectedMoimHostId"];
 		this.setScreen();
-		const response = await regularMoimGet(this.moimid);
-		if(response.status==200)
-      this.calendar = response.data;
-		for (var item in response.data.regular){
-			this.setEvent(response.data.regular[item]);
-		}
-		this.startKalendar=1;
+		this.startKalendar = await this.regularGet(this.moimid);
   },
 	mounted(){
 	},
 	methods: {
 		setScreen(){
-			let hide = [0,1,2,3];	
-      if(this.$store.state.width<250){
-				this.calendar_settings.hide_days = hide;
-			}
-			else if(this.$store.state.width<450){
-				hide[0,1,2];
-				this.calendar_settings.hide_days = hide;
-			}
-			else{
-				this.calendar_settings.hide_days = [];
-			}
+			// let hide = [0,1,2,3];	
+      // if(this.$store.state.width<250){
+			// 	this.calendar_settings.hide_days = hide;
+			// }
+			// else if(this.$store.state.width<450){
+			// 	hide[0,1,2];
+			// 	this.calendar_settings.hide_days = hide;
+			// }
+			// else{
+			// 	this.calendar_settings.hide_days = [];
+			// }
 		},
 		setEvent(item){
 			var calen = Object();
@@ -129,7 +125,6 @@ export default {
 			data['title'] = item.scheduleName;
 			data['description'] = item.scheduleDetail;
 			calen["data"] = data;
-			console.log(calen);
 			this.events.push(calen);
 		},
 	async	addAppointment(popup_info) {
@@ -178,6 +173,8 @@ export default {
       }
 			response = await regularMoimGet(this.moimid);
 			if(response.status==200){
+				console.log("ㅋㅋ");
+				console.log(response.data);
 				for(var index in response.data){
 					if(response.data[index].startTime == data.startTime && response.data[index].endTime == data.endTime){
 						payload.id = response.data[index].id;
@@ -198,7 +195,6 @@ export default {
 			};
 		},
 	async	removeEvent(kalendarEvent) {
-			console.log('KalendarEvent', kalendarEvent);
 			let day = kalendarEvent.start_time.slice(0, 10);
 			this.$kalendar.removeEvent({
 				day,
@@ -215,6 +211,27 @@ export default {
 				});
 			}
 		},
+	async regularGet(moimid){
+		let response = await regularMoimGet(moimid);
+		for (var item in response.data.regular){
+			this.setEvent(response.data.regular[item]);
+		}
+		return 1;
+	},
+	async MoimAllCall(){
+			this.events = [];
+			this.regularGet(this.moimid);
+			const response = await AllMeet(this.moimid);
+			if(response.data.length!=0)
+				for (var item in response.data){
+					response.data[item].scheduleName = response.data[item].name;
+					this.setEvent(response.data[item]);
+				}
+			this.startKalendar=1;
+		},
+		startitem(kalendarEvent){
+			console.log(kalendarEvent.kalendar_id);
+		}
 	},
 };
 </script>

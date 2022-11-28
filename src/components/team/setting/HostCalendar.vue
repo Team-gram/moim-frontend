@@ -64,7 +64,6 @@
 </template>
 
 <script>
-import { JoinMeet } from "@/services/meet.js"
 export default {
   data() {
     return {
@@ -86,15 +85,15 @@ export default {
           autoHideDelay: 3000,
         });
       }
-      const response = await JoinMeet(this.moimid);
-      if(response.status==200){
-        this.$bvToast.toast('모임 조율 시간이 등록되었습니다.', {
-        // title: "회원 정보 등록 실패",
-        toaster: "b-toaster-top-right",
-        appendToast: false,
-        autoHideDelay: 3000,
-        });
-      }
+      // const response = await JoinMeet(this.moimid);
+      // if(response.status==200){
+      //   this.$bvToast.toast('모임 조율 시간이 등록되었습니다.', {
+      //   // title: "회원 정보 등록 실패",
+      //   toaster: "b-toaster-top-right",
+      //   appendToast: false,
+      //   autoHideDelay: 3000,
+      //   });
+      // }
     },
   },
   created() {
