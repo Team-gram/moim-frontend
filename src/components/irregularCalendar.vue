@@ -22,16 +22,16 @@
         </div>
       </b-col>
     </b-row>
-    <regularCalendar :parentdata="parentdata" v-if="dayflag"></regularCalendar>
+    <irrCalendarchild :parentdata="parentdata" v-if="dayflag"></irrCalendarchild>
   </div>
 </template>
 
 <script>
-import regularCalendar from "@/components/irrCalendarchild.vue"
+import irrCalendarchild from "@/components/irrCalendarchild.vue"
 import { irregularGet } from "@/services/calendar";
 export default {
   components:{
-    regularCalendar,
+    irrCalendarchild,
   },
   data () {
     return {
@@ -53,7 +53,7 @@ export default {
  async created(){
     const response = await irregularGet(this.$cookies.get("MoimUserId"));
     if(response.status==200)
-      this.calendardata=response.data;
+      this.calendardata=response.data.irregular;
     else{
       alert('로그인이 필요합니다.');
     }

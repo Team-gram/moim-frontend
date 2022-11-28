@@ -6,7 +6,6 @@
     <b-card id="schedule-card" style="max-width: 1000px">
       <h4 id="schedule-title">모임 시간 참가하기</h4>
       <b-container class="bv-example-row">
-        
       </b-container>
     </b-card>
     <b-button

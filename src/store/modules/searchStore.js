@@ -12,7 +12,6 @@ const getters = {
     return state.data;
   },
   getSelectedSubCategory(state) {
-    console.log(state.options.subCategory);
     return state.options.subCategory;
   },
   getSearchLocation(state) {

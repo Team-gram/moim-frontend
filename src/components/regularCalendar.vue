@@ -1,5 +1,6 @@
 <template>
-	<div id="Calendar">
+	<div id="Calendar"> 
+		
 		<kalendar v-if="startKalendar>0" :configuration="calendar_settings" :events="events" style="width:80%;">
 		<div
 			slot="created-card"
@@ -68,7 +69,7 @@ export default {
 	},
 	data() {
 		return {
-			colorlist : ['red','white','gray','blue'],
+			colorlist : ["#AEDFDB","#96DFD8","#85D4BE","#AEE6CB","#60ABA8","#F6F3CF","#CDEEF3","#DAF1DE","#D6E9AA","#21B7A9","#EFF4E7","#EDE868"],
 			startKalendar:0,
       events:[
       ],
@@ -95,52 +96,51 @@ export default {
 		const response = await regularGet(this.$cookies.get("MoimUserId"));
 		if(response.status==200)
       this.calendar = response.data;
-    else{
-      alert('로그인이 필요합니다.');
-    }
-		for (var item in response.data.regular){
-			this.setEvent(response.data.regular[item]);
-		}
+		if(response.data.regular.length!=0)
+			for (var item in response.data.regular){
+				this.setEvent(response.data.regular[item]);
+			}
 		this.startKalendar=1;
   },
 	mounted(){
-		window.addEventListener('resize',() =>{
-			this.startKalendar=0;
-    });
-		window.addEventListener('resize',() =>{
-			this.setScreen();
-    });
+		// window.addEventListener('resize',() =>{
+		// 	// this.startKalendar=0;
+    // });
+		// window.addEventListener('resize',() =>{
+		// 	this.setScreen();
+    // });
 	},
 	methods: {
 		setScreen(){
-			let hide = [0,1,2,3];	
-      if(this.$store.state.width<250){
-				this.calendar_settings.hide_days = hide;
-			}
-			else if(this.$store.state.width<450){
-				hide[0,1,2];
-				this.calendar_settings.hide_days = hide;
-			}
-			else{
-				this.calendar_settings.hide_days = [];
-			}
+			// let hide = [0,1,2,3,4];	
+      // if(this.$store.state.width<250){
+			// 	this.calendar_settings.hide_days = hide;
+			// 	this.startKalendar=1;
+			// }
+			// else if(this.$store.state.width<450){
+			// 	hide = [0,1,2,3];
+			// 	this.calendar_settings.hide_days = hide;
+			// 	this.startKalendar=1;
+			// }
+			// else{
+			// 	this.calendar_settings.hide_days = [];
+			// 	this.startKalendar=1;
+			// }
 		},
 		setEvent(item){
 			var calen = Object();
 			var data = Object();
-			console.log(item.day);
 			calen['from'] = moment().day(item.day+1).format().slice(0,11).toString() + item.startTime + "+09:00"
 			calen['to'] = moment().day(item.day+1).format().slice(0,11).toString() + item.endTime + "+09:00"
 			calen['id'] = item.id;
 			data['title'] = item.title;
 			data['description'] = item.detail;
 			calen["data"] = data;
-			console.log(calen)
 			this.events.push(calen);
 		},
 	async	addAppointment(popup_info) {
-		const IDcolor = document.getElementById("creating-event");
-		IDcolor.style.backgroundColor = this.colorlist[Math.floor(Math.random() * 4)];
+		// const IDcolor = document.getElementById("creating-event");
+		// IDcolor.style.backgroundColor = this.colorlist[Math.floor(Math.random() * 16)];
 			let payload = {
 				data: {
 					title: this.new_appointment.title,
@@ -149,6 +149,11 @@ export default {
 				from: popup_info.start_time,
 				to: popup_info.end_time,
 			};
+			
+			// const IDcolor2 = document.getElementsByClassName("created-event");
+			// IDcolor2[IDcolor2.length-1].style.backgroundColor = this.colorlist[Math.floor(Math.random() * 16)];
+			// console.log(IDcolor2[length]);
+
 			if(payload.data.title==null){
 				this.$bvToast.toast("실패했습니다. 제목을 입력해주세요", {
         toaster: "b-toaster-top-right",
@@ -165,7 +170,6 @@ export default {
       data["title"] = payload.data.title;
       data["detail"] = payload.data.description;
       data["userId"] = this.$cookies.get("MoimUserId");
-			console.log(moment(payload.from))
 			let response = await regularSet(data);
       if(response.status==200){
         this.$bvToast.toast(data.title+': 개인일정이 등록되었습니다.', {
@@ -185,7 +189,7 @@ export default {
 			}
 			this.$kalendar.addNewEvent(payload);
 			this.$kalendar.closePopups();
-			this.clearFormData(); 
+			this.clearFormData();
 		},
 		closePopups() {
 			this.$kalendar.closePopups();
@@ -268,9 +272,6 @@ svg{
 	font-size: 13px;	
 }
 .creating-event{
-	background-color: rgba(100, 100, 100, 0.403);
-}
-.created-event{
 	background-color: rgba(100, 100, 100, 0.403);
 }
 </style>

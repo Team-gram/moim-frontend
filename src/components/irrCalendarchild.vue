@@ -51,7 +51,8 @@ export default {
   methods:{
   async irrdelete(){
       const response = await irregularRemove(this.$cookies.get("MoimUserId"),this.irrid);
-      console.log(response); 
+      console.log(response);
+      this.$router.go();
     },
     irrselected(item){
       this.irrid=item.id;
