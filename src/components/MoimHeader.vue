@@ -27,7 +27,7 @@
               >
                 <template #button-content
                   ><img
-                    v-if="!islogin || userProfile == undefined"
+                    v-if="!islogin || userProfile == undefined || userProfile == null || userProfile == ''"
                     src="../assets/default-profile.png"
                     width="40"
                   /><b-img v-else 
