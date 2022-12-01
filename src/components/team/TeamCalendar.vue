@@ -4,7 +4,7 @@
       @click="[(startKalendar = 0), MoimAllCall()]"
       variant="outline-success"
       style="margin: 0 0 10px 80%"
-      >모임 일정 조율</b-button
+      >{{Allbutton}}</b-button
     >
     <kalendar
       v-if="startKalendar > 0"
@@ -34,14 +34,14 @@
         ></button>
       </div>
       <div slot="creating-card">
-        <h4 class="appointment-title" style="text-align: left">새 일정</h4>
+        <h4 class="appointment-title" style="text-align: left">모임 일정</h4>
       </div>
       <div
         slot="popup-form"
         slot-scope="{ popup_information }"
         style="display: flex; flex-direction: column"
       >
-        <h4 style="margin-bottom: 10px">새 일정</h4>
+        <h4 style="margin-bottom: 10px">모임 일정</h4>
         <input
           v-model="new_appointment['title']"
           type="text"
@@ -194,6 +194,7 @@ export default {
   },
   data() {
     return {
+      Allbutton: "참여자 일정",
       isAllbutton: 0,
       moimid: "",
       moimhostid: "",
@@ -207,7 +208,7 @@ export default {
         hourlySelection: false,
         start_day: new Date().toISOString(),
         military_time: false,
-        read_only: false,
+        read_only: true,
         day_starts_at: 0,
         day_ends_at: 24,
         overlap: true,
@@ -368,18 +369,28 @@ export default {
     },
     async MoimAllCall() {
       if(this.isAllbutton==0)
+      {
+        this.Allbutton = "기존 모임 일정"
+        this.events = [];
+        this.regularGet(this.moimid);
+        const response = await AllMeet(this.moimid);
+        if (response.data.length != 0)
+          for (var item in response.data) {
+            response.data[item].scheduleName = response.data[item].name;
+            this.setEvent(response.data[item]);
+          }
+        this.calendar_settings.read_only=false;
+        this.startKalendar = 1;
         this.isAllbutton=1;
-      else
+      }
+      else{
+        this.Allbutton = "참여자 일정"
+        this.events = [];
+        this.calendar_settings.read_only=true;
+        this.startKalendar = await this.regularGet(this.moimid);
         this.isAllbutton=0;
-      this.events = [];
-      this.regularGet(this.moimid);
-      const response = await AllMeet(this.moimid);
-      if (response.data.length != 0)
-        for (var item in response.data) {
-          response.data[item].scheduleName = response.data[item].name;
-          this.setEvent(response.data[item]);
-        }
-      this.startKalendar = 1;
+      }
+      
     },
     startitem(kalendarEvent) {
       this.currentSelectedSchedule = kalendarEvent;
