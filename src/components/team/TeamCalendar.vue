@@ -15,7 +15,7 @@
         slot="created-card"
         slot-scope="{ event_information }"
         class="details-card"
-        @click="startitem(event_information)"
+        @click="[isAllbutton==0 ? startitem(event_information) : isAllbutton]"
       >
         <h5 class="appointment-title appfont">
           {{ event_information.data.title }}
@@ -63,7 +63,6 @@
         </div>
       </div>
     </kalendar>
-    <b-button @click="startitem(8)">테스트용</b-button>
     <b-modal
       id="modal-scrollable"
       centered
@@ -185,9 +184,9 @@ import {
   regularMoimRemove,
 } from "@/services/teamcalendar";
 import { AllMeet } from "@/services/meet";
+import { getMoimRef, takeMoimRef, deleteMoimRef, newMoimRef } from "@/services/moim";
 import Kalendar from "@/lib-components/kalendar-container.vue";
 import moment from "moment";
-import { getMoimRef, takeMoimRef, deleteMoimRef, newMoimRef } from "@/services/moim";
 export default {
   name: "MoimTest",
   components: {
@@ -195,6 +194,7 @@ export default {
   },
   data() {
     return {
+      isAllbutton: 0,
       moimid: "",
       moimhostid: "",
       colorlist: ["red", "white", "gray", "blue"],
@@ -212,7 +212,7 @@ export default {
         day_ends_at: 24,
         overlap: true,
         hide_dates: [],
-        hide_days: [0, 1, 2],
+        hide_days: [],
         past_event_creation: true,
       },
       currentSelectedSchedule: null,
@@ -317,8 +317,6 @@ export default {
       }
       response = await regularMoimGet(this.moimid);
       if (response.status == 200) {
-        console.log("ㅋㅋ");
-        console.log(response.data);
         for (var index in response.data) {
           if (
             response.data[index].startTime == data.startTime &&
@@ -369,6 +367,10 @@ export default {
       return 1;
     },
     async MoimAllCall() {
+      if(this.isAllbutton==0)
+        this.isAllbutton=1;
+      else
+        this.isAllbutton=0;
       this.events = [];
       this.regularGet(this.moimid);
       const response = await AllMeet(this.moimid);
@@ -382,11 +384,9 @@ export default {
     startitem(kalendarEvent) {
       this.currentSelectedSchedule = kalendarEvent;
       this.updateRef();
-      console.log(kalendarEvent);
       this.$bvModal.show("modal-scrollable");
     },
     async togglePrepItem(prepId) {
-      console.log("toggle");
       var prep = this.preparations.find((x) => x.id === prepId);
       if (prep) {
         if (prep.status === "N") {

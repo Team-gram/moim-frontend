@@ -21,7 +21,6 @@ const store = new Vuex.Store({
   mutations:{
     MoimUserInfo(state,data){
       state.userinfo = data;
-      console.log(data);
     },
     Resize(state,width,height){
       state.width = width;
@@ -30,9 +29,7 @@ const store = new Vuex.Store({
   },
   actions:{
    async UpdateUserInfo(state, userId){
-      console.log("hi?");
       if(state.userinfo==undefined){
-
         var data = await getUserinfo(userId);
         state.commit('MoimUserInfo',data.data);
       }

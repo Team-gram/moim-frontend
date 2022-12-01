@@ -7,24 +7,27 @@
       <b-col id="teammenu" cols="auto" style="cursor:pointer" :class="{menuselect: memuindex==3}" @click="memuindex=3"><div>설정</div></b-col>
     </b-row>
   <TeamInfo style="width:80%" v-if="memuindex==0"></TeamInfo>
+  <TeamChat style="width:80%" v-if="memuindex==1"></TeamChat>
   <TeamCalendar style="width:80%" v-if="memuindex==2"></TeamCalendar>
   <TeamSetting style="width:80%" v-if="memuindex==3"></TeamSetting>
   </div>
 </template> 
 <script>
-import TeamSetting from "@/components/team/TeamSetting.vue";
 import TeamInfo from "@/components/team/TeamInfo.vue";
+import TeamChat from "@/components/team/TeamChat";
 import TeamCalendar from "@/components/team/TeamCalendar.vue";
+import TeamSetting from "@/components/team/TeamSetting.vue";
 export default {
    components: {
-    TeamCalendar,
     TeamInfo,
+    TeamChat,
+    TeamCalendar,
     TeamSetting,
   },
   name: "MoimTeam",
   data() {
     return {
-      memuindex: 0,
+      memuindex: 3,
     };
   },
   methods:{
