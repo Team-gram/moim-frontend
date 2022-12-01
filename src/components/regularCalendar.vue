@@ -1,7 +1,6 @@
 <template>
 	<div id="Calendar"> 
-		
-		<kalendar v-if="startKalendar==0" :configuration="calendar_settings" :events="events" style="width:80%;">
+		<kalendar v-if="startKalendar>0"  :configuration="calendar_settings" :events="events" style="width:80%;">
 		<div
 			slot="created-card"
 			slot-scope="{ event_information }"
@@ -72,14 +71,6 @@ export default {
 			colorlist : ["#AEDFDB","#96DFD8","#85D4BE","#AEE6CB","#60ABA8","#F6F3CF","#CDEEF3","#DAF1DE","#D6E9AA","#21B7A9","#EFF4E7","#EDE868"],
 			startKalendar:0,
       events:[
-				{
-					from: '2022-11-29T10:22:00-07:00',
-					to: '2022-11-29T11:20:00-07:00',
-					data: {
-						title: 'Side',
-						description: 'Look.2',
-					},
-				},
       ],
 			calendar_settings: {
 				view_type: 'week',
@@ -100,6 +91,7 @@ export default {
 		};
 	},
   async created(){
+
 		this.setScreen();
 		const response = await regularGet(this.$cookies.get("MoimUserId"));
 		if(response.status==200)
@@ -111,13 +103,6 @@ export default {
 		this.startKalendar=1;
   },
 	mounted(){
-		// window.addEventListener('resize',() =>{
-		// 	// this.startKalendar=0;
-    // });
-		// window.addEventListener('resize',() =>{
-		// 	this.setScreen();
-    // });
-		
 	},
 	methods: {
 		setScreen(){
@@ -148,6 +133,7 @@ export default {
 			this.events.push(calen);
 		},
 	async	addAppointment(popup_info) {
+		
 			let payload = {
 				data: {
 					title: this.new_appointment.title,
@@ -156,9 +142,7 @@ export default {
 				from: popup_info.start_time,
 				to: popup_info.end_time,
 			};
-			// const IDcolor2 = document.getElementsByClassName("created-event");
-			// console.log(IDcolor2[0].style);
-			// IDcolor2[IDcolor2.length-1].style.backgroundColor = this.colorlist[Math.floor(Math.random() * 16)];
+			// 
 
 			if(payload.data.title==null){
 				this.$bvToast.toast("실패했습니다. 제목을 입력해주세요", {
@@ -278,6 +262,9 @@ svg{
 	font-size: 13px;	
 }
 .creating-event{
+	background-color: rgba(100, 100, 100, 0.403);
+}
+.created-event{
 	background-color: rgba(100, 100, 100, 0.403);
 }
 </style>

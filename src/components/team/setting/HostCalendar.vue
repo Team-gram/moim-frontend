@@ -68,6 +68,8 @@ export default {
   data() {
     return {
       moimid:0,
+      schedule_name:"",
+      schedule_description:"",
       start_hour_selected:0,
       hour_options: [
         1, 7, 6, 12, 24, 48, 72, 144
