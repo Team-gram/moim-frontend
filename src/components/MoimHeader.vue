@@ -26,8 +26,15 @@
                 style="margin: 0; padding: 0"
               >
                 <template #button-content
-                  ><img src="../assets/default-profile.png" width="40"
-                /></template>
+                  ><img
+                    v-if="!islogin || userProfile == undefined || userProfile == null || userProfile == ''"
+                    src="../assets/default-profile.png"
+                    width="40"
+                  /><b-img v-else 
+                  :src='`${userProfile}`'
+                  rounded="circle"
+                  width="40"/>
+                </template>
                 <b-dropdown-item
                   v-if="!islogin"
                   @click="[$bvModal.show('login-modal')]"
@@ -77,6 +84,9 @@ export default {
       userID: "로그인",
       logintext: "로그인 | 회원가입",
       islogin: false,
+      userProfile: null,
+      userInfo: null,
+      userInfoTest: {profileImage:"http://k.kakaocdn.net/dn/d7dp4q/btrQ1JslRdP/E9yZpopocyQjHIMnmSG1B1/img_640x640.jpg"}
     };
   },
   methods: {
@@ -113,13 +123,19 @@ export default {
       }
     },
   },
-  created() {
+  async created() {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
     if (this.$cookies.get("MoimUserId") != undefined) {
+
       this.userID = "로그아웃";
       this.islogin = true;
       this.logintext = "로그아웃";
+
+      // 로그인되어 있는 경우
+      await this.$store.dispatch("UpdateUserInfo", this.$cookies.get("MoimUserId"));
+      this.userinfo = this.$store.getters.getUserData;
+      this.userProfile = this.userinfo.profileImage;
     }
   },
   mounted() {
@@ -160,6 +176,6 @@ h5 {
 }
 #header {
   margin: 0;
-  background-color : #eeeeee;
+  background-color: #eeeeee;
 }
 </style>
