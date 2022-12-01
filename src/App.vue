@@ -98,6 +98,15 @@ export default {
   padding: 2px 20px 2px 20px;
   width: fit-content;
 }
+#gray-colored-option-button {  /*회색 옵션 버튼 id*/
+  background-color: #aaaaaa;
+  border-radius: 20px !important;
+  border: 0px solid #aaaaaa;
+  color: #ffffff;
+  font-family: "NanumBarunGothic";
+  padding: 2px 20px 2px 20px;
+  width: fit-content;
+}
 #gray-outline-option-button {  /*회색 외곽 옵션 버튼 id*/
   background-color: #ffffff;
   border-radius: 20px !important;
