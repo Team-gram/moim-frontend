@@ -38,7 +38,6 @@ export default{
     this.id = this.$cookies.get("MoimUserId");
     this.moimid = this.$store.getters["searchStore/getSelectedMoimId"];
     this.hostid = this.$store.getters["searchStore/getSelectedMoimHostId"];
-    console.log(this.moimid);
     const response = await chatGet(this.moimid);
     this.chatList = response.data;
   },

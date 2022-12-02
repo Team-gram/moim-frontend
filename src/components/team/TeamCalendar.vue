@@ -28,10 +28,6 @@
           <br />
           {{ event_information.end_time.substr(11, 5) }}
         </span>
-        <button
-          @click="removeEvent(event_information)"
-          class="details-button"
-        ></button>
       </div>
       <div slot="creating-card">
         <h4 class="appointment-title" style="text-align: left">모임 일정</h4>
@@ -156,6 +152,7 @@
 
       <template #modal-footer="{ hide }">
         <!-- Button with custom close trigger value -->
+        <b-button size="sm" v-if="moimhostid==userid" @click="removeEvent(event_information)" style="background-color:red;"> 삭제하기 </b-button>
         <b-button size="sm" @click="hide('forget')"> 닫기 </b-button>
       </template>
     </b-modal>
@@ -196,6 +193,7 @@ export default {
     return {
       Allbutton: "참여자 일정",
       isAllbutton: 0,
+      userid:null,
       moimid: "",
       moimhostid: "",
       colorlist: ["red", "white", "gray", "blue"],
@@ -223,6 +221,7 @@ export default {
     };
   },
   async created() {
+    this.userid = this.$cookies.get("MoimUserId");
     this.moimid = this.$store.getters["searchStore/getSelectedMoimId"];
     this.moimhostid = this.$store.getters["searchStore/getSelectedMoimHostId"];
     this.setScreen();
@@ -502,12 +501,6 @@ svg {
 }
 .appsubfont {
   font-size: 13px;
-}
-.creating-event {
-  background-color: rgba(100, 100, 100, 0.403);
-}
-.created-event {
-  background-color: rgba(100, 100, 100, 0.403);
 }
 #moim-prep-item {
   border-radius: 20px !important;
