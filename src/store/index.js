@@ -6,7 +6,7 @@ import createPersistedState from "vuex-persistedstate";
 Vue.use(Vuex);
 
 import searchStore from '@/store/modules/searchStore';
-
+import chatStore from '@/store/modules/chatStore';
 const store = new Vuex.Store({
   state:{
     userinfo:"",
@@ -21,7 +21,6 @@ const store = new Vuex.Store({
   mutations:{
     MoimUserInfo(state,data){
       state.userinfo = data;
-      console.log(data);
     },
     Resize(state,width,height){
       state.width = width;
@@ -30,17 +29,15 @@ const store = new Vuex.Store({
   },
   actions:{
    async UpdateUserInfo(state, userId){
-      console.log("hi?");
       if(state.userinfo==undefined){
-
         var data = await getUserinfo(userId);
         state.commit('MoimUserInfo',data.data);
       }
     }
   },
-  modules: {searchStore},
+  modules: {searchStore,chatStore},
   plugins: [createPersistedState({
-    paths: ['searchStore'],
+    paths: ['searchStore','chatStore'],
   })],
 });
 

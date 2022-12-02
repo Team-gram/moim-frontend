@@ -19,7 +19,7 @@
         <b-row class="mb-3" id="menu">
           <b-col id="subtitle">개설일자</b-col>
           <div class="w-100"></div>
-          <b-col id="categorytext"
+          <b-col id="categorytext" v-if="moimData.length!=0"
             >{{ this.moimData.createDate.split(/-|T/)[0] }} 년
             {{ this.moimData.createDate.split(/-|T/)[1] }}월
             {{ this.moimData.createDate.split(/-|T/)[2] }}일</b-col

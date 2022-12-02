@@ -4,7 +4,7 @@
       @click="[(startKalendar = 0), MoimAllCall()]"
       variant="outline-success"
       style="margin: 0 0 10px 80%"
-      >모임 일정 조율</b-button
+      >{{Allbutton}}</b-button
     >
     <kalendar
       v-if="startKalendar > 0"
@@ -15,7 +15,7 @@
         slot="created-card"
         slot-scope="{ event_information }"
         class="details-card"
-        @click="startitem(event_information)"
+        @click="[isAllbutton==0 ? startitem(event_information) : isAllbutton]"
       >
         <h5 class="appointment-title appfont">
           {{ event_information.data.title }}
@@ -34,14 +34,14 @@
         ></button>
       </div>
       <div slot="creating-card">
-        <h4 class="appointment-title" style="text-align: left">새 일정</h4>
+        <h4 class="appointment-title" style="text-align: left">모임 일정</h4>
       </div>
       <div
         slot="popup-form"
         slot-scope="{ popup_information }"
         style="display: flex; flex-direction: column"
       >
-        <h4 style="margin-bottom: 10px">새 일정</h4>
+        <h4 style="margin-bottom: 10px">모임 일정</h4>
         <input
           v-model="new_appointment['title']"
           type="text"
@@ -63,7 +63,6 @@
         </div>
       </div>
     </kalendar>
-    <b-button @click="startitem(8)">테스트용</b-button>
     <b-modal
       id="modal-scrollable"
       centered
@@ -185,9 +184,9 @@ import {
   regularMoimRemove,
 } from "@/services/teamcalendar";
 import { AllMeet } from "@/services/meet";
+import { getMoimRef, takeMoimRef, deleteMoimRef, newMoimRef } from "@/services/moim";
 import Kalendar from "@/lib-components/kalendar-container.vue";
 import moment from "moment";
-import { getMoimRef, takeMoimRef, deleteMoimRef, newMoimRef } from "@/services/moim";
 export default {
   name: "MoimTest",
   components: {
@@ -195,6 +194,8 @@ export default {
   },
   data() {
     return {
+      Allbutton: "참여자 일정",
+      isAllbutton: 0,
       moimid: "",
       moimhostid: "",
       colorlist: ["red", "white", "gray", "blue"],
@@ -207,12 +208,12 @@ export default {
         hourlySelection: false,
         start_day: new Date().toISOString(),
         military_time: false,
-        read_only: false,
+        read_only: true,
         day_starts_at: 0,
         day_ends_at: 24,
         overlap: true,
         hide_dates: [],
-        hide_days: [0, 1, 2],
+        hide_days: [],
         past_event_creation: true,
       },
       currentSelectedSchedule: null,
@@ -317,8 +318,6 @@ export default {
       }
       response = await regularMoimGet(this.moimid);
       if (response.status == 200) {
-        console.log("ㅋㅋ");
-        console.log(response.data);
         for (var index in response.data) {
           if (
             response.data[index].startTime == data.startTime &&
@@ -369,24 +368,36 @@ export default {
       return 1;
     },
     async MoimAllCall() {
-      this.events = [];
-      this.regularGet(this.moimid);
-      const response = await AllMeet(this.moimid);
-      if (response.data.length != 0)
-        for (var item in response.data) {
-          response.data[item].scheduleName = response.data[item].name;
-          this.setEvent(response.data[item]);
-        }
-      this.startKalendar = 1;
+      if(this.isAllbutton==0)
+      {
+        this.Allbutton = "기존 모임 일정"
+        this.events = [];
+        this.regularGet(this.moimid);
+        const response = await AllMeet(this.moimid);
+        if (response.data.length != 0)
+          for (var item in response.data) {
+            response.data[item].scheduleName = response.data[item].name;
+            this.setEvent(response.data[item]);
+          }
+        this.calendar_settings.read_only=false;
+        this.startKalendar = 1;
+        this.isAllbutton=1;
+      }
+      else{
+        this.Allbutton = "참여자 일정"
+        this.events = [];
+        this.calendar_settings.read_only=true;
+        this.startKalendar = await this.regularGet(this.moimid);
+        this.isAllbutton=0;
+      }
+      
     },
     startitem(kalendarEvent) {
       this.currentSelectedSchedule = kalendarEvent;
       this.updateRef();
-      console.log(kalendarEvent);
       this.$bvModal.show("modal-scrollable");
     },
     async togglePrepItem(prepId) {
-      console.log("toggle");
       var prep = this.preparations.find((x) => x.id === prepId);
       if (prep) {
         if (prep.status === "N") {

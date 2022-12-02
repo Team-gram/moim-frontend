@@ -1,7 +1,6 @@
 <template>
 	<div id="Calendar"> 
-		
-		<kalendar v-if="startKalendar>0" :configuration="calendar_settings" :events="events" style="width:80%;">
+		<kalendar v-if="startKalendar>0"  :configuration="calendar_settings" :events="events" style="width:80%;">
 		<div
 			slot="created-card"
 			slot-scope="{ event_information }"
@@ -92,6 +91,7 @@ export default {
 		};
 	},
   async created(){
+
 		this.setScreen();
 		const response = await regularGet(this.$cookies.get("MoimUserId"));
 		if(response.status==200)
@@ -103,12 +103,6 @@ export default {
 		this.startKalendar=1;
   },
 	mounted(){
-		// window.addEventListener('resize',() =>{
-		// 	// this.startKalendar=0;
-    // });
-		// window.addEventListener('resize',() =>{
-		// 	this.setScreen();
-    // });
 	},
 	methods: {
 		setScreen(){
@@ -139,8 +133,7 @@ export default {
 			this.events.push(calen);
 		},
 	async	addAppointment(popup_info) {
-		// const IDcolor = document.getElementById("creating-event");
-		// IDcolor.style.backgroundColor = this.colorlist[Math.floor(Math.random() * 16)];
+		
 			let payload = {
 				data: {
 					title: this.new_appointment.title,
@@ -149,10 +142,7 @@ export default {
 				from: popup_info.start_time,
 				to: popup_info.end_time,
 			};
-			
-			// const IDcolor2 = document.getElementsByClassName("created-event");
-			// IDcolor2[IDcolor2.length-1].style.backgroundColor = this.colorlist[Math.floor(Math.random() * 16)];
-			// console.log(IDcolor2[length]);
+			// 
 
 			if(payload.data.title==null){
 				this.$bvToast.toast("실패했습니다. 제목을 입력해주세요", {
@@ -272,6 +262,9 @@ svg{
 	font-size: 13px;	
 }
 .creating-event{
+	background-color: rgba(100, 100, 100, 0.403);
+}
+.created-event{
 	background-color: rgba(100, 100, 100, 0.403);
 }
 </style>
