@@ -5,6 +5,7 @@
 			slot="created-card"
 			slot-scope="{ event_information }"
 			class="details-card"
+			@click="startitem(event_information)"
 		>
 			<h5 class="appointment-title appfont">
 				{{ event_information.data.title }}
@@ -17,7 +18,9 @@
 					<br>
 					{{ event_information.end_time.substr(11,5)}}
 				</span>
-			<button @click="removeEvent(event_information)" class="details-button"></button>
+			<button @click="removeEvent(event_information)" class="details-button" >
+				<img src="@/assets/x-button.png" style="width:10px">
+			</button>
 		</div>
 		<div slot="creating-card">
 			<h4 class="appointment-title" style="text-align: left;">
@@ -55,6 +58,39 @@
 				</div>
 			</div>
 		</kalendar>
+		<b-modal
+      id="modal-scrollable"
+      centered
+      scrollable
+      title="모임 일정 상세 조회"
+    >
+      <template #modal-header>
+        <h5>일정 상세 조회</h5>
+      </template>
+      <template>
+        <b-row>
+          <b-col v-if="this.currentSelectedSchedule">
+            제목: {{ this.currentSelectedSchedule.data.title }}
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col v-if="this.currentSelectedSchedule">
+            일시: {{ this.currentSelectedSchedule.start_time.substr(0,10)}} {{this.currentSelectedSchedule.start_time.substr(11,8)}} -
+						{{this.currentSelectedSchedule.end_time.substr(11,8)}}
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col v-if="this.currentSelectedSchedule">
+            상세 내용: {{ this.currentSelectedSchedule.data.description }}
+          </b-col>
+        </b-row>
+      </template>
+      <template #modal-footer="{ hide }">
+        <!-- Button with custom close trigger value -->
+        <b-button size="sm" v-if="moimhostid==userid" @click="removeEvent(event_information)" style="background-color:red;"> 삭제하기 </b-button>
+        <b-button size="sm" @click="hide('forget')"> 닫기 </b-button>
+      </template>
+    </b-modal>
 	</div>
 </template>
 <script>
@@ -62,7 +98,6 @@ import Kalendar from '@/lib-components/kalendar-container.vue';
 import { regularGet, regularSet, regularRemove} from "@/services/calendar";
 import moment from "moment";
 export default {
-  name: "MoimTest",
 	components: {
 		Kalendar,
 	},
@@ -70,6 +105,7 @@ export default {
 		return {
 			colorlist : ["#AEDFDB","#96DFD8","#85D4BE","#AEE6CB","#60ABA8","#F6F3CF","#CDEEF3","#DAF1DE","#D6E9AA","#21B7A9","#EFF4E7","#EDE868"],
 			startKalendar:0,
+			currentSelectedSchedule:0,
       events:[
       ],
 			calendar_settings: {
@@ -91,8 +127,6 @@ export default {
 		};
 	},
   async created(){
-
-		this.setScreen();
 		const response = await regularGet(this.$cookies.get("MoimUserId"));
 		if(response.status==200)
       this.calendar = response.data;
@@ -105,21 +139,9 @@ export default {
 	mounted(){
 	},
 	methods: {
-		setScreen(){
-			// let hide = [0,1,2,3,4];	
-      // if(this.$store.state.width<250){
-			// 	this.calendar_settings.hide_days = hide;
-			// 	this.startKalendar=1;
-			// }
-			// else if(this.$store.state.width<450){
-			// 	hide = [0,1,2,3];
-			// 	this.calendar_settings.hide_days = hide;
-			// 	this.startKalendar=1;
-			// }
-			// else{
-			// 	this.calendar_settings.hide_days = [];
-			// 	this.startKalendar=1;
-			// }
+		startitem(kalendarEvent){
+			this.currentSelectedSchedule = kalendarEvent;
+			this.$bvModal.show("modal-scrollable");
 		},
 		setEvent(item){
 			var calen = Object();
@@ -132,8 +154,7 @@ export default {
 			calen["data"] = data;
 			this.events.push(calen);
 		},
-	async	addAppointment(popup_info) {
-		
+	async	addAppointment(popup_info) {	
 			let payload = {
 				data: {
 					title: this.new_appointment.title,
@@ -141,9 +162,7 @@ export default {
 				},
 				from: popup_info.start_time,
 				to: popup_info.end_time,
-			};
-			// 
-
+			};	
 			if(payload.data.title==null){
 				this.$bvToast.toast("실패했습니다. 제목을 입력해주세요", {
         toaster: "b-toaster-top-right",
@@ -259,12 +278,16 @@ svg{
 	font-size: 16px;
 }
 .appsubfont{
-	font-size: 13px;	
+	color: black;
+	font-size: 12px;	
 }
 .creating-event{
-	background-color: rgba(100, 100, 100, 0.403);
+	background-color: white;
 }
 .created-event{
-	background-color: rgba(100, 100, 100, 0.403);
+	background-color: white;
+}
+.time{
+	color:black
 }
 </style>
