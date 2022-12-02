@@ -4,7 +4,12 @@
     style="margin-top: 10px; margin-left: 20px; margin-right: 20px"
   >
     <div id="list-box">
-      <div id="list-item" v-for="moimItem in moimList" :key="moimItem.title" @click="moimDetail(moimItem)">
+      <div
+        id="list-item"
+        v-for="moimItem in moimList"
+        :key="moimItem.title"
+        @click="moimDetail(moimItem)"
+      >
         <b-row align-v="center">
           <b-col cols="auto">
             <b-img
@@ -26,7 +31,7 @@
                   :src="require(`@/assets/person.png`)"
                 ></b-img>
               </b-col>
-              <b-col cols="auto">
+              <b-col cols="auto" style="width: 70px">
                 {{ moimItem.maxMember }} 명
               </b-col>
               <b-col cols="auto" style="padding: 0 0 0 15px">
@@ -35,16 +40,29 @@
                   :src="require(`@/assets/location.png`)"
                 ></b-img>
               </b-col>
-              <b-col cols="auto">
+              <b-col
+                cols="auto"
+                style="
+                  width: 150px;
+                  text-overflow: ellipsis;
+                  overflow: hidden;
+                  white-space: nowrap;
+                "
+              >
                 {{ moimItem.sido }} {{ moimItem.sigungu }} {{ moimItem.dong }}
               </b-col>
               <b-col cols="auto" style="padding: 0 0 0 15px">
-                <b-img
-                  id="listIcon"
-                  :src="require(`@/assets/mic.png`)"
-                ></b-img>
+                <b-img id="listIcon" :src="require(`@/assets/mic.png`)"></b-img>
               </b-col>
-              <b-col cols="auto">
+              <b-col
+                cols="auto"
+                style="
+                  width: 220px;
+                  text-overflow: ellipsis;
+                  overflow: hidden;
+                  white-space: nowrap;
+                "
+              >
                 {{ moimItem.content }}
               </b-col>
             </b-row>
@@ -57,8 +75,7 @@
 </template>
 
 <script>
-
-import {SearchMoim} from "@/services/moim";
+import { SearchMoim } from "@/services/moim";
 
 export default {
   data() {
@@ -67,31 +84,40 @@ export default {
     };
   },
   methods: {
-    async getMoimSearchResult(){
+    async getMoimSearchResult() {
       var searchData = new Object();
-      if(this.$store.getters["searchStore/getSearchType"] === "keyword"){
+      if (this.$store.getters["searchStore/getSearchType"] === "keyword") {
         //title
         searchData.title = this.$store.getters["searchStore/getSearchData"];
-
-      }else if (this.$store.getters["searchStore/getSearchType"] === "category"){
+      } else if (
+        this.$store.getters["searchStore/getSearchType"] === "category"
+      ) {
         //categoryId
-        if(this.$store.getters["searchStore/getSelectedSubCategory"] !== null) {
-        searchData.categoryId = this.$store.getters["searchStore/getSelectedSubCategory"].categoryId;
-        }
-        else {
-          searchData.categoryId = this.$store.getters["searchStore/getSearchData"].categoryId;
+        if (
+          this.$store.getters["searchStore/getSelectedSubCategory"] !== null
+        ) {
+          searchData.categoryId =
+            this.$store.getters[
+              "searchStore/getSelectedSubCategory"
+            ].categoryId;
+        } else {
+          searchData.categoryId =
+            this.$store.getters["searchStore/getSearchData"].categoryId;
         }
       }
       var location = this.$store.getters["searchStore/getSearchLocation"];
-      if(location){
-        if(location.sido) {
-          searchData.sido = this.$store.getters["searchStore/getSearchLocation"].sido;
+      if (location) {
+        if (location.sido) {
+          searchData.sido =
+            this.$store.getters["searchStore/getSearchLocation"].sido;
         }
-        if(location.sigungu) {
-          searchData.sigungu = this.$store.getters["searchStore/getSearchLocation"].sigungu;
+        if (location.sigungu) {
+          searchData.sigungu =
+            this.$store.getters["searchStore/getSearchLocation"].sigungu;
         }
-        if(location.dong) {
-          searchData.dong = this.$store.getters["searchStore/getSearchLocation"].dong;
+        if (location.dong) {
+          searchData.dong =
+            this.$store.getters["searchStore/getSearchLocation"].dong;
         }
       }
       console.log(searchData);
@@ -99,24 +125,24 @@ export default {
       this.moimList = result.data;
     },
     changeSubCategory() {
-      this.$store.commit('searchStore/initCategorySearchOptions');
+      this.$store.commit("searchStore/initCategorySearchOptions");
     },
     moimDetail(moimItem) {
       console.log(moimItem.id);
-      this.$store.commit('searchStore/setSelectedMoimId', moimItem.id);
-      this.$router.push({name: "MoimIntro"});
-    }
+      this.$store.commit("searchStore/setSelectedMoimId", moimItem.id);
+      this.$router.push({ name: "MoimIntro" });
+    },
   },
   created() {
     this.getMoimSearchResult();
   },
   computed: {
-    subCategory: function() {
+    subCategory: function () {
       return this.$store.getters["searchStore/getSelectedSubCategory"];
     },
-    location: function() {
+    location: function () {
       return this.$store.getters["searchStore/getSearchLocation"];
-    }
+    },
   },
   watch: {
     subCategory(value) {
@@ -127,7 +153,7 @@ export default {
     location(value) {
       console.log("watch location", value);
       this.getMoimSearchResult();
-    }
+    },
   },
 };
 </script>
