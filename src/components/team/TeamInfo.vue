@@ -70,7 +70,7 @@
             <b-row class="mb-3" id="menu">
               <b-col id="subtitle">가입 인원</b-col>
               <div class="w-100"></div>
-              <b-col id="categorytext">3명</b-col>
+              <b-col id="categorytext">{{this.moimCurrentMember}}명</b-col>
             </b-row>
           </b-col>
         </b-row>
@@ -84,7 +84,7 @@
         </div>
         <div v-else>등록된 소개 글이 없습니다.</div>
       </div>
-      <MoimMember v-bind:hostId="moimhostid"></MoimMember>
+      <MoimMember v-bind:hostId="moimhostid" @memberCount="updateCurrentMember"></MoimMember>
     </div>
   </div>
 </template>
@@ -97,6 +97,7 @@ export default {
   data() {
     return {
       moimData: [],
+      moimCurrentMember: 0,
       moimhostid: null,
     };
   },
@@ -108,6 +109,10 @@ export default {
       let moimData = await MoimDetail(id);
       this.moimData = moimData.data;
     },
+    updateCurrentMember(data) {
+      console.log(data);
+      this.moimCurrentMember = data;
+    }
   },
   created() {
     //모임id api에 요청 후 모임 세부정보 반환 내용을 넣으면 됩니다.

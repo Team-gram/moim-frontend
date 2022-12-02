@@ -164,6 +164,7 @@ export default {
     async getMoimMemberList(moimId) {
       this.memberList = [];
       let moimMemberList = await getMoimMember(moimId);
+      this.$emit('memberCount',moimMemberList.data.length);
       for (var i = 0; i < moimMemberList.data.length; i++) {
         var userId = moimMemberList.data[i].userId;
         let userDetail = await getUserinfo(userId);
