@@ -42,13 +42,24 @@
                       <b-col style="margin: 5px 0 5px 0">
                         <b-row id="listTitle">
                           <b-col cols="auto">
-                            <div >{{ member.name }}</div>
+                            <div>{{ member.name }}</div>
                           </b-col>
                           <b-col cols="auto">
-                            <div style="font-weight: normal; font-size: 12px; margin: 6px 0 6px 0"> {{ member.detail }}</div>
+                            <div
+                              style="
+                                font-weight: normal;
+                                font-size: 12px;
+                                margin: 6px 0 6px 0;
+                              "
+                            >
+                              {{ member.detail }}
+                            </div>
                           </b-col>
                           <b-col cols="auto" v-if="member.id == moimHostId">
-                            <i class="fa-solid fa-crown" style="color: #4fb26f"></i>
+                            <i
+                              class="fa-solid fa-crown"
+                              style="color: #4fb26f"
+                            ></i>
                           </b-col>
                         </b-row>
                       </b-col>
@@ -61,10 +72,11 @@
                         font-size: 10px !important;
                         cursor: pointer;
                         align: right;
-                        margin: 10px
+                        margin: 10px;
                       "
-                      v-b-modal.modal-sm
+                      v-b-modal.modal-member
                       v-if="userId != member.id"
+                      @click="setCurrentSelectedMember(member)"
                     >
                       더보기
                     </div>
@@ -77,7 +89,7 @@
       </b-col>
     </b-row>
     <b-modal
-      id="modal-sm"
+      id="modal-member"
       size="sm"
       title="모임 구성원 관리"
       hide-footer
@@ -114,7 +126,11 @@
       </b-row>
       <b-row>
         <b-col>
-          <div id="list-item" style="height: 30px !important">
+          <div
+            id="list-item"
+            style="height: 30px !important"
+            @click="showInviteMemberModal()"
+          >
             <b-row style="padding: 5px 10px 5px 10px">
               <b-col cols="auto">
                 <i class="fa-solid fa-comment" style="color: #4fb26f"></i>
@@ -144,38 +160,112 @@
         </b-col>
       </b-row>
     </b-modal>
+    <b-modal
+      id="invite_modal"
+      title="모임 초대하기"
+      @show="resetModal"
+      @hidden="resetModal"
+      @ok="InviteSubmit"
+      centered
+    >
+      <form @submit.stop.prevent="InviteSubmit">
+        <b-form-group label="모임" label-for="moim-input">
+          <b-form-select
+            id="moim-input"
+            v-model="inviteMoim"
+            :options="inviteMoims"
+            value-field="id"
+            text-field="title"
+            required
+          >
+            <template #first>
+              <b-form-select-option :value="null" disabled
+                >초대할 모임을 선택하세요</b-form-select-option
+              >
+            </template>
+          </b-form-select>
+        </b-form-group>
+
+        <b-form-group label="초대메세지" label-for="name-input">
+          <b-form-input
+            id="name-input"
+            v-model="inviteMsg"
+            required
+            placeholder="초대메세지를 입력하세요"
+          ></b-form-input>
+          
+        </b-form-group>
+      </form>
+    </b-modal>
   </div>
 </template>
 
 <script>
 import { getMoimMember } from "@/services/moim.js";
 import { getUserinfo } from "@/services/login.js";
+import { MyMoimList, InviteMoim } from "@/services/moim.js";
 export default {
-  props: ['hostId'],
+  props: ["hostId"],
   data() {
     return {
       moimId: null,
       memberList: null,
       userId: null,
       moimHostId: this.$props.hostId,
+      currentSelectedMember: null,
+      inviteMsg: "",
+      inviteMoim: null,
+      inviteMoims: ["a", "b", "c"],
     };
   },
+  components: {},
   methods: {
     async getMoimMemberList(moimId) {
       this.memberList = [];
       let moimMemberList = await getMoimMember(moimId);
-      this.$emit('memberCount',moimMemberList.data.length);
+      this.$emit("memberCount", moimMemberList.data.length);
       for (var i = 0; i < moimMemberList.data.length; i++) {
         var userId = moimMemberList.data[i].userId;
         let userDetail = await getUserinfo(userId);
-        if ( this.$cookies.get("MoimUserId") == userDetail.data.id) {
+        if (this.$cookies.get("MoimUserId") == userDetail.data.id) {
           this.memberList.unshift(userDetail.data);
-        }
-        else {
+        } else {
           this.memberList.push(userDetail.data);
         }
       }
       console.log(this.memberList);
+    },
+    setCurrentSelectedMember(member) {
+      this.currentSelectedMember = member;
+      console.log(this.currentSelectedMember);
+    },
+    showInviteMemberModal() {
+      this.$bvModal.hide("modal-member");
+      this.$bvModal.show("invite_modal");
+    },
+    resetModal() {
+      this.inviteMsg = "";
+      this.inviteMoim = null;
+    },
+    async InviteSubmit() {
+      // Exit when the form isn't valid
+      if (this.inviteMsg.split(' ').join('') !== "" && this.inviteMoim != null) {
+        let inviteSend = await InviteMoim(this.inviteMoim, this.userId, this.inviteMsg);
+        console.log(inviteSend);
+      }
+      else {
+        alert("초대 정보가 제대로 입력되지 않았습니다.");
+      }
+
+      // Hide the modal manually
+      this.$nextTick(() => {
+        this.$bvModal.hide("invite_modal");
+      });
+    },
+    async getInviteMoimList(userId) {
+      let inviteMoims = await MyMoimList(userId);
+      console.log(inviteMoims);
+      this.inviteMoims = inviteMoims.data;
     },
   },
   created() {
@@ -184,6 +274,7 @@ export default {
     this.getMoimMemberList(this.moimid);
     console.log(this.moimHostId);
     this.userId = this.$cookies.get("MoimUserId");
+    this.getInviteMoimList(this.userId);
   },
   // mounted() {
   //   console.log(this.moimHostId);
