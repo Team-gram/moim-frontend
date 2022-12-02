@@ -1,7 +1,7 @@
 <template>
-  <div class="inputchat">
+  <div class="inputchat" style="background-color:white;">
     <input v-model="text" class="inputtext" @keyup.enter="send()">
-    <img src="@/assets/send.png" @click="send()" style="width:45px">
+    <img src="@/assets/send.png" @click="send()" style="width:45px; padding-left:3px;">
   </div>
 </template>
 <script>
@@ -38,7 +38,7 @@ export default {
 <style>
 .inputchat{
   display: flex;
-  width: 75%;
+  width: 77%;
   height : 45px;
   background : #F8F8FA;
   position: fixed;
