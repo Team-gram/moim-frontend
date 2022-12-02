@@ -41,8 +41,14 @@
                       </b-col>
                       <b-col style="margin: 5px 0 5px 0">
                         <b-row id="listTitle">
-                          <b-col>
+                          <b-col cols="auto">
                             <div >{{ member.name }}</div>
+                          </b-col>
+                          <b-col cols="auto">
+                            <div style="font-weight: normal; font-size: 12px; margin: 6px 0 6px 0"> {{ member.detail }}</div>
+                          </b-col>
+                          <b-col cols="auto" v-if="member.id == moimHostId">
+                            <i class="fa-solid fa-crown" style="color: #4fb26f"></i>
                           </b-col>
                         </b-row>
                       </b-col>
@@ -58,6 +64,7 @@
                         margin: 10px
                       "
                       v-b-modal.modal-sm
+                      v-if="userId != member.id"
                     >
                       더보기
                     </div>
@@ -91,7 +98,7 @@
           </div>
         </b-col>
       </b-row>
-      <b-row v-if="this.userId === this.moimHostId">
+      <b-row v-if="this.userId == this.moimHostId">
         <b-col>
           <div id="list-item" style="height: 30px !important">
             <b-row style="padding: 5px 10px 5px 10px">
@@ -119,7 +126,7 @@
           </div>
         </b-col>
       </b-row>
-      <b-row v-if="this.userId === this.moimHostId">
+      <b-row v-if="this.userId == this.moimHostId">
         <b-col>
           <div id="list-item" style="height: 30px !important">
             <b-row style="padding: 5px 10px 5px 10px">
@@ -160,7 +167,12 @@ export default {
       for (var i = 0; i < moimMemberList.data.length; i++) {
         var userId = moimMemberList.data[i].userId;
         let userDetail = await getUserinfo(userId);
-        this.memberList.push(userDetail.data);
+        if ( this.$cookies.get("MoimUserId") == userDetail.data.id) {
+          this.memberList.unshift(userDetail.data);
+        }
+        else {
+          this.memberList.push(userDetail.data);
+        }
       }
       console.log(this.memberList);
     },
