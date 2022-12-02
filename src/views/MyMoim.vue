@@ -73,6 +73,7 @@ export default {
       }
       else{
         this.moimlist = response.data;
+        this.maxmylist = response.data.length;
         /*
         respose data는 다음과 같은 값을 가진다.
           "id": 0,  (모임 고유 id)

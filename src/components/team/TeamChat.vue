@@ -1,7 +1,9 @@
 <template>
-  <div class="ChatBackground" id="chatscroll" style="overflow: auto; height:400px">
-    <PreviousChat></PreviousChat>
-    <PresentChat></PresentChat>
+  <div>
+    <div class="ChatBackground" id="chatscroll" style="overflow: auto; height:400px">
+      <PreviousChat></PreviousChat>
+      <PresentChat></PresentChat>
+    </div>
     <InputChat :socket="socket"></InputChat>
   </div>
 </template>
@@ -52,10 +54,10 @@ export default {
 </script>
 <style>
 .ChatBackground{
-    margin-left : 16px;
-    margin-right : 16px;
-    margin-bottom : 50px;
-  }
+  margin-left : 16px;
+  margin-right : 16px;
+  margin-bottom : 10px;
+}
 .ChatBackground::-webkit-scrollbar {
   width: 5px;
 }
