@@ -1,66 +1,50 @@
 <template>
   <div class="ChatBackground">
     <PreviousChat></PreviousChat>
-    <b-form-input v-model="text" placeholder="Enter your name"></b-form-input>
-    <button type="button" @click="send()" @keyup.enter="send()" class="send_btn">send</button>
+    <PresentChat></PresentChat>
+    <InputChat :socket="socket"></InputChat>
   </div>
 </template>
 
 
 <script>
 import { io } from "socket.io-client";
-import { chatSet } from '@/services/chat'
 import PreviousChat from "@/components/team/chat/PreviousChat.vue"
+import InputChat from "@/components/team/chat/InputChat.vue"
+import PresentChat from "@/components/team/chat/PresentChat.vue"
+import { mapGetters,mapMutations } from "vuex";
 export default {
   components:{
     PreviousChat,
+    PresentChat,
+    InputChat,
   },
   data() {
     return {
-      chatList:null,
-      text:"",
-      moimid:-1,
       socket:null,
     };
   },
-  methods: {
-    send(){
-      const data = {
-        id: this.$cookies.get("MoimUserId"),
-        moimId: this.moimid,
-        name: "이진기",
-        message: this.text,
-        createdAt: new Date()
-      }
-      this.socket.emit("chat", data);
-      console.log(data);
-      chatSet(data);
-    },
+  methods:{
+    ...mapMutations("chatStore",{pushnewchat : 'pushnewchat'}),
+  },
+  computed:{
+    ...mapGetters("searchStore",{MoimId :'getSelectedMoimId'}),
   },
   created() {
-    this.moimid = this.$store.getters["searchStore/getSelectedMoimId"];
     this.socket = io("http://ec2-54-180-16-76.ap-northeast-2.compute.amazonaws.com:3000",{
       cors: { origin: "*"}
     });
     this.socket.on("chat", (data) => {
-      // const li = document.createElement("li");
-      // li.innerText = `${data.name} : ${data.message}`;
-      // console.log(data);
-      // this.chatList.appendChild(li);
-      console.log(data.name,data.message);  
+      if(data.moimId==this.MoimId){
+        this.pushnewchat(data);
+      }
     });
     
-    var moiminfo = Object();
-    moiminfo = this.$store.getters["searchStore/getSearchData"];
-    console.log(moiminfo);
   },
   mounted(){
-    const chatList = document.getElementById('content');
-    this.chatList = chatList;
   },
   destroyed(){
     this.socket.off('chat');
-    this.socket.off('disconnect');
   }
 };
 </script>
