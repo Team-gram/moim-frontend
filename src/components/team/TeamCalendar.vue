@@ -400,8 +400,9 @@ export default {
     async togglePrepItem(prepId) {
       var prep = this.preparations.find((x) => x.id === prepId);
       if (prep) {
-        if (prep.status === "N") {
-          // 이미 챙긴 준비물은 다시 못 뺀다!
+        console.log(prep.userId);
+        if (prep.status === "N" && prep.userId != this.$cookies.get("MoimUserId")) {
+        //   // 이미 챙긴 준비물은 다시 못 뺀다!
           prep.status = "Y";
         } else {
           //새로 준비물 챙기기
