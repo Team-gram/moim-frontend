@@ -20,7 +20,6 @@ export function MoimCreate(data) {
       isPublish: data.isPublish,
       isFreeEnter: data.isFreeEnter,
       maxMember: data.maxMember,
-      file: null,
     },
   });
 }
@@ -120,6 +119,16 @@ export function deleteMoimRef(id) {
     method: "delete",
     data: {
       id: id,
+    }
+  })
+}
+
+export function getMoimMember(moimId) {
+  return request({
+    url: "/moim/member/"+moimId,
+    method: "get",
+    params: {
+      moimId: moimId,
     }
   })
 }
