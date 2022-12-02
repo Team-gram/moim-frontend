@@ -6,7 +6,7 @@ import createPersistedState from "vuex-persistedstate";
 Vue.use(Vuex);
 
 import searchStore from '@/store/modules/searchStore';
-
+import chatStore from '@/store/modules/chatStore';
 const store = new Vuex.Store({
   state:{
     userinfo:"",
@@ -35,9 +35,9 @@ const store = new Vuex.Store({
       }
     }
   },
-  modules: {searchStore},
+  modules: {searchStore,chatStore},
   plugins: [createPersistedState({
-    paths: ['searchStore'],
+    paths: ['searchStore','chatStore'],
   })],
 });
 

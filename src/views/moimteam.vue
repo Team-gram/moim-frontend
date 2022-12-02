@@ -39,7 +39,7 @@ export default {
 
 <style>
 .teamfirst{
-  margin-top: 10px;margin-left: 20px; margin-right: 20px;
+  margin-top: 10px;
   align-content: center;
 }
 #teammenu{
