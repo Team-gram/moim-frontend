@@ -94,7 +94,7 @@ export function newMoimRef(moimId, moimScheduleId, name) {
 export function takeMoimRef(id, userId) {
   return request({
     url: "/meet/ref",
-    method: "patch",
+    method: "put",
     data: {
       id: id,
       userId: userId
