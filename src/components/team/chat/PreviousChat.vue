@@ -1,9 +1,10 @@
 <template>
-  <div>
+  <div class="PrevChat">
     <div v-for="(chat,index) in chatList" :key="index">
       <div v-if="chat.userId==id" class="myMessage">
         <div v-if="chat.createdAt != ''" class="mycreatedAt">
-          {{ chat.createdAt.substr(2,8)}} {{ chat.createdAt.substr(11,5)}}
+          {{ chat.createdAt}}
+          <!-- {{ chat.createdAt.substr(2,8)}}  -->
         </div>
         <div v-if="chat.content != ''" class="myContent">
           {{ chat.content }}
@@ -13,13 +14,14 @@
       <div v-else class="opponentMessage">
         <img  v-if="chat.userId==HostId" src="@/assets/Host.png" class="hostImg">
         <div class="opponentData">
-          <!-- <div class="opponentName">{{chat.name}}</div> -->
+          <div class="opponentName">{{chat.name}}</div>
           <div v-if="chat.content != ''" class="opponentContent">
             {{ chat.content }}
           </div>
         </div>
         <div v-if="chat.createdAt != ''" class="opponentcreatedAt">
-          {{ chat.createdAt.substr(2,8)}} {{ chat.createdAt.substr(11,5)}}
+          {{ chat.createdAt}}
+          <!-- {{ chat.createdAt.substr(2,8)}}  -->
         </div>
       </div>
     </div>
@@ -59,20 +61,24 @@ export default{
 </script>
 
 <style>
+.PrevChat{
+  max-height: 400px;
+}
 .myMessage{
   justify-content: flex-end;
   margin-top : 16px;
   align-items : center;
   display : flex;
+  padding-top: 1px;
 }
 .myContent{
   word-break: break-all;
   word-wrap: normal;
   max-width: 230px;
-  padding : 10px 20px;
+  padding : 10px 7px;
   font-size : 14px;
   color : white;
-  background-color: #00B286;
+  background-color: #9248f3ba;
   border-radius: 8px;
 }
 .mycreatedAt{
@@ -91,6 +97,7 @@ export default{
   display : flex;
   align-items : center;
   flex-direction: row;
+  padding-top: 1px;
 }
 .opponentData{
   display : flex;
@@ -104,9 +111,9 @@ export default{
   word-break: break-all;
   word-wrap: normal;
   max-width: 230px;
-  padding : 10px 10px;
+  padding : 10px 7px;
   font-size : 14px;
-  background-color: #D1EBE580;
+  background-color: #c6e8e080;
   border-radius: 8px;
 }
 .opponentcreatedAt{

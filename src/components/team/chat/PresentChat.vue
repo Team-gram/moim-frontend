@@ -13,7 +13,7 @@
       <div v-else class="opponentMessage">
         <img  v-if="newchat.id==HostId" src="@/assets/Host.png" class="hostImg">
         <div class="opponentData">
-          <!-- <div class="opponentName">{{chat.name}}</div> -->
+          <div class="opponentName">{{chat.name}}</div>
           <div v-if="newchat.message != ''" class="opponentContent">
             {{ newchat.message }}
           </div>
