@@ -41,11 +41,6 @@ export default {
         this.pushnewchat(data);
       }
     });
-    
-  },
-  mounted(){
-    const schroll = document.getElementById("chatscroll");
-    schroll.scrollTop = schroll.scrollHeight;
   },
   destroyed(){
     this.socket.off('chat');
@@ -57,6 +52,7 @@ export default {
   margin-left : 16px;
   margin-right : 16px;
   margin-bottom : 10px;
+  padding: 0 5px;
 }
 .ChatBackground::-webkit-scrollbar {
   width: 5px;

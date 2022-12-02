@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="Next">
     <div v-for="(newchat,index) in newchatList" :key="index">
       <div v-if="newchat.id==id" class="myMessage">
         <div v-if="newchat.createdAt != ''" class="mycreatedAt">
@@ -43,7 +43,14 @@ export default{
   },
   created(){
     this.id = this.$cookies.get("MoimUserId");
-  }
+  },
+  watch:{
+    newchatList(){
+      this.$nextTick(() => {
+        const schroll = document.getElementById("chatscroll");
+        schroll.scrollTop = schroll.scrollHeight - schroll.clientHeight;
+      })
+    }
+  },
 }
-
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="PrevChat">
+  <div>
     <div v-for="(chat,index) in chatList" :key="index">
       <div v-if="chat.userId==id" class="myMessage">
         <div v-if="chat.createdAt != ''" class="mycreatedAt">
@@ -61,9 +61,6 @@ export default{
 </script>
 
 <style>
-.PrevChat{
-  max-height: 400px;
-}
 .myMessage{
   justify-content: flex-end;
   margin-top : 16px;
