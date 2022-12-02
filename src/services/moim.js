@@ -132,3 +132,15 @@ export function getMoimMember(moimId) {
     }
   })
 }
+
+export function InviteMoim(moimId, userId, message) {
+  return request({
+    url: "/moim/invite",
+    method: "post",
+    data: {
+      moimId: moimId,
+      userId: userId,
+      message: message
+    }
+  })
+}
