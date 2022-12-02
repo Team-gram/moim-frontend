@@ -17,37 +17,52 @@
             :key="member.id"
           >
             <b-row align-v="center" style="padding: 5px">
-              <b-col cols="auto">
-                <img
-                  v-if="
-                    member.profileImage == undefined ||
-                    member.profileImage == null ||
-                    member.profileImage == ''
-                  "
-                  src="../assets/default-profile.png"
-                  width="40"
-                /><b-img
-                  v-else
-                  :src="`${member.profileImage}`"
-                  rounded="circle"
-                  width="40"
-                />
-              </b-col>
               <b-col>
-                <b-row id="listTitle">
-                  <b-col>
-                    <div>{{ member.name }}</div>
+                <b-row align-h="between">
+                  <b-col cols="auto">
+                    <b-row>
+                      <b-col cols="auto">
+                        <img
+                          v-if="
+                            member.profileImage == undefined ||
+                            member.profileImage == null ||
+                            member.profileImage == ''
+                          "
+                          src="../assets/default-profile.png"
+                          width="40"
+                          height="40"
+                        /><b-img
+                          v-else
+                          :src="`${member.profileImage}`"
+                          rounded="circle"
+                          width="40"
+                          height="40"
+                        />
+                      </b-col>
+                      <b-col style="margin: 5px 0 5px 0">
+                        <b-row id="listTitle">
+                          <b-col>
+                            <div >{{ member.name }}</div>
+                          </b-col>
+                        </b-row>
+                      </b-col>
+                    </b-row>
+                  </b-col>
+                  <b-col cols="auto">
+                    <div
+                      id="green-outline-option-button"
+                      style="
+                        font-size: 10px !important;
+                        cursor: pointer;
+                        align: right;
+                        margin: 10px
+                      "
+                      v-b-modal.modal-sm
+                    >
+                      더보기
+                    </div>
                   </b-col>
                 </b-row>
-              </b-col>
-              <b-col>
-                <div
-                  id="green-outline-option-button"
-                  style="font-size: 10px !important; cursor: pointer"
-                  v-b-modal.modal-sm
-                >
-                  더보기
-                </div>
               </b-col>
             </b-row>
           </div>
@@ -64,8 +79,8 @@
     >
       <b-row>
         <b-col>
-          <div id="list-item" style="height: 50px !important">
-            <b-row>
+          <div id="list-item" style="height: 30px !important">
+            <b-row style="padding: 5px 10px 5px 10px">
               <b-col cols="auto">
                 <i class="fa-solid fa-calendar" style="color: #4fb26f"></i>
               </b-col>
@@ -78,8 +93,8 @@
       </b-row>
       <b-row>
         <b-col>
-          <div id="list-item" style="height: 50px !important">
-            <b-row>
+          <div id="list-item" style="height: 30px !important">
+            <b-row style="padding: 5px 10px 5px 10px">
               <b-col cols="auto">
                 <i class="fa-solid fa-star" style="color: #4fb26f"></i>
               </b-col>
@@ -92,8 +107,8 @@
       </b-row>
       <b-row>
         <b-col>
-          <div id="list-item" style="height: 50px !important">
-            <b-row>
+          <div id="list-item" style="height: 30px !important">
+            <b-row style="padding: 5px 10px 5px 10px">
               <b-col cols="auto">
                 <i class="fa-solid fa-comment" style="color: #4fb26f"></i>
               </b-col>
@@ -106,8 +121,8 @@
       </b-row>
       <b-row>
         <b-col>
-          <div id="list-item" style="height: 50px !important">
-            <b-row>
+          <div id="list-item" style="height: 30px !important">
+            <b-row style="padding: 5px 10px 5px 10px">
               <b-col cols="auto">
                 <i
                   class="fa-solid fa-right-from-bracket"
