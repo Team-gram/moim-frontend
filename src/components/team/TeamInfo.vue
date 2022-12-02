@@ -84,7 +84,7 @@
         </div>
         <div v-else>등록된 소개 글이 없습니다.</div>
       </div>
-      <MoimMember></MoimMember>
+      <MoimMember v-bind:hostId="moimhostid"></MoimMember>
     </div>
   </div>
 </template>
@@ -97,6 +97,7 @@ export default {
   data() {
     return {
       moimData: [],
+      moimhostid: null,
     };
   },
   components: {
@@ -112,6 +113,8 @@ export default {
     //모임id api에 요청 후 모임 세부정보 반환 내용을 넣으면 됩니다.
     var id = this.$store.getters["searchStore/getSelectedMoimId"];
     this.setData(id);
+    this.moimhostid = this.$store.getters["searchStore/getSelectedMoimHostId"];
+    console.log(this.moimhostid);
   },
 };
 </script>

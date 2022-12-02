@@ -91,7 +91,7 @@
           </div>
         </b-col>
       </b-row>
-      <b-row>
+      <b-row v-if="this.userId === this.moimHostId">
         <b-col>
           <div id="list-item" style="height: 30px !important">
             <b-row style="padding: 5px 10px 5px 10px">
@@ -119,7 +119,7 @@
           </div>
         </b-col>
       </b-row>
-      <b-row>
+      <b-row v-if="this.userId === this.moimHostId">
         <b-col>
           <div id="list-item" style="height: 30px !important">
             <b-row style="padding: 5px 10px 5px 10px">
@@ -144,10 +144,13 @@
 import { getMoimMember } from "@/services/moim.js";
 import { getUserinfo } from "@/services/login.js";
 export default {
+  props: ['hostId'],
   data() {
     return {
       moimId: null,
       memberList: null,
+      userId: null,
+      moimHostId: this.$props.hostId,
     };
   },
   methods: {
@@ -166,7 +169,13 @@ export default {
     this.moimid = this.$store.getters["searchStore/getSelectedMoimId"];
     console.log(this.moimid);
     this.getMoimMemberList(this.moimid);
+    console.log(this.moimHostId);
+    this.userId = this.$cookies.get("MoimUserId");
   },
+  // mounted() {
+  //   console.log(this.moimHostId);
+  //   console.log(this.$props.hostId);
+  // }
 };
 </script>
 
