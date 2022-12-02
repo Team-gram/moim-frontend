@@ -7,8 +7,10 @@
       align="center"
       style="margin-top: 10px; margin-left: 20px; margin-right: 20px"
     >
+      <div id="main-text">
+        <b id="main-text-highlight">기본 정보</b>
+      </div>
       <div id="listbackground">
-        <div id="title">기본 정보</div>
         <b-row class="mb-3" id="menu">
           <b-col id="subtitle">모임이름</b-col>
           <div class="w-100"></div>
@@ -73,25 +75,32 @@
           </b-col>
         </b-row>
       </div>
+      <div id="main-text">
+        <b id="main-text-highlight">소개글</b>
+      </div>
       <div id="listbackground">
-        <div id="title">소개글</div>
         <div v-if="this.moimData.content !== ''">
           {{ this.moimData.content }}
         </div>
         <div v-else>등록된 소개 글이 없습니다.</div>
       </div>
+      <MoimMember></MoimMember>
     </div>
   </div>
 </template>
 
 <script>
 import { MoimDetail } from "@/services/moim";
+import MoimMember from "@/components/MoimMember.vue";
 
 export default {
   data() {
     return {
       moimData: [],
     };
+  },
+  components: {
+    MoimMember,
   },
   methods: {
     async setData(id) {
@@ -126,15 +135,23 @@ export default {
 #categorytext {
   background-color: white !important;
   border-radius: 20px !important;
+  border: 0px solid;
+  box-shadow: 0px 0px 5px #ccc;
   font-size: 15px;
   /* max-width: 45em; */
   padding: 5px 0 5px 0;
+  font-family: "NanumBarunGothic";
 }
 #listbackground {
-  background-color: #f3f3f3 !important;
   border-radius: 20px !important;
+  border: 0px solid;
+  box-shadow: 0px 0px 5px #ccc;
+  background-color: #ffffff !important;
+  float: center;
+  font-family: "NanumBarunGothic";
   padding: 20px 30px 30px 30px;
   margin: 10px 0 10px 0;
-  max-width: 1050px;
+  /* max-width: 1050px; */
+  max-width: 700px;
 }
 </style>
