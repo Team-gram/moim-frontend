@@ -1,5 +1,5 @@
 <template>
-  <div class="ChatBackground">
+  <div class="ChatBackground" id="chatscroll" style="overflow: auto; height:400px">
     <PreviousChat></PreviousChat>
     <PresentChat></PresentChat>
     <InputChat :socket="socket"></InputChat>
@@ -42,6 +42,8 @@ export default {
     
   },
   mounted(){
+    const schroll = document.getElementById("chatscroll");
+    schroll.scrollTop = schroll.scrollHeight;
   },
   destroyed(){
     this.socket.off('chat');
@@ -54,4 +56,19 @@ export default {
     margin-right : 16px;
     margin-bottom : 50px;
   }
+.ChatBackground::-webkit-scrollbar {
+  width: 5px;
+}
+.ChatBackground::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+.ChatBackground::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  height: 50%;
+  background-color: gray;
+}
+.ChatBackground::-webkit-scrollbar-button {
+  width: 0;
+  height: 0;
+}
 </style>
