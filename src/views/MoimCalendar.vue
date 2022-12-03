@@ -12,7 +12,7 @@
   </div>
   <regularCalendar :class="{display: !isRegular}"></regularCalendar>
   <irregularCalendar :class="{display: isRegular}"></irregularCalendar>
-  <b-button v-show="!isRegular" id="newbutton" v-on:click="newCalendar">새로운 일정 등록하기</b-button>
+  <b-button v-show="!isRegular" id="green-colored-option-button" v-on:click="newCalendar">새로운 일정 등록하기</b-button>
   <div style="padding: 10px 0 0 0;"></div>
   </div>
 </template>

@@ -214,6 +214,8 @@ export default {
 .today{
   background-color: #e8e5e5 !important;
   border-radius: 50% !important; 
+  width: 30px;
+  height: 30px;
 }
 .Calendar{
   text-decoration-line: underline;
