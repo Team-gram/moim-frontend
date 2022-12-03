@@ -7,6 +7,7 @@
       <b id="main-text-highlight">모임 개설하기</b>
     </div>
     <div id="listbackground">
+
       <b-row class="mb-3">
         <b-col id="subtitle">제목</b-col>
         <b-col>
@@ -265,12 +266,13 @@ export default {
 };
 </script>
 <style>
-#listbackground {
+#listnewbackground{
   background-color: #f3f3f3 !important;
   border-radius: 20px !important;
   padding: 20px 30px 30px 30px;
   margin: 10px 0 10px 0;
   max-width: 1050px;
+  border: 1px solid;
 }
 #register-button {
   width: 200px !important;
