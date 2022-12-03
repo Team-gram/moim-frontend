@@ -1,27 +1,13 @@
 <template>
   <div
     align="center"
-    style="margin-top: 20px; margin-left: 20px; margin-right: 20px"
+    style="margin-top: 40px; margin-left: 20px; margin-right: 20px"
   >
-    <b-card id="schedule-card" style="max-width: 1000px">
-      <h4 id="schedule-title">개인 일정 등록</h4>
+    <div id="main-text">
+      <b id="main-text-highlight">비정기 일정 등록</b>
+    </div>
+    <b-card id="listbackground" style="max-width: 1000px">
       <b-container class="bv-example-row">
-        <b-row class="mb-3">
-          <b-col id="subtitle">일정 유형*</b-col>
-          <div class="w-100"></div>
-          <b-col>
-            <b-form-radio-group
-              v-model="type_selected"
-              :options="type_options"
-              class="mb-3"
-              value-field="item"
-              text-field="name"
-              disabled-field="notEnabled"
-              style="float: left"
-            ></b-form-radio-group>
-          </b-col>
-        </b-row>
-
         <b-row class="mb-3">
           <b-col id="subtitle">제목*</b-col>
           <div class="w-100"></div>
@@ -35,41 +21,7 @@
           </b-col>
         </b-row>
 
-        <b-row class="mb-3" v-if="this.type_selected === 'Regular'">
-          <b-col id="subtitle">날짜*</b-col>
-          <div class="w-100"></div>
-          <b-col
-            cols="auto"
-            style="padding: 0 5px 0 15px; margin: 0px 5px 5px 0"
-          >
-            <b-form-select
-              id="form-input"
-              v-model="regular_type_selected"
-              :options="regular_type_options"
-              value-field="item"
-              text-field="name"
-              style="width: 80px; text-align: center"
-            ></b-form-select>
-          </b-col>
-          <b-col
-            cols="auto"
-            style="padding: 0 5px 0 15px; margin: 0px 5px 5px 0"
-          >
-            <b-form-select
-              id="form-input"
-              v-model="regular_day_selected"
-              :options="day_options"
-              value-field="item"
-              text-field="name"
-              style="width: 80px; text-align: center"
-            ></b-form-select>
-          </b-col>
-          <b-col cols="auto" style="padding: 8px 0px 0 0; margin: 0px 5px 5px 0"
-            >요일</b-col
-          >
-        </b-row>
-
-        <b-row class="mb-3" v-if="this.type_selected === 'Irregular'">
+        <b-row class="mb-3">
           <b-col id="subtitle">날짜*</b-col>
           <div class="w-100"></div>
           <b-col
@@ -202,7 +154,7 @@
     </b-card>
     <b-button
       pill
-      id="register-button"
+      id="green-colored-option-button"
       class="ml-auto"
       align="center"
       style="margin-right: 10px; margin-top: 20px; margin-bottom: 40px"
@@ -213,7 +165,7 @@
 </template>
 
 <script>
-import { regularSet, irregularSet } from "@/services/calendar";
+import { irregularSet } from "@/services/calendar";
 export default {
   data() {
     return {
@@ -266,27 +218,34 @@ export default {
       var day = ("0" + date.getDate()).slice(-2);
       let today = year + "-" + month + "-" + day;
 
-      let start_time = this.start_hour_selected.toString()+":"+this.start_minute_selected.toString()+":"+"00";
-      let end_time = this.end_hour_selected.toString()+":"+this.end_minute_selected.toString()+":"+"00";
+      let start_time =
+        this.start_hour_selected.toString() +
+        ":" +
+        this.start_minute_selected.toString() +
+        ":" +
+        "00";
+      let end_time =
+        this.end_hour_selected.toString() +
+        ":" +
+        this.end_minute_selected.toString() +
+        ":" +
+        "00";
 
-      let start = today+" "+start_time;
-      let end = today+" "+end_time;
+      let start = today + " " + start_time;
+      let end = today + " " + end_time;
 
-
-      if(new Date(start).getTime()<new Date(end).getTime()) {
+      if (new Date(start).getTime() < new Date(end).getTime()) {
         return true;
-      }
-      else {
+      } else {
         return false;
       }
-      
     },
-  async  registerSchedule() {
+    async registerSchedule() {
       //요일, 시작 및 종료시간, 이름, 설명이 다 입력되었는지 확인
       var isValidSchedule = true;
       //시간 입력 문제
-      if(!this.isSelectedTimeAppropriate()) {
-        this.$bvToast.toast('종료 시각을 시작 시각 이후로 설정해주세요.', {
+      if (!this.isSelectedTimeAppropriate()) {
+        this.$bvToast.toast("종료 시각을 시작 시각 이후로 설정해주세요.", {
           // title: "",
           toaster: "b-toaster-top-right",
           appendToast: false,
@@ -295,8 +254,8 @@ export default {
         isValidSchedule = false;
       }
       //필수 입력 사항(제목) 모두 입력했는지 확인
-      if(this.schedule_name.split(' ').join('') == ""){
-        this.$bvToast.toast('제목은 필수 입력 항목입니다.', {
+      if (this.schedule_name.split(" ").join("") == "") {
+        this.$bvToast.toast("제목은 필수 입력 항목입니다.", {
           // title: "",
           toaster: "b-toaster-top-right",
           appendToast: false,
@@ -305,42 +264,41 @@ export default {
         isValidSchedule = false;
       }
       var data = Object();
-      const start_time = this.start_hour_selected.toString()+":"+this.start_minute_selected.toString();
-      const end_time = this.end_hour_selected.toString()+":"+this.end_minute_selected.toString();
-      data.userId = this.$cookies.get("MoimUserId"); 
+      const start_time =
+        this.start_hour_selected.toString() +
+        ":" +
+        this.start_minute_selected.toString();
+      const end_time =
+        this.end_hour_selected.toString() +
+        ":" +
+        this.end_minute_selected.toString();
+      data.userId = this.$cookies.get("MoimUserId");
       data.startTime = start_time;
       data.endTime = end_time;
       data.title = this.schedule_name;
       data.detail = this.schedule_description;
 
-      if(isValidSchedule == true) {
-        if(this.type_selected==="Regular") {
-          data.day = this.regular_day_selected;
-          const response = await regularSet(data);
-          if(response.status==200){
-            this.$bvToast.toast(data.title+': 개인일정(정기)가 등록되었습니다.', {
-            // title: "회원 정보 등록 실패",
-            toaster: "b-toaster-top-right",
-            appendToast: false,
-            autoHideDelay: 3000,
-            });
-          }
-        }
-        else {
-          data.date = this.year_selected + "-" + this.month_selected + "-" + this.date_selected;
-          console.log(data);
-          const response = await irregularSet(data);
-          if(response.status==200){
-            this.$bvToast.toast(data.title+': 개인일정(비정기)가 등록되었습니다.', {
-            // title: "회원 정보 등록 실패",
-            toaster: "b-toaster-top-right",
-            appendToast: false,
-            autoHideDelay: 3000,
-            });
-          }
+      if (isValidSchedule == true) {
+        data.date =
+          this.year_selected +
+          "-" +
+          this.month_selected +
+          "-" +
+          this.date_selected;
+        console.log(data);
+        const response = await irregularSet(data);
+        if (response.status == 200) {
+          this.$bvToast.toast(
+            data.title + ": 개인일정(비정기)가 등록되었습니다.",
+            {
+              // title: "회원 정보 등록 실패",
+              toaster: "b-toaster-top-right",
+              appendToast: false,
+              autoHideDelay: 3000,
+            }
+          );
         }
       }
-      
     },
   },
   created() {
@@ -375,7 +333,7 @@ export default {
     for (var hour = 0; hour <= 23; hour++) {
       this.hour_options.push(hour);
     }
-    for (var minute = 0; minute <= 59; minute+=5) {
+    for (var minute = 0; minute <= 59; minute += 5) {
       this.minute_options.push(minute);
     }
   },
@@ -407,8 +365,9 @@ export default {
 }
 #form-input {
   border-radius: 10px !important;
-  border: 0px solid;
   background-color: #ffffff !important;
   float: left;
+  border: 1px solid #aaaaaa;
+  font-family: "NanumBarunGothic";
 }
 </style>

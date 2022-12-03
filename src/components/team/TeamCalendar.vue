@@ -164,7 +164,7 @@
           <p class="my-4">준비물 이름</p>
         </b-col>
         <b-col>
-          <b-form-input v-model="newPerpText" placeholder="Enter your name"></b-form-input>
+          <b-form-input v-model="newPerpText" placeholder="준비물 이름을 입력하세요"></b-form-input>
         </b-col>
       </b-row>
       <b-row>

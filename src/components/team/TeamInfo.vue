@@ -41,7 +41,7 @@
             <b-row class="mb-3" id="menu">
               <b-col id="subtitle">가입방식</b-col>
               <div class="w-100"></div>
-              <b-col id="categorytext" v-if="this.moimData.isFreeEnter === 'Y'"
+              <b-col id="categorytext" v-if="this.moimData.isFreeEnter == 'Y'"
                 >자유 가입</b-col
               >
               <b-col id="categorytext" v-else>승인 가입</b-col>
@@ -51,7 +51,7 @@
             <b-row class="mb-3" id="menu">
               <b-col id="subtitle">공개여부</b-col>
               <div class="w-100"></div>
-              <b-col id="categorytext" v-if="this.moimData.isPublic === 'Y'"
+              <b-col id="categorytext" v-if="this.moimData.isPublish == 'Y'"
                 >공개</b-col
               >
               <b-col id="categorytext" v-else>비공개</b-col>

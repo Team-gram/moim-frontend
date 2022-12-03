@@ -433,9 +433,10 @@ h4 {
 }
 #form-input {
   border-radius: 10px !important;
-  border: 0px solid;
   background-color: #ffffff !important;
   float: left;
+  border: 1px solid #aaaaaa;
+  font-family: "NanumBarunGothic";
 }
 #subtitle {
   text-align: left;
