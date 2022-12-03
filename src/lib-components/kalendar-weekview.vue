@@ -121,11 +121,12 @@ export default {
       let time = getLocaleTime(now);
       let day_starts = `${time.split("T")[0]}T${(day_starts_at + "").padStart(2, '0')}:00:00.000Z`;
       let day_ends = `${time.split("T")[0]}T${(day_ends_at + "").padStart(2, '0')}:00:00.000Z`;
-      let time_obj = new Date(time);
+      // let time_obj = new Date(time);
+      // if(new Date(day_ends) < time_obj || time_obj < new Date(day_starts)) return null;
 
-      if(new Date(day_ends) < time_obj || time_obj < new Date(day_starts)) return null;
-
-      let distance = (time_obj - new Date(day_starts)) / 1000 / 60;
+      // // let distance = (time_obj - new Date(day_starts)) / 1000 / 60;
+      let distance = (new Date(day_ends) - new Date(day_starts)) / 1000 / 60;
+      console.log(distance);
       return {distance, time};
     }
   },
