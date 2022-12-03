@@ -27,7 +27,7 @@ export default {
   name: "MoimTeam",
   data() {
     return {
-      memuindex: 3,
+      memuindex: 0,
     };
   },
   methods:{
