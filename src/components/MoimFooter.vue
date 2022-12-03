@@ -1,6 +1,6 @@
 <template>
   <footer>
-    <p style="margin: 0px;">2022-2 SW Capsone Design Team-gram</p>
+    <p style="margin: 0px;">2022-2 SW Capstone Design Team-gram</p>
   </footer>
 </template>
 

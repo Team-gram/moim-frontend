@@ -87,7 +87,7 @@
       </template>
       <template #modal-footer="{ hide }">
         <!-- Button with custom close trigger value -->
-        <b-button size="sm" v-if="moimhostid==userid" @click="removeEvent(event_information)" style="background-color:red;"> 삭제하기 </b-button>
+        <b-button size="sm" @click="removeEvent(event_information)" style="background-color:red;"> 삭제하기 </b-button>
         <b-button size="sm" @click="hide('forget')"> 닫기 </b-button>
       </template>
     </b-modal>
