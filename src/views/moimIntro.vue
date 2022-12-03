@@ -13,8 +13,10 @@
       align="center"
       style="margin-top: 10px; margin-left: 20px; margin-right: 20px"
     >
+      <div id="main-text">
+        <b id="main-text-highlight">기본 정보</b>
+      </div>
       <div id="listbackground">
-        <div id="title">기본 정보</div>
         <!-- <b-row class="mb-3" id="menu">
         <b-col id="subtitle">카테고리</b-col>
         <div class="w-100" ></div>
@@ -50,7 +52,7 @@
             <b-row class="mb-3" id="menu">
               <b-col id="subtitle">가입방식</b-col>
               <div class="w-100"></div>
-              <b-col id="categorytext" v-if="this.moimData.isFreeEnter === 'Y'"
+              <b-col id="categorytext" v-if="this.moimData.isFreeEnter == 'Y'"
                 >자유 가입</b-col
               >
               <b-col id="categorytext" v-else>승인 가입</b-col>
@@ -60,7 +62,7 @@
             <b-row class="mb-3" id="menu">
               <b-col id="subtitle">공개여부</b-col>
               <div class="w-100"></div>
-              <b-col id="categorytext" v-if="this.moimData.isPublic === 'Y'"
+              <b-col id="categorytext" v-if="this.moimData.isPublish == 'Y'"
                 >공개</b-col
               >
               <b-col id="categorytext" v-else>비공개</b-col>
@@ -77,15 +79,17 @@
           </b-col>
           <b-col>
             <b-row class="mb-3" id="menu">
-              <b-col id="subtitle">가입 인원</b-col>
+              <!-- <b-col id="subtitle">가입 인원</b-col>
               <div class="w-100"></div>
-              <b-col id="categorytext">3명</b-col>
+              <b-col id="categorytext">3명</b-col> -->
             </b-row>
           </b-col>
         </b-row>
       </div>
+      <div id="main-text">
+        <b id="main-text-highlight">소개글</b>
+      </div>
       <div id="listbackground">
-        <div id="title">소개글</div>
         <div v-if="this.moimData.content !== ''">
           {{ this.moimData.content }}
         </div>
@@ -95,7 +99,7 @@
       <div id="title">분석 리스트</div>
     </div> -->
     </div>
-    <b-button pill align="center" id="moim-button" @click="showJoinModal()"
+    <b-button pill align="center" id="green-colored-option-button" @click="showJoinModal()"
       >가입 신청</b-button
     >
     <b-modal id="moimFreeJoinModal" size="sm" hide-footer hide-header centered>
@@ -107,7 +111,7 @@
         <h6>해당 모임에 가입하시겠습니까?</h6>
       </div>
       <div class="d-block text-center" style="margin-bottom: 20px">
-        <b-button pill align="center" id="moim-button" @click="joinMoim()"
+        <b-button pill align="center" id="green-colored-option-button" @click="joinMoim()"
           >가입하기</b-button
         >
       </div>
@@ -126,7 +130,7 @@
         ></b-form-textarea>
       </div>
       <div class="d-block text-center" style="margin-bottom: 20px">
-        <b-button pill align="center" id="moim-button" @click="joinMoim()"
+        <b-button pill align="center" id="green-colored-option-button" @click="joinMoim()"
           >신청서 제출</b-button
         >
       </div>
@@ -218,7 +222,7 @@ export default {
       let myMoim = await MyMoimList(this.$cookies.get("MoimUserId"));
       if (myMoim.status === 200) {
         console.log(myMoim.data);
-        return myMoim.data.every(moim => moim.id !== id);
+        return myMoim.data.every((moim) => moim.id !== id);
       }
     },
   },

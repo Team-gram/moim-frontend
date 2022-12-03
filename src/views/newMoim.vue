@@ -1,10 +1,12 @@
 <template>
   <div
     align="center"
-    style="margin-top: 10px; margin-left: 20px; margin-right: 20px"
+    style="margin-top: 40px; margin-left: 20px; margin-right: 20px"
   >
+    <div id="main-text">
+      <b id="main-text-highlight">모임 개설하기</b>
+    </div>
     <div id="listbackground">
-      <div id="title">새로운 모임 개설하기</div>
       <b-row class="mb-3">
         <b-col id="subtitle">제목</b-col>
         <b-col>
@@ -59,7 +61,7 @@
             v-model="region1_selected"
             :options="region1_options"
             v-on:change="UpdateLocation(1, $event)"
-            style="width: 200px; text-align: center"
+            style="width: 150px; text-align: center"
           >
             <template #first>
               <b-form-select-option :value="null" disabled
@@ -74,7 +76,7 @@
             v-model="region2_selected"
             :options="region2_options"
             v-on:change="UpdateLocation(2, $event)"
-            style="width: 200px; text-align: center"
+            style="width: 150px; text-align: center"
           >
             <template #first>
               <b-form-select-option :value="null" disabled
@@ -88,7 +90,7 @@
             id="form-input"
             v-model="region3_selected"
             :options="region3_options"
-            style="width: 200px; text-align: center"
+            style="width: 150px; text-align: center"
           >
             <template #first>
               <b-form-select-option :value="null" disabled
@@ -154,7 +156,7 @@
     </div>
     <b-button
       pill
-      id="register-button"
+      id="green-colored-option-button"
       class="ml-auto"
       align="center"
       style="margin-right: 10px; margin-top: 20px; margin-bottom: 40px"
@@ -232,7 +234,7 @@ export default {
         this.region3_options.sort();
       }
     },
-   async clickCompleteButton(){
+    async clickCompleteButton() {
       var data = Object();
       data.userId = this.$cookies.get("MoimUserId");
       data.categoryId = this.selected_category.childCategory;
@@ -246,9 +248,9 @@ export default {
       data.maxMember = this.maxMember;
       console.log(data);
       const response = await MoimCreate(data);
-      if(response.status==200){
+      if (response.status == 200) {
         alert("모임 개설 완료");
-        this.$router.replace('/mymoim');
+        this.$router.replace("/mymoim");
       }
       //여기에 버튼 클릭시 json 보낼 데이터를 입력해주세요!
     },
@@ -289,8 +291,9 @@ export default {
 }
 #form-input {
   border-radius: 10px !important;
-  border: 0px solid;
   background-color: #ffffff !important;
   float: left;
+  border: 1px solid #aaaaaa;
+  font-family: "NanumBarunGothic";
 }
 </style>
