@@ -18,9 +18,6 @@
 					<br>
 					{{ event_information.end_time.substr(11,5)}}
 				</span>
-			<button @click="removeEvent(event_information)" class="details-button" >
-				<img src="@/assets/x-button.png" style="width:10px">
-			</button>
 		</div>
 		<div slot="creating-card">
 			<h4 class="appointment-title" style="text-align: left;">
@@ -87,7 +84,7 @@
       </template>
       <template #modal-footer="{ hide }">
         <!-- Button with custom close trigger value -->
-        <b-button size="sm" @click="removeEvent(event_information)" style="background-color:red;"> 삭제하기 </b-button>
+        <b-button size="sm" @click="[removeEvent(currentSelectedSchedule), hide('forget')]" style="background-color:red;"> 삭제하기 </b-button>
         <b-button size="sm" @click="hide('forget')"> 닫기 </b-button>
       </template>
     </b-modal>
@@ -141,6 +138,7 @@ export default {
 	methods: {
 		startitem(kalendarEvent){
 			this.currentSelectedSchedule = kalendarEvent;
+			console.log(kalendarEvent);
 			this.$bvModal.show("modal-scrollable");
 		},
 		setEvent(item){
@@ -190,11 +188,7 @@ export default {
       }
 			response = await regularGet(this.$cookies.get("MoimUserId"));
 			if(response.status==200){
-				for(var index in response.data){
-					if(response.data[index].startTime == data.startTime && response.data[index].endTime == data.endTime){
-						payload.id = response.data[index].id;
-					}
-				}
+				payload.id = response.data.regular[response.data.regular.length-1].id;
 			}
 			this.$kalendar.addNewEvent(payload);
 			this.$kalendar.closePopups();
