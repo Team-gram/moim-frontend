@@ -45,10 +45,8 @@
 
         .creating-event,
         .created-event {
-            // background-color: #b6d884;
-            // color: var(--card-color);
             text-shadow: none;
-
+            background-color: rgb(246, 232, 162);
             > * {
                 text-shadow: none;
             }
@@ -234,7 +232,6 @@
 }
 
 .creating-event {
-    background-color: #34aadc;
     opacity: 0.9;
 
     > * {
@@ -243,7 +240,6 @@
 }
 
 .created-event {
-    background-color: #bfecff;
     opacity: 0.74;
     border-left: solid 3px #34aadc;
     color: #1f6570;
