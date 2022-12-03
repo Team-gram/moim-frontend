@@ -144,8 +144,8 @@ export default {
 }
 #listBox {
   border-radius: 10px !important;
-  border: 0px solid;
-  background-color: #d9d9d9 !important;
+  border: 1px solid;
+  background-color: #f1f1f1 !important;
   float: center;
   max-width: 1000px;
   padding: 20px 10px 20px 10px;
