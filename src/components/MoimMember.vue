@@ -104,7 +104,7 @@
                 <i class="fa-solid fa-calendar" style="color: #4fb26f"></i>
               </b-col>
               <b-col>
-                <div>개인 일정 확인</div>
+                <div @click="[showCalendarMemberModal(), isCalendar=true]">개인 일정 확인</div>
               </b-col>
             </b-row>
           </div>
@@ -160,6 +160,15 @@
         </b-col>
       </b-row>
     </b-modal>
+     <b-modal
+      id="Calendar_modal"
+      title="공개한 일정"
+      @show="resetModal"
+      @hidden="resetModal"
+      centered
+    >
+    <MemberCalendar v-if="isCalendar" v-bind:Memberid="currentSelectedMember.id"></MemberCalendar>
+    </b-modal>
     <b-modal
       id="invite_modal"
       title="모임 초대하기"
@@ -201,11 +210,15 @@
 </template>
 
 <script>
+import MemberCalendar from "@/components/MemberCalendar.vue"
 import { getMoimMember } from "@/services/moim.js";
 import { getUserinfo } from "@/services/login.js";
 import { MyMoimList, InviteMoim } from "@/services/moim.js";
 export default {
   props: ["hostId"],
+  components:{
+    MemberCalendar
+  },
   data() {
     return {
       moimId: null,
@@ -216,9 +229,9 @@ export default {
       inviteMsg: "",
       inviteMoim: null,
       inviteMoims: ["a", "b", "c"],
+      isCalendar:false,
     };
   },
-  components: {},
   methods: {
     async getMoimMemberList(moimId) {
       this.memberList = [];
@@ -242,6 +255,11 @@ export default {
     showInviteMemberModal() {
       this.$bvModal.hide("modal-member");
       this.$bvModal.show("invite_modal");
+    },
+    showCalendarMemberModal() {
+      this.$bvModal.hide("modal-member");
+      this.$bvModal.show("Calendar_modal");
+      this.isCalendar = false;
     },
     resetModal() {
       this.inviteMsg = "";
@@ -288,5 +306,8 @@ export default {
   text-align: left;
   font-weight: bold !important;
   font-size: 18px;
+}
+#Calendar_modal___BV_modal_footer_{
+  margin: 0;
 }
 </style>
