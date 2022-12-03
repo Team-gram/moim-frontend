@@ -1,5 +1,8 @@
 <template>
   <div id="Calendar" style="margin-top: 0px">
+    <div style="margin-top: 3px" v-if="isAllbutton==0 && startKalendar==1 &&events.length==0 && moimhostid==userid">
+      참여자 일정에서 새 모임일정을 만들 수 있습니다.
+    </div>
     <b-button
       @click="[(startKalendar = 0), MoimAllCall()]"
       variant="outline-success"
@@ -15,7 +18,7 @@
         slot="created-card"
         slot-scope="{ event_information }"
         class="details-card"
-        @click="[isAllbutton==0 ? startitem(event_information) : isAllbutton]"
+        @click="[isAllbutton==0 ? startitem(event_information) : Message(0)]"
       >
         <h5 class="appointment-title appfont">
           {{ event_information.data.title }}
@@ -149,10 +152,9 @@
           </b-col>
         </b-row>
       </template>
-
       <template #modal-footer="{ hide }">
         <!-- Button with custom close trigger value -->
-        <b-button size="sm" v-if="moimhostid==userid" @click="removeEvent(event_information)" style="background-color:red;"> 삭제하기 </b-button>
+        <b-button size="sm" v-if="moimhostid==userid" @click="[removeEvent(currentSelectedSchedule), hide('forget')]" style="background-color:red;"> 삭제하기 </b-button>
         <b-button size="sm" @click="hide('forget')"> 닫기 </b-button>
       </template>
     </b-modal>
@@ -185,7 +187,7 @@ import { getMoimRef, takeMoimRef, deleteMoimRef, newMoimRef } from "@/services/m
 import Kalendar from "@/lib-components/kalendar-container.vue";
 import moment from "moment";
 export default {
-  name: "MoimTest",
+  name: "TeamCalendar",
   components: {
     Kalendar,
   },
@@ -448,6 +450,15 @@ export default {
       }
       else{
         alert('준비물 이름이 입력되지 않았습니다.');
+      }
+    },
+    Message(level){
+      if (level==0) {
+        this.$bvToast.toast("기존 모임 일정에서 상세 내역을 볼 수 있습니다.", {
+          toaster: "b-toaster-top-right",
+          appendToast: false,
+          autoHideDelay: 3000,
+        });
       }
     }
   },
