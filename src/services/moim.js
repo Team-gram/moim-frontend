@@ -20,7 +20,6 @@ export function MoimCreate(data) {
       isPublish: data.isPublish,
       isFreeEnter: data.isFreeEnter,
       maxMember: data.maxMember,
-      file: null,
     },
   });
 }
@@ -95,7 +94,7 @@ export function newMoimRef(moimId, moimScheduleId, name) {
 export function takeMoimRef(id, userId) {
   return request({
     url: "/meet/ref",
-    method: "patch",
+    method: "put",
     data: {
       id: id,
       userId: userId
@@ -120,6 +119,28 @@ export function deleteMoimRef(id) {
     method: "delete",
     data: {
       id: id,
+    }
+  })
+}
+
+export function getMoimMember(moimId) {
+  return request({
+    url: "/moim/member/"+moimId,
+    method: "get",
+    params: {
+      moimId: moimId,
+    }
+  })
+}
+
+export function InviteMoim(moimId, userId, message) {
+  return request({
+    url: "/moim/invite",
+    method: "post",
+    data: {
+      moimId: moimId,
+      userId: userId,
+      message: message
     }
   })
 }
