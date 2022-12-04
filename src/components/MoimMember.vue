@@ -104,7 +104,9 @@
                 <i class="fa-solid fa-calendar" style="color: #4fb26f"></i>
               </b-col>
               <b-col>
-                <div @click="[showCalendarMemberModal(), isCalendar=true]">개인 일정 확인</div>
+                <div @click="[showCalendarMemberModal(), (isCalendar = true)]">
+                  개인 일정 확인
+                </div>
               </b-col>
             </b-row>
           </div>
@@ -160,14 +162,17 @@
         </b-col>
       </b-row>
     </b-modal>
-     <b-modal
+    <b-modal
       id="Calendar_modal"
       title="공개한 일정"
       @show="resetModal"
       @hidden="resetModal"
       centered
     >
-    <MemberCalendar v-if="isCalendar" v-bind:Memberid="currentSelectedMember.id"></MemberCalendar>
+      <MemberCalendar
+        v-if="isCalendar"
+        v-bind:Memberid="currentSelectedMember.id"
+      ></MemberCalendar>
     </b-modal>
     <b-modal
       id="invite_modal"
@@ -202,7 +207,6 @@
             required
             placeholder="초대메세지를 입력하세요"
           ></b-form-input>
-          
         </b-form-group>
       </form>
     </b-modal>
@@ -210,14 +214,14 @@
 </template>
 
 <script>
-import MemberCalendar from "@/components/MemberCalendar.vue"
+import MemberCalendar from "@/components/MemberCalendar.vue";
 import { getMoimMember } from "@/services/moim.js";
 import { getUserinfo } from "@/services/login.js";
 import { MyMoimList, InviteMoim } from "@/services/moim.js";
 export default {
   props: ["hostId"],
-  components:{
-    MemberCalendar
+  components: {
+    MemberCalendar,
   },
   data() {
     return {
@@ -228,8 +232,8 @@ export default {
       currentSelectedMember: null,
       inviteMsg: "",
       inviteMoim: null,
-      inviteMoims: ["a", "b", "c"],
-      isCalendar:false,
+      inviteMoims: [],
+      isCalendar: false,
     };
   },
   methods: {
@@ -248,9 +252,47 @@ export default {
       }
       console.log(this.memberList);
     },
-    setCurrentSelectedMember(member) {
+    async setCurrentSelectedMember(member) {
+      this.inviteMoims = [];
       this.currentSelectedMember = member;
-      console.log(this.currentSelectedMember);
+
+      let inviteMoims = await MyMoimList(this.userId); // 사용자가 가입한 모임 리스트
+      let memberMoims = await MyMoimList(member.id); // 선택한 멤버가 가입한 모임 리스트
+
+      console.log(this.moimid);
+      console.log(inviteMoims.data);
+      console.log(memberMoims.data);
+
+      
+      for (var i = 0; i < inviteMoims.data.length; i++) {
+        //참가자가 가입한 모임 리스트 순회
+        var exist = false;
+        for (var j = 0; j < memberMoims.data.length; j++) {
+          // 선택한 멤버가 가입한 모임 리스트
+          if (inviteMoims.data[i].id == memberMoims.data[j].id) {
+            exist = true;
+          }
+        }
+        if(exist == false) {
+          this.inviteMoims.push(inviteMoims.data[i]);
+        }
+        // if (
+        //   inviteMoims.data[i].id != this.moimid ||
+        //   memberMoims.data.filter((e) => {
+        //     return e.id == memberMoims.data[i].id;
+        //   }).length < 1
+        // ) {
+        //   this.inviteMoims.push(inviteMoims.data[i]);
+        // }
+      }
+      console.log(this.inviteMoims);
+
+      // this.currentSelectedMember.joinMoims = memberMoims.data;
+      // for (var i = 0 ; i < memberMoims.data.length; i++) {
+      //   if( this.memberMoims.filter((e) => { return e.id == inviteMember.data[i].id }).length < 1 ) arr.push(user);
+      // }
+      // if( this.inviteMoims.filter((e) => { return e.id == user.id }).length < 1 ) arr.push(user);
+      // console.log(this.currentSelectedMember);
     },
     showInviteMemberModal() {
       this.$bvModal.hide("modal-member");
@@ -266,12 +308,19 @@ export default {
       this.inviteMoim = null;
     },
     async InviteSubmit() {
+      console.log(this.currentSelectedMember);
       // Exit when the form isn't valid
-      if (this.inviteMsg.split(' ').join('') !== "" && this.inviteMoim != null) {
-        let inviteSend = await InviteMoim(this.inviteMoim, this.userId, this.inviteMsg);
+      if (
+        this.inviteMsg.split(" ").join("") !== "" &&
+        this.inviteMoim != null
+      ) {
+        let inviteSend = await InviteMoim(
+          this.inviteMoim,
+          this.currentSelectedMember.id,
+          this.inviteMsg
+        );
         console.log(inviteSend);
-      }
-      else {
+      } else {
         alert("초대 정보가 제대로 입력되지 않았습니다.");
       }
 
@@ -282,8 +331,14 @@ export default {
     },
     async getInviteMoimList(userId) {
       let inviteMoims = await MyMoimList(userId);
+      console.log(this.moimid);
+      for (var i = 0; i < inviteMoims.data.length; i++) {
+        if (inviteMoims.data[i].id != this.moimid) {
+          this.inviteMoims.push(inviteMoims.data[i]);
+        }
+      }
       console.log(inviteMoims);
-      this.inviteMoims = inviteMoims.data;
+      // this.inviteMoims = inviteMoims.data;
     },
   },
   created() {
@@ -307,7 +362,7 @@ export default {
   font-weight: bold !important;
   font-size: 18px;
 }
-#Calendar_modal___BV_modal_footer_{
+#Calendar_modal___BV_modal_footer_ {
   margin: 0;
 }
 </style>
