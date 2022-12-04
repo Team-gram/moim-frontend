@@ -50,7 +50,7 @@
                 <b-col cols="auto">
                   <b-img
                     id="listImage"
-                    :src="list[image]"
+                    :src="list.thumbnail"
                     rounded="circle"
                   ></b-img>
                 </b-col>
@@ -154,7 +154,7 @@
         </div>
       </b-col>
     </b-row>
-    <!-- <b-row  style="margin-top: 80px">
+    <b-row style="margin-top: 80px">
       <b-col>
         <b-row align-h="center">
           <b-col cols="auto" style="padding: 0 5px 0 5px">
@@ -164,52 +164,38 @@
           </b-col>
         </b-row>
       </b-col>
-    </b-row> -->
-    <!-- <b-row>
+    </b-row>
+    <b-row>
       <b-col>
-        <div id="list-box">
-          <div
-            v-for="(list, index) in moimlist"
-            :key="index"
-            @click="callMoim(index)"
-          >
+        <div id="list-box" v-if="inviteMsgList.length > 0">
+          <div v-for="(list, index) in inviteMsgList" :key="index">
             <div
               v-if="list !== null"
               id="list-item"
-              v-show="index < mylist + 4 && index >= mylist"
+              style="cursor: default !important"
+              v-show="
+                index < currentInviteMsgCnt + 4 && index >= currentInviteMsgCnt
+              "
             >
               <b-row align-v="center">
                 <b-col cols="auto">
                   <b-img
                     id="listImage"
-                    :src="list[image]"
+                    :src="list.moimData.thumbnail"
                     rounded="circle"
                   ></b-img>
                 </b-col>
                 <b-col>
                   <b-row id="listTitle">
                     <b-col>
-                      <div>{{ list["title"] }}</div>
+                      <div>{{ list.moimData.title }}</div>
                     </b-col>
                   </b-row>
                   <b-row id="listData">
-                    <b-col cols="auto" style="padding: 0 0 0 15px">
-                      <b-img
-                        id="listIcon"
-                        :src="require(`@/assets/person.png`)"
-                      ></b-img>
-                    </b-col>
-                    <b-col cols="auto" style="width: 70px">
-                      {{ list["maxMember"] }} 명
-                    </b-col>
-                    <b-col cols="auto" style="padding: 0 0 0 15px">
-                      <b-img
-                        id="listIcon"
-                        :src="require(`@/assets/location.png`)"
-                      ></b-img>
+                    <b-col cols="auto" style="padding: 0 0 0 20px">
+                      <i class="fa-solid fa-envelope"></i>
                     </b-col>
                     <b-col
-                      cols="auto"
                       style="
                         width: 150px;
                         text-overflow: ellipsis;
@@ -217,27 +203,24 @@
                         white-space: nowrap;
                       "
                     >
-                      {{ list["sido"] }} {{ list["sigungu"] }}
-                      {{ list["sidongdo"] }}
-                    </b-col>
-                    <b-col cols="auto" style="padding: 0 0 0 15px">
-                      <b-img
-                        id="listIcon"
-                        :src="require(`@/assets/mic.png`)"
-                      ></b-img>
-                    </b-col>
-                    <b-col
-                      cols="auto"
-                      style="
-                        width: 220px;
-                        text-overflow: ellipsis;
-                        overflow: hidden;
-                        white-space: nowrap;
-                      "
-                    >
-                      {{ list["content"] }}
+                      {{ list.message }}
                     </b-col>
                   </b-row>
+                </b-col>
+                <b-col cols="auto">
+                  <div
+                    id="green-outline-option-button"
+                    style="
+                      font-size: 10px !important;
+                      cursor: pointer;
+                      align: right;
+                      margin: 20px;
+                    "
+                    v-b-modal.modal-invite-detail
+                    @click="setCurrentSelectedMsgDetail(list)"
+                  >
+                    더보기
+                  </div>
                 </b-col>
               </b-row>
             </div>
@@ -245,7 +228,7 @@
           <div id="green-colored-option-button" style="width: 150px !important">
             <b-row>
               <b-col>
-                <span @click="prevlist()">
+                <span @click="prevInviteMsgList()">
                   <i
                     class="fa-solid fa-angle-left"
                     id="recommend-type-change-button"
@@ -256,7 +239,7 @@
                 <div style="width: 10px"></div>
               </b-col>
               <b-col>
-                <span @click="nextlist()">
+                <span @click="nextInviteMsgList()">
                   <i
                     class="fa-solid fa-angle-right"
                     id="recommend-type-change-button"
@@ -266,19 +249,114 @@
             </b-row>
           </div>
         </div>
+        <div v-else>받은 초대메세지가 없습니다.</div>
       </b-col>
-    </b-row> -->
+    </b-row>
+    <b-modal
+      id="modal-invite-detail"
+      title="초대메세지"
+      hide-footer
+      centered
+      style="font-family: 'NanumBarunGothic'"
+    >
+      <div v-if="currentSelectedMsgDetail != null">
+        <b-row style="margin: 5px">
+          <b-col cols="auto" style="padding: 0 0 0 15px">
+            <div style="width: 60px">모임</div>
+          </b-col>
+          <b-col cols="auto" style="padding: 0">
+            <div>:</div>
+          </b-col>
+          <b-col>
+            {{ currentSelectedMsgDetail.moimData.title }}
+          </b-col>
+        </b-row>
+        <b-row style="margin: 5px">
+          <b-col cols="auto" style="padding: 0 0 0 15px">
+            <div style="width: 60px">모임장</div>
+          </b-col>
+          <b-col cols="auto" style="padding: 0">
+            <div>:</div>
+          </b-col>
+          <b-col>
+            {{ currentSelectedMsgDetail.fromData.name }}
+          </b-col>
+        </b-row>
+        <b-row style="margin: 5px">
+          <b-col>
+            <b-row>
+              <b-col>
+                <div style="width: 60px">메세지</div>
+              </b-col>
+            </b-row>
+            <b-row style="margin: 5px 0 5px 0">
+              <b-col style="padding: 0">
+                <b-form-textarea
+                  plaintext
+                  :value="currentSelectedMsgDetail.message"
+                  style="
+                    background-color: #ffffff;
+                    border-radius: 10px !important;
+                    border: 1px solid #aaaaaa;
+                    font-family: 'NanumBarunGothic';
+                    padding: 5px;
+                  "
+                ></b-form-textarea>
+              </b-col>
+            </b-row>
+          </b-col>
+        </b-row>
+        <b-row align-h="center">
+          <b-col cols="auto">
+            <div
+              id="green-colored-option-button"
+              style="margin: 10px !important; cursor: pointer"
+              @click="acceptInvite"
+            >
+              수락하기
+            </div>
+          </b-col>
+          <b-col cols="auto">
+            <div
+              id="green-colored-option-button"
+              style="
+                background-color: red !important;
+                margin: 10px !important;
+                cursor: pointer;
+              "
+              @click="rejectInvite"
+            >
+              거절하기
+            </div>
+          </b-col>
+        </b-row>
+      </div>
+    </b-modal>
   </div>
 </template>
 
 <script>
-import { MyMoimList } from "@/services/moim";
+import { MyMoimList, MoimDetail } from "@/services/moim";
+import {
+  GetAllMessage,
+  MessageAccept,
+  MessageReject,
+} from "@/services/message";
+import { getUserinfo } from "@/services/login";
+
 export default {
   data() {
     return {
       moimlist: "",
       mylist: 0,
       maxmylist: 1,
+      inviteMsgList: [],
+      currentInviteMsgCnt: 0,
+      inviteMsgCnt: 1,
+      joinMsgList: [],
+      currentJoinMsgCnt: 0,
+      joinMsgCnt: 1,
+      currentSelectedMsgDetail: null,
     };
   },
   methods: {
@@ -287,6 +365,13 @@ export default {
     },
     nextlist() {
       if (this.mylist + 4 < this.maxmylist) this.mylist += 4;
+    },
+    prevInviteMsgList() {
+      if (this.currentInviteMsgCnt >= 4) this.currentInviteMsgCnt -= 4;
+    },
+    nextInviteMsgList() {
+      if (this.currentInviteMsgCnt + 4 < this.inviteMsgCnt)
+        this.currentInviteMsgCnt += 4;
     },
     callMoim(index) {
       this.$store.commit(
@@ -302,22 +387,21 @@ export default {
     newmoim() {
       this.$router.replace("/newmoim");
     },
-  },
-  async created() {
-    let response = await MyMoimList(this.$cookies.get("MoimUserId"));
-    if (response.status == 200) {
-      if (response.data.length == 0) {
-        this.mylist = 0;
-        var Nulldata = Object();
-        let data = [];
-        data.push({ title: "모임 정보가 존재하지 않습니다.", info: "" });
-        Nulldata = data;
-        this.moimlist = Nulldata;
-        console.log(this.moimlist);
-      } else {
-        this.moimlist = response.data;
-        this.maxmylist = response.data.length;
-        /*
+    async setMyMoimList() {
+      let response = await MyMoimList(this.$cookies.get("MoimUserId"));
+      if (response.status == 200) {
+        if (response.data.length == 0) {
+          this.mylist = 0;
+          var Nulldata = Object();
+          let data = [];
+          data.push({ title: "모임 정보가 존재하지 않습니다.", info: "" });
+          Nulldata = data;
+          this.moimlist = Nulldata;
+          console.log(this.moimlist);
+        } else {
+          this.moimlist = response.data;
+          this.maxmylist = response.data.length;
+          /*
         respose data는 다음과 같은 값을 가진다.
           "id": 0,  (모임 고유 id)
           "userId": 0, (방장)
@@ -333,8 +417,73 @@ export default {
           "createDate": "2022-11-18T09:33:59.914Z",
           "moimLevel": 0
         */
+        }
       }
-    }
+    },
+    async setCurrentSelectedMsgDetail(detail) {
+      let currentMessageFrom = await getUserinfo(detail.fromId);
+      var newDetail = detail;
+      newDetail.fromData = currentMessageFrom.data;
+      this.currentSelectedMsgDetail = newDetail;
+      console.log(this.currentSelectedMsgDetail);
+    },
+    async acceptInvite() {
+      console.log("invite!");
+      let accept = await MessageAccept(
+        this.currentSelectedMsgDetail.id,
+        this.currentSelectedMsgDetail.moimId,
+        this.currentSelectedMsgDetail.toId
+      );
+      this.$bvModal.hide("modal-invite-detail");
+      this.setMyMoimList();
+      this.setAllMessages();
+      console.log(accept);
+    },
+    async rejectInvite() {
+      console.log("reject!");
+      let reject = await MessageReject(
+        this.currentSelectedMsgDetail.id,
+        this.currentSelectedMsgDetail.moimId,
+        this.currentSelectedMsgDetail.toId
+      );
+      this.$bvModal.hide("modal-invite-detail");
+      this.setMyMoimList();
+      this.setAllMessages();
+      console.log(reject);
+    },
+    resetMessageData() {
+      this.inviteMsgList = [];
+      this.currentInviteMsgCnt = 0;
+      this.inviteMsgCnt = 0;
+      this.joinMsgList = [];
+      this.currentJoinMsgCnt = 0;
+      this.joinMsgCnt = 0;
+      this.currentSelectedMsgDetail = null;
+    },
+    async setAllMessages() {
+      let allMessage = await GetAllMessage(this.$cookies.get("MoimUserId"));
+      console.log(allMessage);
+      this.resetMessageData();
+
+      for (var i = 0; i < allMessage.data.length; i++) {
+        if (allMessage.data[i].type == "INVITE") {
+          let inviteMoimData = await MoimDetail(allMessage.data[i].moimId);
+          console.log(inviteMoimData);
+          var inviteMessage = allMessage.data[i];
+          inviteMessage.moimData = inviteMoimData.data;
+          this.inviteMsgList.push(inviteMessage);
+          this.inviteMsgCnt += 1;
+        } else if (allMessage.data[i].type == "JOIN") {
+          this.joinMsgList.push(allMessage.data[i]);
+          this.joinMsgCnt += 1;
+        }
+      }
+      console.log(this.inviteMsgList);
+    },
+  },
+  async created() {
+    this.setMyMoimList();
+    this.setAllMessages();
   },
 };
 </script>
