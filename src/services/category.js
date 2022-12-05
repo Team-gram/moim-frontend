@@ -13,3 +13,9 @@ export function getChildCategory(parentId) {
     method: "get",
   });
 }
+export function getCategoryname(categoryId){
+  return request({
+    url: "/category/name/"+categoryId,
+    method: "get",
+  });
+}

@@ -4,30 +4,32 @@
     style="margin-top: 20px;"
   >
     <div class="map-area">
-      <div class="searchbox" v-for="rs in search.data" :key="rs.id">
-        <div class="searchdata">
+      <div class="searchbox" align="left" >
+        <b-form-input v-model="text" id="searchkeyword" placeholder="장소" @keyup.enter="searchPlaces()"></b-form-input>
+        <div class="searchdata" v-for="rs in search.data" :key="rs.id" @click="move(rs)">
           <div class="place">
-            <div>{{rs.place_name}}</div>
+            <hr/>
+            <row>
+              <col><a @click="history(rs)" :href="rs.place_url" target="_black"><b>{{rs.place_name}}</b></a>
+              <b-button variant="success" id="placeset">장소</b-button>
+            </row>
+            <div style="color:green;">{{rs.phone}}</div>
             <div class="searchaddress">{{rs.address_name}}</div>
           </div>
         </div>
       </div>
       <div id="map">map</div>
     </div>
-    <b-form-input v-model="text" id="keyword" placeholder="Enter your name" @keyup.enter="searchPlaces()"></b-form-input>
-    <b-button
-      pill
-      id="register-button"
-      class="ml-auto"
-      align="center"
-      style="margin-right: 10px; margin-top: 20px; margin-bottom: 40px"
-      @click="PlaceSearch()"
-      >참가하기
-    </b-button>
+    <div>장소 리스트</div>
   </div>
 </template>
 
 <script>
+import { historySet } from '@/services/place'
+import { mapGetters } from "vuex";
+import { MoimDetail } from "@/services/moim";
+import { getCategoryname } from "@/services/category";
+
 export default {
   data() {
     return {
@@ -36,11 +38,13 @@ export default {
       infowinodw:null,
       text:"",
       moimid:0,
+      moimData:null,
+      recommend:null,
       search : {
         keyword : null,
         pgn : null,
         data : [],
-      }
+      },
     };
   },
   methods: {
@@ -51,12 +55,11 @@ export default {
         level:3,
       };
       this.map = new kakao.maps.Map(container,options);
-      this.map.relayout();
       this.ps = new window.kakao.maps.services.Places();
       this.infowinodw = new kakao.maps.InfoWindow({zIndex:1});
+      this.map.relayout();
     },
     searchPlaces(){
-      console.log(this.text);
         if (!this.text.replace(/^\s+|\s+$/g, '')) {
             alert('키워드를 입력해주세요!');
             return false;
@@ -66,14 +69,41 @@ export default {
           this.search.keyword = this.text;
           this.search.pgn = pgn;
           this.search.data = data;
+          console.log(data);
         });
+    },
+    move(place){
+      var moveLatLon = new kakao.maps.LatLng(place.y,place.x);
+      this.map.setCenter(moveLatLon);
+      var marker = new kakao.maps.Marker({
+        position: moveLatLon
+      });
+      marker.setMap(this.map);
+    },
+    history(place){
+      if(place.categoryGroupName!=""){
+        let text = String(place.road_address_name).split(" ");
+        for(var i in text){
+          if(!isNaN(text[i])){
+            text[i] = "";
+          }
+        }
+        historySet(place,text);
+      }
+    },
+    async setData(id) {
+      let moimData = await MoimDetail(id);
+      this.moimData = moimData.data;
+      console.log(this.moimData.sido,this.moimData.sigungu)
+      // const recommend = await recommendplace(this.moimData.sido,this.moimData.sigungu)
+      // this.recommend = recommend.data
+      const response = await getCategoryname(this.moimData.categoryId)
+      this.text = this.moimData.sido + " " + this.moimData.sigungu+ " " + this.moimData.dong + " " + response.data
+      this.searchPlaces()
     },
   },
   created() {
-    this.moimid = this.$store.getters["searchStore/getSelectedMoimId"];
-    var moiminfo = Object();
-    moiminfo = this.$store.getters["searchStore/getSearchData"];
-    console.log(moiminfo);
+    this.setData(this.MoimId);    
   },
   mounted(){
     if(!window.kakao || !window.kakao.maps){
@@ -84,10 +114,13 @@ export default {
         kakao.maps.load(this.initMap);
       });
       document.head.appendChild(script);
+      
     } else{
       this.initMap();
     }
-    
+  },
+  computed:{
+    ...mapGetters("searchStore",{MoimId :'getSelectedMoimId',HostId:"getSelectedMoimHostId"}),
   }
 };
 </script>
@@ -106,13 +139,21 @@ export default {
   position: absolute;
   padding-bottom: 10px;
   height: 400px;
-  background-color: #ffffffaa;
-}
-.searchdata{
+  background-color: #ffffff73;
   flex: 1 1 auto;
   overflow-y: auto;
 }
-.place{
-  padding: 8px;
+.searchdata{
+  font-size: 10px;
+  margin: 10px;
+}
+#searchkeyword{
+  font-size: 10px;
+  width:100%
+}
+#placeset{
+  font-size: 10px;
+  padding:5px;
+  margin-left:4px; 
 }
 </style>
