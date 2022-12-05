@@ -1,7 +1,7 @@
 <template>
   <div
     align="center"
-    style="margin-top: 10px; margin-left: 20px; margin-right: 20px"
+    style="margin-top: 80px; margin-left: 20px; margin-right: 20px"
   >
     <b-row>
       <b-col>
@@ -11,7 +11,11 @@
               <b id="main-text-highlight">내 모임</b>
             </div>
           </b-col>
-          <b-col cols="auto" style="padding: 0 5px 0 5px">
+          <b-col
+            cols="auto"
+            style="padding: 0 5px 0 5px"
+            v-if="this.$cookies.get('MoimUserId')"
+          >
             <div
               @click="newmoim()"
               id="green-colored-option-button"
@@ -33,7 +37,7 @@
         </b-row>
       </b-col>
     </b-row>
-    <b-row>
+    <b-row v-if="this.$cookies.get('MoimUserId')">
       <b-col>
         <div id="list-box">
           <div
@@ -128,7 +132,10 @@
               </b-row> -->
             </div>
           </div>
-          <div id="green-colored-option-button" style="width: 150px !important">
+          <div
+            id="green-colored-option-button"
+            style="width: 150px !important; margin-top: 40px"
+          >
             <b-row>
               <b-col>
                 <span @click="prevlist()">
@@ -154,7 +161,14 @@
         </div>
       </b-col>
     </b-row>
-    <b-row style="margin-top: 80px">
+    <b-row align-h="center" v-else>
+      <b-col>
+        <div style="margin-top: 30px; margin-bottom: 500px">
+          로그인 후 이용 가능한 서비스입니다.
+        </div></b-col
+      >
+    </b-row>
+    <b-row style="margin-top: 80px" v-if="this.$cookies.get('MoimUserId')">
       <b-col>
         <b-row align-h="center">
           <b-col cols="auto" style="padding: 0 5px 0 5px">
@@ -165,7 +179,7 @@
         </b-row>
       </b-col>
     </b-row>
-    <b-row>
+    <b-row v-if="this.$cookies.get('MoimUserId')">
       <b-col>
         <div id="list-box" v-if="inviteMsgList.length > 0">
           <div v-for="(list, index) in inviteMsgList" :key="index">
@@ -225,7 +239,10 @@
               </b-row>
             </div>
           </div>
-          <div id="green-colored-option-button" style="width: 150px !important">
+          <div
+            id="green-colored-option-button"
+            style="width: 150px !important; margin-top: 40px"
+          >
             <b-row>
               <b-col>
                 <span @click="prevInviteMsgList()">
@@ -249,7 +266,120 @@
             </b-row>
           </div>
         </div>
-        <div v-else>받은 초대메세지가 없습니다.</div>
+        <div v-else style="margin-top: 50px; margin-bottom: 50px">
+          받은 초대메세지가 없습니다.
+        </div>
+      </b-col>
+    </b-row>
+    <b-row style="margin-top: 80px" v-if="this.$cookies.get('MoimUserId')">
+      <b-col>
+        <b-row align-h="center">
+          <b-col cols="auto" style="padding: 0 5px 0 5px">
+            <div id="main-text">
+              <b id="main-text-highlight"
+                >가입신청서
+                <p
+                  style="
+                    float: center;
+
+                    font-size: 10px !important;
+                  "
+                >
+                  가입신청서는 방장만 조회 가능합니다.
+                </p></b
+              >
+            </div>
+          </b-col>
+        </b-row>
+      </b-col>
+    </b-row>
+    <b-row v-if="this.$cookies.get('MoimUserId')">
+      <b-col>
+        <div id="list-box" v-if="this.joinMsgList.length > 0">
+          <div v-for="(list, index) in joinMsgList" :key="index">
+            <div
+              v-if="list !== null"
+              id="list-item"
+              style="cursor: default !important"
+              v-show="
+                index < currentJoinMsgCnt + 4 && index >= currentJoinMsgCnt
+              "
+            >
+              <b-row align-v="center">
+                <b-col cols="auto">
+                  <b-img
+                    id="listImage"
+                    :src="list.moimData.thumbnail"
+                    rounded="circle"
+                  ></b-img>
+                </b-col>
+                <b-col>
+                  <b-row id="listTitle">
+                    <b-col>
+                      <div>{{ list.moimData.title }}</div>
+                    </b-col>
+                  </b-row>
+                  <b-row id="listData">
+                    <b-col cols="auto" style="padding: 0 0 0 20px">
+                      <i class="fa-solid fa-envelope"></i>
+                    </b-col>
+                    <b-col
+                      style="
+                        width: 150px;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                        white-space: nowrap;
+                      "
+                    >
+                      {{ list.message }}
+                    </b-col>
+                  </b-row>
+                </b-col>
+                <b-col cols="auto">
+                  <div
+                    id="green-outline-option-button"
+                    style="
+                      font-size: 10px !important;
+                      cursor: pointer;
+                      align: right;
+                      margin: 20px;
+                    "
+                    v-b-modal.modal-invite-detail
+                    @click="setCurrentSelectedMsgDetail(list)"
+                  >
+                    더보기
+                  </div>
+                </b-col>
+              </b-row>
+            </div>
+          </div>
+          <div id="green-colored-option-button" style="width: 150px !important">
+            <b-row>
+              <b-col>
+                <span @click="prevJoinMsgList()">
+                  <i
+                    class="fa-solid fa-angle-left"
+                    id="recommend-type-change-button"
+                  ></i>
+                </span>
+              </b-col>
+              <b-col>
+                <div style="width: 10px"></div>
+              </b-col>
+              <b-col>
+                <span @click="nextJoinMsgList()">
+                  <i
+                    class="fa-solid fa-angle-right"
+                    id="recommend-type-change-button"
+                  ></i>
+                </span>
+              </b-col>
+            </b-row>
+          </div>
+        </div>
+        <div v-else style="margin-top: 50px; margin-bottom: 50px">
+          받은 가입신청서가 없습니다.
+        </div>
       </b-col>
     </b-row>
     <b-modal
@@ -273,7 +403,18 @@
         </b-row>
         <b-row style="margin: 5px">
           <b-col cols="auto" style="padding: 0 0 0 15px">
-            <div style="width: 60px">모임장</div>
+            <div
+              style="width: 60px"
+              v-if="this.currentSelectedMsgDetail.type == 'INVITE'"
+            >
+              모임장
+            </div>
+            <div
+              style="width: 60px"
+              v-if="this.currentSelectedMsgDetail.type == 'JOIN'"
+            >
+              신청인
+            </div>
           </b-col>
           <b-col cols="auto" style="padding: 0">
             <div>:</div>
@@ -373,6 +514,13 @@ export default {
       if (this.currentInviteMsgCnt + 4 < this.inviteMsgCnt)
         this.currentInviteMsgCnt += 4;
     },
+    prevJoinMsgList() {
+      if (this.currentJoinMsgCnt >= 4) this.currentJoinMsgCnt -= 4;
+    },
+    nextJoinMsgList() {
+      if (this.currentJoinMsgCnt + 4 < this.joinMsgCnt)
+        this.currentJoinMsgCnt += 4;
+    },
     callMoim(index) {
       this.$store.commit(
         "searchStore/setSelectedMoimId",
@@ -429,11 +577,21 @@ export default {
     },
     async acceptInvite() {
       console.log("invite!");
-      let accept = await MessageAccept(
-        this.currentSelectedMsgDetail.id,
-        this.currentSelectedMsgDetail.moimId,
-        this.currentSelectedMsgDetail.toId
-      );
+      let accept;
+      if (this.currentSelectedMsgDetail.type == "INVITE") {
+        accept = await MessageAccept(
+          this.currentSelectedMsgDetail.id,
+          this.currentSelectedMsgDetail.moimId,
+          this.currentSelectedMsgDetail.toId
+        );
+      } else if (this.currentSelectedMsgDetail.type == "JOIN") {
+        accept = await MessageAccept(
+          this.currentSelectedMsgDetail.id,
+          this.currentSelectedMsgDetail.moimId,
+          this.currentSelectedMsgDetail.fromId
+        );
+      }
+
       this.$bvModal.hide("modal-invite-detail");
       this.setMyMoimList();
       this.setAllMessages();
@@ -441,11 +599,20 @@ export default {
     },
     async rejectInvite() {
       console.log("reject!");
-      let reject = await MessageReject(
-        this.currentSelectedMsgDetail.id,
-        this.currentSelectedMsgDetail.moimId,
-        this.currentSelectedMsgDetail.toId
-      );
+      let reject;
+      if (this.currentSelectedMsgDetail.type == "INVITE") {
+        reject = await MessageReject(
+          this.currentSelectedMsgDetail.id,
+          this.currentSelectedMsgDetail.moimId,
+          this.currentSelectedMsgDetail.toId
+        );
+      } else if (this.currentSelectedMsgDetail.type == "JOIN") {
+        reject = await MessageReject(
+          this.currentSelectedMsgDetail.id,
+          this.currentSelectedMsgDetail.moimId,
+          this.currentSelectedMsgDetail.fromId
+        );
+      }
       this.$bvModal.hide("modal-invite-detail");
       this.setMyMoimList();
       this.setAllMessages();
@@ -474,11 +641,17 @@ export default {
           this.inviteMsgList.push(inviteMessage);
           this.inviteMsgCnt += 1;
         } else if (allMessage.data[i].type == "JOIN") {
-          this.joinMsgList.push(allMessage.data[i]);
+          let joinMoimData = await MoimDetail(allMessage.data[i].moimId);
+          console.log(joinMoimData);
+          var joinMessage = allMessage.data[i];
+          joinMessage.moimData = joinMoimData.data;
+          this.joinMsgList.push(joinMessage);
           this.joinMsgCnt += 1;
         }
       }
       console.log(this.inviteMsgList);
+      console.log(this.joinMsgList);
+      console.log(this.joinMsgList.length);
     },
   },
   async created() {

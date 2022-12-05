@@ -99,7 +99,11 @@
       <div id="title">분석 리스트</div>
     </div> -->
     </div>
-    <b-button pill align="center" id="green-colored-option-button" @click="showJoinModal()"
+    <b-button
+      pill
+      align="center"
+      id="green-colored-option-button"
+      @click="showJoinModal()"
       >가입 신청</b-button
     >
     <b-modal id="moimFreeJoinModal" size="sm" hide-footer hide-header centered>
@@ -111,7 +115,11 @@
         <h6>해당 모임에 가입하시겠습니까?</h6>
       </div>
       <div class="d-block text-center" style="margin-bottom: 20px">
-        <b-button pill align="center" id="green-colored-option-button" @click="joinMoim()"
+        <b-button
+          pill
+          align="center"
+          id="green-colored-option-button"
+          @click="joinMoim()"
           >가입하기</b-button
         >
       </div>
@@ -130,7 +138,11 @@
         ></b-form-textarea>
       </div>
       <div class="d-block text-center" style="margin-bottom: 20px">
-        <b-button pill align="center" id="green-colored-option-button" @click="joinMoim()"
+        <b-button
+          pill
+          align="center"
+          id="green-colored-option-button"
+          @click="joinMoim()"
           >신청서 제출</b-button
         >
       </div>
@@ -179,18 +191,17 @@ export default {
       var isJoinAble = await this.checkNotJoinedMoim(this.moimData.id);
       console.log(isJoinAble);
       if (isJoinAble) {
-        let joinRequest;
+        // let joinRequest;
         if (this.moimData.isFreeEnter === "Y") {
           //자유가입api
-          joinRequest = await JoinFreeMoim(
+          await JoinFreeMoim(
             this.moimData.id,
             this.$cookies.get("MoimUserId")
           );
-          if (joinRequest.status === 200) {
-            alert(
-              "'" + this.moimData.title + "'" + "모임 가입이 완료되었습니다."
-            );
-          }
+
+          alert(
+            "'" + this.moimData.title + "'" + "모임 가입이 완료되었습니다."
+          );
         } else {
           //승인가입api
           await JoinPassMoim(
@@ -198,14 +209,9 @@ export default {
             this.$cookies.get("MoimUserId"),
             this.moimApplyMessage
           );
-          if (joinRequest.status === 200) {
-            alert(
-              "'" +
-                this.moimData.title +
-                "'" +
-                "모임 가입 신청이 접수되었습니다."
-            );
-          }
+          alert(
+            "'" + this.moimData.title + "'" + "모임 가입 신청이 접수되었습니다."
+          );
         }
         this.$router.push("/mymoim");
       } else {
