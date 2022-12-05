@@ -6,13 +6,12 @@
     <div class="map-area">
       <div class="searchbox" align="left" >
         <b-form-input v-model="text" id="searchkeyword" placeholder="장소" @keyup.enter="searchPlaces()"></b-form-input>
+        <div v-if="!search.data.length" style="font-size:10px">데이터가 존재하지 않습니다.</div>
         <div class="searchdata" v-for="rs in search.data" :key="rs.id" @click="move(rs)">
           <div class="place">
             <hr/>
-            <row>
-              <col><a @click="history(rs)" :href="rs.place_url" target="_black"><b>{{rs.place_name}}</b></a>
-              <b-button variant="success" id="placeset">장소</b-button>
-            </row>
+              <a @click="history(rs)" :href="rs.place_url" target="_black"><b>{{rs.place_name}}</b></a>
+              <b-button variant="success" id="placeset" @click="placeAdd(rs)">추가</b-button>
             <div style="color:green;">{{rs.phone}}</div>
             <div class="searchaddress">{{rs.address_name}}</div>
           </div>
@@ -21,18 +20,24 @@
       <div id="map">map</div>
     </div>
     <div>장소 리스트</div>
+    <div v-for="(item,index) in moimlist.data" :key="index">
+      <a :href="kakaourl+item.addressId" target="_black"> <b>{{item.placeName}}</b></a>
+      <b-button variant="danger" id="placeset" @click="placeRemove(item.id)">삭제</b-button>
+    </div>    
   </div>
 </template>
 
 <script>
-import { historySet } from '@/services/place'
+import { historySet,MoimplaceSet,MoimplaceGet,MoimplaceRemove } from '@/services/place'
 import { mapGetters } from "vuex";
 import { MoimDetail } from "@/services/moim";
 import { getCategoryname } from "@/services/category";
 
 export default {
+  props:['Scheduleid'],
   data() {
     return {
+      kakaourl:"https://map.kakao.com/link/map/",
       map:null,
       ps:null,
       infowinodw:null,
@@ -45,6 +50,7 @@ export default {
         pgn : null,
         data : [],
       },
+      moimlist : [],
     };
   },
   methods: {
@@ -101,9 +107,35 @@ export default {
       this.text = this.moimData.sido + " " + this.moimData.sigungu+ " " + this.moimData.dong + " " + response.data
       this.searchPlaces()
     },
+  async placeAdd(place){
+      const response = await MoimplaceSet(this.MoimId,this.Scheduleid,place);
+      if(response.status==200){
+        this.$bvToast.toast('모임 장소가 추가 되었습니다.', {
+        // title: "회원 정보 등록 실패",
+        toaster: "b-toaster-top-right",
+        appendToast: false,
+        autoHideDelay: 3000,
+        });
+      }
+    },
+  async MoimplaceList(){
+    const response = await MoimplaceGet(this.MoimId,this.Scheduleid);
+    this.moimlist = response;
+  },
+  async placeRemove(id){
+    const response = await MoimplaceRemove(id);
+    if(response.status==200){
+        this.$bvToast.toast('모임 장소가 삭제 되었습니다.', {
+        // title: "회원 정보 등록 실패",
+        toaster: "b-toaster-top-right",
+        appendToast: false,
+        autoHideDelay: 3000,
+        });
+      }
+  }  
   },
   created() {
-    this.setData(this.MoimId);    
+    this.setData(this.MoimId);
   },
   mounted(){
     if(!window.kakao || !window.kakao.maps){
@@ -118,6 +150,7 @@ export default {
     } else{
       this.initMap();
     }
+    this.MoimplaceList();
   },
   computed:{
     ...mapGetters("searchStore",{MoimId :'getSelectedMoimId',HostId:"getSelectedMoimHostId"}),
@@ -138,7 +171,7 @@ export default {
   z-index:10000;
   position: absolute;
   padding-bottom: 10px;
-  height: 400px;
+  height: 300px;
   background-color: #ffffff73;
   flex: 1 1 auto;
   overflow-y: auto;
