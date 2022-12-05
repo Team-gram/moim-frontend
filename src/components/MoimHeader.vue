@@ -27,13 +27,20 @@
               >
                 <template #button-content
                   ><img
-                    v-if="!islogin || userProfile == undefined || userProfile == null || userProfile == ''"
+                    v-if="
+                      !islogin ||
+                      userProfile == undefined ||
+                      userProfile == null ||
+                      userProfile == ''
+                    "
                     src="../assets/default-profile.png"
                     width="40"
-                  /><b-img v-else 
-                  :src='`${userProfile}`'
-                  rounded="circle"
-                  width="40"/>
+                  /><b-img
+                    v-else
+                    :src="`${userProfile}`"
+                    rounded="circle"
+                    width="40"
+                  />
                 </template>
                 <b-dropdown-item
                   v-if="!islogin"
@@ -86,21 +93,40 @@ export default {
       islogin: false,
       userProfile: null,
       userInfo: null,
-      userInfoTest: {profileImage:"http://k.kakaocdn.net/dn/d7dp4q/btrQ1JslRdP/E9yZpopocyQjHIMnmSG1B1/img_640x640.jpg"}
+      userInfoTest: {
+        profileImage:
+          "http://k.kakaocdn.net/dn/d7dp4q/btrQ1JslRdP/E9yZpopocyQjHIMnmSG1B1/img_640x640.jpg",
+      },
     };
   },
   methods: {
     home() {
-      this.$router.push("/");
+      this.$router.push("/").catch((error) => {
+        if (error.name === "NavigationDuplicated") {
+          location.reload();
+        }
+      });
     },
     mymoim() {
-      this.$router.push("/mymoim");
+      this.$router.push("/mymoim").catch((error) => {
+        if (error.name === "NavigationDuplicated") {
+          location.reload();
+        }
+      });
     },
     calender() {
-      this.$router.push("/calendar");
+      this.$router.push("/calendar").catch((error) => {
+        if (error.name === "NavigationDuplicated") {
+          location.reload();
+        }
+      });
     },
     settle() {
-      this.$router.push("/setting");
+      this.$router.push("/setting").catch((error) => {
+        if (error.name === "NavigationDuplicated") {
+          location.reload();
+        }
+      });
     },
     async kakaoLogin() {
       let login = await getLogin();
@@ -127,13 +153,15 @@ export default {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
     if (this.$cookies.get("MoimUserId") != undefined) {
-
       this.userID = "로그아웃";
       this.islogin = true;
       this.logintext = "로그아웃";
 
       // 로그인되어 있는 경우
-      await this.$store.dispatch("UpdateUserInfo", this.$cookies.get("MoimUserId"));
+      await this.$store.dispatch(
+        "UpdateUserInfo",
+        this.$cookies.get("MoimUserId")
+      );
       this.userinfo = this.$store.getters.getUserData;
       this.userProfile = this.userinfo.profileImage;
     }

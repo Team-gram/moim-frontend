@@ -95,20 +95,23 @@ export default {
 #optionBox {
   border-radius: 20px !important;
   border: 0px solid;
-  background-color: #f3f3f3 !important;
+  box-shadow: 0px 0px 5px #ccc;
+  background-color: #ffffff;
   float: center;
-  max-width: 1000px;
+  max-width: 700px;
   padding: 20px 20px 20px 20px;
   margin: 10px 0 10px 0;
+  font-family: "NanumBarunGothic";
 }
 #optionItem {
   cursor: pointer;
   border-radius: 20px !important;
-  border: 0px solid;
+  border: 1px solid #d9d9d9;
   background-color: #ffffff;
   float: center;
   width: max-content !important;
   padding: 5px 20px 5px 20px;
   margin: 5px 10px 5px 10px;
+  font-family: "NanumBarunGothic";
 }
 </style>
