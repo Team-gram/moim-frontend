@@ -15,9 +15,36 @@ export function historySet(data,text) {
   })
 }
 export function recommendplace(sido,sigungu) {
-  console.log(encodeURI(encodeURIComponent(sido)))
   return request({
-    url: "/place/recommend/"+ encodeURI(encodeURIComponent(sido)) +"/" + encodeURI(encodeURIComponent(sigungu)),
+    url: "/place/recommend/?sido="+sido +"&sigungu=" +sigungu,
     method: "get",
+  })
+}
+export function MoimplaceSet(MoimId,Scheduleid,place) {
+  let text = String(place.road_address_name).split(" ");
+  return request({
+    url: "/place",
+    method: "post",
+    data: {
+      "moimId": MoimId,
+      "scheduleId": Scheduleid,
+      "addressId": place.id,
+      "placeName" : place.place_name,
+      "sido": text[0],
+      "sigungu": text[1],
+      "dong": text[2]
+    }
+  })
+}
+export function MoimplaceGet(MoimId,Scheduleid) {
+  return request({
+    url: "/place/"+MoimId+"/"+Scheduleid,
+    method: "get",
+  })
+}
+export function MoimplaceRemove(placeId) {
+  return request({
+    url: "/place/" + placeId,
+    method: "delete",
   })
 }

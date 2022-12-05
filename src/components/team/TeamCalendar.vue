@@ -91,7 +91,7 @@
             cols="auto"
             style="cursor: pointer"
             :class="{ menuselect: memuindex == 0 }"
-            @click="memuindex = 0"
+            @click="memuindex = (memuindex!=0)? 0 : -1"
             ><div>정보</div></b-col
           >
           <b-col
@@ -99,7 +99,7 @@
             cols="auto"
             style="cursor: pointer"
             :class="{ menuselect: memuindex == 1 }"
-            @click="memuindex = 1"
+            @click="memuindex = (memuindex!=1)? 1 : -1"
             ><div>참여인원</div></b-col
           >
           <b-col
@@ -107,7 +107,7 @@
             cols="auto"
             style="cursor: pointer"
             :class="{ menuselect: memuindex == 2 }"
-            @click="memuindex = 2"
+            @click="memuindex = (memuindex!=2)? 2 : -1"
             ><div>준비물</div></b-col
           >
           <b-col
@@ -115,7 +115,7 @@
             cols="auto"
             style="cursor: pointer"
             :class="{ menuselect: memuindex == 3 }"
-            @click="memuindex = 3"
+            @click="memuindex = (memuindex!=3)? 3 : -1"
             ><div>장소</div></b-col
           >
         </b-row>
@@ -207,7 +207,7 @@
           </b-row>
         </div>
         <div v-if="memuindex == 3">  <!-- 장소 -->
-
+          <PlaceSearch :Scheduleid="currentSelectedSchedule.kalendar_id"></PlaceSearch>
         </div>
       </template>
       <template #modal-footer="{ hide }">
@@ -268,11 +268,13 @@ import {
   newMoimRef,
 } from "@/services/moim";
 import Kalendar from "@/lib-components/kalendar-container.vue";
+import PlaceSearch from "@/components/team/setting/PlaceSearch.vue"
 import moment from "moment";
 export default {
   name: "TeamCalendar",
   components: {
     Kalendar,
+    PlaceSearch
   },
   data() {
     return {
@@ -282,7 +284,6 @@ export default {
       userid: null,
       moimid: "",
       moimhostid: "",
-      colorlist: ["red", "white", "gray", "blue"],
       startKalendar: 0,
       events: [],
       calendar_settings: {
@@ -355,9 +356,6 @@ export default {
       this.events.push(calen);
     },
     async addAppointment(popup_info) {
-      const IDcolor = document.getElementById("creating-event");
-      IDcolor.style.backgroundColor =
-        this.colorlist[Math.floor(Math.random() * 4)];
       let payload = {
         data: {
           title: this.new_appointment.title,
@@ -476,6 +474,7 @@ export default {
       }
     },
     startitem(kalendarEvent) {
+      this.memuindex=0;
       this.currentSelectedSchedule = kalendarEvent;
       this.updateRef();
       this.$bvModal.show("modal-scrollable");
