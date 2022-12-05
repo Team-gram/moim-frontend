@@ -91,7 +91,7 @@
             cols="auto"
             style="cursor: pointer"
             :class="{ menuselect: memuindex == 0 }"
-            @click="memuindex = (memuindex!=0)? 0 : -1"
+            @click="memuindex = 0"
             ><div>정보</div></b-col
           >
           <b-col
@@ -99,7 +99,7 @@
             cols="auto"
             style="cursor: pointer"
             :class="{ menuselect: memuindex == 1 }"
-            @click="memuindex = (memuindex!=1)? 1 : -1"
+            @click="memuindex = 1"
             ><div>참여인원</div></b-col
           >
           <b-col
@@ -107,7 +107,7 @@
             cols="auto"
             style="cursor: pointer"
             :class="{ menuselect: memuindex == 2 }"
-            @click="memuindex = (memuindex!=2)? 2 : -1"
+            @click="memuindex = 2"
             ><div>준비물</div></b-col
           >
           <b-col
@@ -115,11 +115,19 @@
             cols="auto"
             style="cursor: pointer"
             :class="{ menuselect: memuindex == 3 }"
-            @click="memuindex = (memuindex!=3)? 3 : -1"
+            @click="memuindex = 3"
             ><div>장소</div></b-col
           >
         </b-row>
-        <div v-if="memuindex == 0">  <!-- 정보 -->
+        <div v-if="memuindex == 0" style="padding: 20px">
+          <!-- 정보 -->
+          <b-row>
+                <b-col cols="auto">
+                  <div id="main-text">
+                    <b id="main-text-highlight">일정 상세 정보</b>
+                  </div>
+                </b-col>
+              </b-row>
           <b-row>
             <b-col v-if="this.currentSelectedSchedule">
               제목: {{ this.currentSelectedSchedule.data.title }}
@@ -127,9 +135,9 @@
           </b-row>
           <b-row>
             <b-col v-if="this.currentSelectedSchedule">
-              일시: {{ this.currentSelectedSchedule.start_time }}-{{
-                this.currentSelectedSchedule.end_time
-              }}
+              일시: {{ this.currentSelectedSchedule.start_time.split("T")[0] }}
+              {{ this.currentSelectedSchedule.start_time.substr(11, 5) }} -
+              {{ this.currentSelectedSchedule.end_time.substr(11, 5) }}
             </b-col>
           </b-row>
           <b-row>
@@ -138,18 +146,167 @@
             </b-col>
           </b-row>
         </div>
-        <div v-if="memuindex == 1">  <!-- 모임원 -->
-
-        </div>
-        <div v-if="memuindex == 2">  <!-- 준비물 -->
+        <div v-if="memuindex == 1" style="padding: 20px">
+          <!-- 모임원 -->
           <b-row>
             <b-col>
               <b-row>
-                <b-col cols="auto"> 준비물 목록 </b-col>
+                <b-col cols="auto">
+                  <div id="main-text">
+                    <b id="main-text-highlight">참여 인원 리스트</b>
+                  </div>
+                </b-col>
+              </b-row>
+              <b-row>
+                <b-col v-if="attendMembers.length > 0">
+                  <div id="list-box">
+                    <div
+                      id="list-item"
+                      style="
+                        height: 50px !important;
+                        cursor: default !important;
+                      "
+                      v-for="member in attendMembers"
+                      :key="member.id"
+                    >
+                      <b-row align-v="center" style="padding: 5px">
+                        <b-col>
+                          <b-row align-h="between">
+                            <b-col cols="auto">
+                              <b-row>
+                                <b-col cols="auto">
+                                  <img
+                                    v-if="
+                                      member.profileImage == undefined ||
+                                      member.profileImage == null ||
+                                      member.profileImage == ''
+                                    "
+                                    src="@/assets/default-profile.png"
+                                    width="40"
+                                    height="40"
+                                  /><b-img
+                                    v-else
+                                    :src="`${member.profileImage}`"
+                                    rounded="circle"
+                                    width="40"
+                                    height="40"
+                                  />
+                                </b-col>
+                                <b-col style="margin: 5px 0 5px 0">
+                                  <b-row id="listTitle">
+                                    <b-col cols="auto">
+                                      <div>{{ member.name }}</div>
+                                    </b-col>
+                                  </b-row>
+                                </b-col>
+                              </b-row>
+                            </b-col>
+                            <b-col cols="auto">
+                              <div v-if="userid == member.id">
+                                <b-button-group size="sm">
+                                  <div
+                                    @click="toggleAttendState(true)"
+                                    :style="{
+                                      backgroundColor: attendToggle
+                                        ? '#4fb26f'
+                                        : '#aaaaaa',
+                                    }"
+                                    style="
+                                      cursor: pointer;
+                                      border: 0px solid;
+                                      color: #ffffff;
+                                      font-size: 10px !important;
+                                      font-family: 'NanumBarunGothic';
+                                      padding: 5px 10px 5px 10px;
+                                      width: fit-content;
+                                      border-top-left-radius: 20px;
+                                      border-bottom-left-radius: 20px;
+                                      margin: 10px 0 10px 10px;
+                                    "
+                                  >
+                                    참여
+                                  </div>
+                                  <div
+                                    @click="toggleAttendState(false)"
+                                    :style="{
+                                      backgroundColor: attendToggle
+                                        ? '#aaaaaa'
+                                        : 'red',
+                                    }"
+                                    style="
+                                      cursor: pointer;
+                                      border: 0px solid;
+                                      color: #ffffff;
+                                      font-size: 10px !important;
+                                      font-family: 'NanumBarunGothic';
+                                      padding: 5px 10px 5px 10px;
+                                      width: fit-content;
+                                      border-top-right-radius: 20px;
+                                      border-bottom-right-radius: 20px;
+                                      margin: 10px 10px 10px 0;
+                                    "
+                                  >
+                                    불참
+                                  </div>
+                                </b-button-group>
+                              </div>
+                              <div
+                                id="green-colored-option-button"
+                                style="
+                                  font-size: 10px !important;
+                                  align: right;
+                                  margin: 10px;
+                                "
+                                v-if="
+                                  userid != member.id && member.attend == true
+                                "
+                              >
+                                참석
+                              </div>
+                              <div
+                                id="green-colored-option-button"
+                                style="
+                                  font-size: 10px !important;
+                                  align: right;
+                                  margin: 10px;
+                                  background-color: red !important;
+                                "
+                                v-if="
+                                  userid != member.id && member.attend == false
+                                "
+                              >
+                                불참
+                              </div>
+                            </b-col>
+                          </b-row>
+                        </b-col>
+                      </b-row>
+                    </div>
+                  </div>
+                </b-col>
+                <b-col v-else>
+                  <div>등록된 준비물이 없습니다.</div>
+                </b-col>
+              </b-row>
+            </b-col>
+          </b-row>
+        </div>
+        <div v-if="memuindex == 2" style="padding: 20px">
+          <!-- 준비물 -->
+          <b-row>
+            <b-col>
+              <b-row>
+                <b-col cols="auto"> <b-row>
+                <b-col cols="auto">
+                  <div id="main-text">
+                    <b id="main-text-highlight">준비물 목록</b>
+                  </div>
+                </b-col>
+              </b-row> </b-col>
                 <b-col cols="auto">
                   <div
                     id="green-colored-option-button"
-                    style="cursor: pointer; height: 30px !important"
+                    style="cursor: pointer; height: 30px ; margin-top: 15px"
                     @click="[openNewRefModal(), closeDetailModal()]"
                   >
                     새 준비물 추가하기
@@ -163,7 +320,7 @@
                     v-for="prep in preparations"
                     :key="prep.id"
                   >
-                    <b-row>
+                    <b-row style="padding: 10px">
                       <b-col cols="auto">
                         <b-form-checkbox
                           name="checkbox-1"
@@ -206,7 +363,10 @@
             </b-col>
           </b-row>
         </div>
-        <div v-if="memuindex == 3">  <!-- 장소 -->
+        <div v-if="memuindex == 3" style="padding: 20px">
+          <div id="main-text">
+                    <b id="main-text-highlight">모임 장소 정하기</b>
+                  </div>
           <PlaceSearch :Scheduleid="currentSelectedSchedule.kalendar_id"></PlaceSearch>
         </div>
       </template>
@@ -230,17 +390,17 @@
       hide-footer
     >
       <b-row>
-        <b-col>
+        <b-col cols="4">
           <p class="my-4">준비물 이름</p>
         </b-col>
-        <b-col>
+        <b-col cols="8" style="padding-top: 15px !important">
           <b-form-input
             v-model="newPerpText"
             placeholder="준비물 이름을 입력하세요"
           ></b-form-input>
         </b-col>
       </b-row>
-      <b-row>
+      <b-row align="center">
         <b-col>
           <div
             id="green-colored-option-button"
@@ -260,21 +420,26 @@ import {
   regularMoimSet,
   regularMoimRemove,
 } from "@/services/teamcalendar";
+import { getUserinfo } from "@/services/login.js";
 import { AllMeet } from "@/services/meet";
 import {
   getMoimRef,
   takeMoimRef,
   deleteMoimRef,
   newMoimRef,
+  getMoimMember,
+  getMeetMembers,
+  joinMeet,
+  getOutMeet,
 } from "@/services/moim";
 import Kalendar from "@/lib-components/kalendar-container.vue";
-import PlaceSearch from "@/components/team/setting/PlaceSearch.vue"
 import moment from "moment";
+import PlaceSearch from "@/components/team/setting/PlaceSearch.vue"
 export default {
   name: "TeamCalendar",
   components: {
     Kalendar,
-    PlaceSearch
+    PlaceSearch,
   },
   data() {
     return {
@@ -284,6 +449,7 @@ export default {
       userid: null,
       moimid: "",
       moimhostid: "",
+      colorlist: ["red", "white", "gray", "blue"],
       startKalendar: 0,
       events: [],
       calendar_settings: {
@@ -306,6 +472,7 @@ export default {
       preparations: [],
       newPerpText: "",
       attendMembers: [],
+      attendToggle: false,
     };
   },
   async created() {
@@ -314,9 +481,70 @@ export default {
     this.moimhostid = this.$store.getters["searchStore/getSelectedMoimHostId"];
     this.setScreen();
     this.startKalendar = await this.regularGet(this.moimid);
+    this.getMeetMemberList(this.moimid);
   },
   mounted() {},
   methods: {
+    async getMeetMemberList(moimId) {
+      this.attendMembers = [];
+      let moimMemberList = await getMoimMember(moimId);
+      this.$emit("memberCount", moimMemberList.data.length);
+      for (var i = 0; i < moimMemberList.data.length; i++) {
+        var userId = moimMemberList.data[i].userId;
+        let userDetail = await getUserinfo(userId);
+        if (this.$cookies.get("MoimUserId") == userDetail.data.id) {
+          this.attendMembers.unshift(userDetail.data);
+        } else {
+          this.attendMembers.push(userDetail.data);
+        }
+      }
+
+      console.log(this.attendMembers);
+    },
+    async setMeetMemberStatus() {
+      let meetMemberList = await getMeetMembers(
+        this.moimid,
+        this.currentSelectedSchedule.kalendar_id
+      );
+      console.log(meetMemberList.data);
+      for (var i = 0; i < this.attendMembers.length; i++) {
+        var attend = false;
+        for (var j = 0; j < meetMemberList.data.length; j++) {
+          if (meetMemberList.data[j].userId == this.attendMembers[i].id) {
+            attend = true;
+          }
+        }
+        if (attend == true) {
+          this.attendMembers[i].attend = true;
+        } else {
+          this.attendMembers[i].attend = false;
+        }
+      }
+      this.attendToggle = this.attendMembers[0].attend;
+      console.log(this.attendMembers);
+    },
+    async toggleAttendState(state) {
+      if (this.attendMembers[0].attend != state) {
+        if (state) {
+          console.log("참여");
+          await joinMeet(
+            this.moimid,
+            this.currentSelectedSchedule.kalendar_id,
+            this.userid
+          );
+        } else {
+          console.log("불참");
+          await getOutMeet(
+            this.moimid,
+            this.currentSelectedSchedule.kalendar_id,
+            this.userid
+          );
+        }
+        // this.getMeetMemberList(this.moimid);
+        await this.setMeetMemberStatus();
+        this.attendToggle = this.attendMembers[0].attend;
+      }
+    },
     setScreen() {
       // let hide = [0,1,2,3];
       // if(this.$store.state.width<250){
@@ -356,6 +584,9 @@ export default {
       this.events.push(calen);
     },
     async addAppointment(popup_info) {
+      const IDcolor = document.getElementById("creating-event");
+      IDcolor.style.backgroundColor =
+        this.colorlist[Math.floor(Math.random() * 4)];
       let payload = {
         data: {
           title: this.new_appointment.title,
@@ -474,9 +705,9 @@ export default {
       }
     },
     startitem(kalendarEvent) {
-      this.memuindex=0;
       this.currentSelectedSchedule = kalendarEvent;
       this.updateRef();
+      this.setMeetMemberStatus();
       this.$bvModal.show("modal-scrollable");
     },
     async togglePrepItem(prepId) {
@@ -552,6 +783,7 @@ export default {
         });
       }
     },
+    async setJoinMember() {},
   },
 };
 </script>
