@@ -179,3 +179,15 @@ export function getMeetMembers(moimId, moimScheduleId) {
     }
   })
 }
+
+export function LeaveMoim(moimId, userId) {
+  return request({
+    url: "/moim/leave",
+    method: "delete",
+    data: {
+      moimId: moimId,
+      userId: userId,
+    }
+  })
+
+}
