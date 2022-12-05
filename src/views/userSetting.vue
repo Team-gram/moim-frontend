@@ -11,8 +11,8 @@
       </b-col>
     </b-row>
     <div v-if="this.$cookies.get('MoimUserId')">
-      <div id="listBox">
-        <b-row id="listTitle" align-v="center">
+      <div id="list-item">
+        <b-row id="listTitle" align-v="center" style="padding: 25px">
           <b-col cols="auto" style="padding: 0 0 0 15px">
             <b-img id="listIcon" :src="require('@/assets/settle.png')"></b-img>
           </b-col>
@@ -21,8 +21,8 @@
           </b-col>
         </b-row>
       </div>
-      <div id="listBox">
-        <b-row id="listTitle" align-v="center">
+      <div id="list-item">
+        <b-row id="listTitle" align-v="center"  style="padding: 25px">
           <b-col cols="auto" style="padding: 0 0 0 15px">
             <b-img
               id="listIcon"
