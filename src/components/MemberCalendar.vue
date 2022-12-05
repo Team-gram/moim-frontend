@@ -66,13 +66,13 @@ export default {
 		return {
 			startKalendar:0,
 			currentSelectedSchedule:0,
-			mintime:0,
+			mintime:24,
 			maxtime:0,
       events:[
       ],
 			calendar_settings: {
 				view_type: 'week',
-				cell_height: 10,
+				cell_height: 5,
 				scrollToNow: false,
 				hourlySelection: false,
 				start_day: new Date().toISOString(),
@@ -123,7 +123,7 @@ export default {
       }
 			const startnum = Number(item.startTime.slice(0,2))-1;
 			const endnum = Number(item.endTime.slice(0,2))+1;
-			this.mintime = this.mintime < startnum ? startnum : this.mintime;
+			this.mintime = this.mintime > startnum ? startnum : this.mintime;
 			this.maxtime = this.maxtime > endnum ? this.maxtime : endnum;
 		},
 	},

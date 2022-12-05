@@ -203,7 +203,7 @@ export default {
       events: [],
       calendar_settings: {
         view_type: "week",
-        cell_height: 7,
+        cell_height: 5,
         scrollToNow: false,
         hourlySelection: false,
         start_day: new Date().toISOString(),
