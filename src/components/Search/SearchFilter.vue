@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      style="float: center; max-width: 1000px; height: 30px"
+      style="float: center; max-width: 700px; height: 30px"
       v-if="showFilter == false"
     >
       <div
@@ -20,7 +20,7 @@
     <div
       id="default-item"
       style="
-        max-width: 1000px;
+        max-width: 700px;
         padding: 20px 20px 20px 20px;
         margin: 10px 0 10px 0;
       "
@@ -189,7 +189,7 @@ export default {
   margin: 10px 10px 20px 0;
 }
 #optionBox {
-  max-width: 1000px;
+  max-width: 700px;
   padding: 20px 20px 20px 20px;
   margin: 10px 0 10px 0;
 }
