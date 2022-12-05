@@ -1,13 +1,21 @@
 <template>
   <div id="Calendar" style="margin-top: 0px">
-    <div style="margin-top: 3px" v-if="isAllbutton==0 && startKalendar==1 &&events.length==0 && moimhostid==userid">
+    <div
+      style="margin-top: 3px"
+      v-if="
+        isAllbutton == 0 &&
+        startKalendar == 1 &&
+        events.length == 0 &&
+        moimhostid == userid
+      "
+    >
       참여자 일정에서 새 모임일정을 만들 수 있습니다.
     </div>
     <b-button
       @click="[(startKalendar = 0), MoimAllCall()]"
       variant="outline-success"
       style="margin: 0 0 10px 80%"
-      >{{Allbutton}}</b-button
+      >{{ Allbutton }}</b-button
     >
     <kalendar
       v-if="startKalendar > 0"
@@ -18,7 +26,7 @@
         slot="created-card"
         slot-scope="{ event_information }"
         class="details-card"
-        @click="[isAllbutton==0 ? startitem(event_information) : Message(0)]"
+        @click="[isAllbutton == 0 ? startitem(event_information) : Message(0)]"
       >
         <h5 class="appointment-title appfont">
           {{ event_information.data.title }}
@@ -77,102 +85,172 @@
       </template>
 
       <template>
-        <b-row>
-          <b-col v-if="this.currentSelectedSchedule">
-            제목: {{ this.currentSelectedSchedule.data.title }}
-          </b-col>
+        <b-row align-v="center" align-h="center">
+          <b-col
+            id="teammenu"
+            cols="auto"
+            style="cursor: pointer"
+            :class="{ menuselect: memuindex == 0 }"
+            @click="memuindex = 0"
+            ><div>정보</div></b-col
+          >
+          <b-col
+            id="teammenu"
+            cols="auto"
+            style="cursor: pointer"
+            :class="{ menuselect: memuindex == 1 }"
+            @click="memuindex = 1"
+            ><div>참여인원</div></b-col
+          >
+          <b-col
+            id="teammenu"
+            cols="auto"
+            style="cursor: pointer"
+            :class="{ menuselect: memuindex == 2 }"
+            @click="memuindex = 2"
+            ><div>준비물</div></b-col
+          >
+          <b-col
+            id="teammenu"
+            cols="auto"
+            style="cursor: pointer"
+            :class="{ menuselect: memuindex == 3 }"
+            @click="memuindex = 3"
+            ><div>장소</div></b-col
+          >
         </b-row>
-        <b-row>
-          <b-col v-if="this.currentSelectedSchedule">
-            일시: {{ this.currentSelectedSchedule.start_time }}-{{
-              this.currentSelectedSchedule.end_time
-            }}
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col v-if="this.currentSelectedSchedule">
-            상세 내용: {{ this.currentSelectedSchedule.data.description }}
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col>
-            <b-row>
-              <b-col cols="auto"> 준비물 목록 </b-col>
-              <b-col cols="auto">
-                <div
-                  id="green-colored-option-button"
-                  style="cursor: pointer; height: 30px !important"
-                  @click="[openNewRefModal(), closeDetailModal()]"
-                >
-                  새 준비물 추가하기
-                </div>
-              </b-col>
-            </b-row>
-            <b-row>
-              <b-col v-if="preparations.length > 0">
-                <div
-                  id="moim-prep-item"
-                  v-for="prep in preparations"
-                  :key="prep.id"
-                >
-                  <b-row>
-                    <b-col cols="auto">
-                      <b-form-checkbox
-                        name="checkbox-1"
-                        @change="togglePrepItem(prep.id)"
-                        v-model="prep.status"
-                        value="Y"
-                        unchecked-value="N"
-                      ></b-form-checkbox>
-                    </b-col>
-                    <b-col
-                      v-if="prep.status === 'Y'"
-                      cols="auto"
-                      style="text-decoration: line-through"
-                    >
-                      {{ prep.name }}
-                    </b-col>
-                    <b-col v-else cols="auto"> {{ prep.name }} </b-col>
-                    <b-col cols="auto" v-if="prep.status==='Y'"> 
-                      <div id="gray-colored-option-button" style="height: 20px !important; font-size: 8px">{{ prep.userName }} </div></b-col>
-                    <b-col cols="auto"
-                      ><div
-                        style="cursor: pointer"
-                        @click="deletePrep(prep.id)"
+        <div v-if="memuindex == 0">  <!-- 정보 -->
+          <b-row>
+            <b-col v-if="this.currentSelectedSchedule">
+              제목: {{ this.currentSelectedSchedule.data.title }}
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col v-if="this.currentSelectedSchedule">
+              일시: {{ this.currentSelectedSchedule.start_time }}-{{
+                this.currentSelectedSchedule.end_time
+              }}
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col v-if="this.currentSelectedSchedule">
+              상세 내용: {{ this.currentSelectedSchedule.data.description }}
+            </b-col>
+          </b-row>
+        </div>
+        <div v-if="memuindex == 1">  <!-- 모임원 -->
+
+        </div>
+        <div v-if="memuindex == 2">  <!-- 준비물 -->
+          <b-row>
+            <b-col>
+              <b-row>
+                <b-col cols="auto"> 준비물 목록 </b-col>
+                <b-col cols="auto">
+                  <div
+                    id="green-colored-option-button"
+                    style="cursor: pointer; height: 30px !important"
+                    @click="[openNewRefModal(), closeDetailModal()]"
+                  >
+                    새 준비물 추가하기
+                  </div>
+                </b-col>
+              </b-row>
+              <b-row>
+                <b-col v-if="preparations.length > 0">
+                  <div
+                    id="moim-prep-item"
+                    v-for="prep in preparations"
+                    :key="prep.id"
+                  >
+                    <b-row>
+                      <b-col cols="auto">
+                        <b-form-checkbox
+                          name="checkbox-1"
+                          @change="togglePrepItem(prep.id)"
+                          v-model="prep.status"
+                          value="Y"
+                          unchecked-value="N"
+                        ></b-form-checkbox>
+                      </b-col>
+                      <b-col
+                        v-if="prep.status === 'Y'"
+                        cols="auto"
+                        style="text-decoration: line-through"
                       >
-                        <i class="fa-solid fa-trash"></i></div
-                    ></b-col>
-                  </b-row>
-                </div>
-              </b-col>
-              <b-col v-else>
-                <div>등록된 준비물이 없습니다.</div>
-              </b-col>
-            </b-row>
-          </b-col>
-        </b-row>
+                        {{ prep.name }}
+                      </b-col>
+                      <b-col v-else cols="auto"> {{ prep.name }} </b-col>
+                      <b-col cols="auto" v-if="prep.status === 'Y'">
+                        <div
+                          id="gray-colored-option-button"
+                          style="height: 20px !important; font-size: 8px"
+                        >
+                          {{ prep.userName }}
+                        </div></b-col
+                      >
+                      <b-col cols="auto"
+                        ><div
+                          style="cursor: pointer"
+                          @click="deletePrep(prep.id)"
+                        >
+                          <i class="fa-solid fa-trash"></i></div
+                      ></b-col>
+                    </b-row>
+                  </div>
+                </b-col>
+                <b-col v-else>
+                  <div>등록된 준비물이 없습니다.</div>
+                </b-col>
+              </b-row>
+            </b-col>
+          </b-row>
+        </div>
+        <div v-if="memuindex == 3">  <!-- 장소 -->
+
+        </div>
       </template>
       <template #modal-footer="{ hide }">
         <!-- Button with custom close trigger value -->
-        <b-button size="sm" v-if="moimhostid==userid" @click="[removeEvent(currentSelectedSchedule), hide('forget')]" style="background-color:red;"> 삭제하기 </b-button>
+        <b-button
+          size="sm"
+          v-if="moimhostid == userid"
+          @click="[removeEvent(currentSelectedSchedule), hide('forget')]"
+          style="background-color: red"
+        >
+          삭제하기
+        </b-button>
         <b-button size="sm" @click="hide('forget')"> 닫기 </b-button>
       </template>
     </b-modal>
-    <b-modal id="newRefModal" centered title="새로운 준비물 등록하기" hide-footer>
+    <b-modal
+      id="newRefModal"
+      centered
+      title="새로운 준비물 등록하기"
+      hide-footer
+    >
       <b-row>
         <b-col>
           <p class="my-4">준비물 이름</p>
         </b-col>
         <b-col>
-          <b-form-input v-model="newPerpText" placeholder="준비물 이름을 입력하세요"></b-form-input>
+          <b-form-input
+            v-model="newPerpText"
+            placeholder="준비물 이름을 입력하세요"
+          ></b-form-input>
         </b-col>
       </b-row>
       <b-row>
         <b-col>
-          <div id="green-colored-option-button" style="cursor: pointer" @click="registerNewPrep(newPerpText)"> 등록하기 </div>
+          <div
+            id="green-colored-option-button"
+            style="cursor: pointer"
+            @click="registerNewPrep(newPerpText)"
+          >
+            등록하기
+          </div>
         </b-col>
       </b-row>
-      
     </b-modal>
   </div>
 </template>
@@ -183,7 +261,12 @@ import {
   regularMoimRemove,
 } from "@/services/teamcalendar";
 import { AllMeet } from "@/services/meet";
-import { getMoimRef, takeMoimRef, deleteMoimRef, newMoimRef } from "@/services/moim";
+import {
+  getMoimRef,
+  takeMoimRef,
+  deleteMoimRef,
+  newMoimRef,
+} from "@/services/moim";
 import Kalendar from "@/lib-components/kalendar-container.vue";
 import moment from "moment";
 export default {
@@ -193,9 +276,10 @@ export default {
   },
   data() {
     return {
+      memuindex: 0,
       Allbutton: "참여자 일정",
       isAllbutton: 0,
-      userid:null,
+      userid: null,
       moimid: "",
       moimhostid: "",
       colorlist: ["red", "white", "gray", "blue"],
@@ -220,6 +304,7 @@ export default {
       new_appointment: {},
       preparations: [],
       newPerpText: "",
+      attendMembers: [],
     };
   },
   async created() {
@@ -369,9 +454,8 @@ export default {
       return 1;
     },
     async MoimAllCall() {
-      if(this.isAllbutton==0)
-      {
-        this.Allbutton = "기존 모임 일정"
+      if (this.isAllbutton == 0) {
+        this.Allbutton = "기존 모임 일정";
         this.events = [];
         this.regularGet(this.moimid);
         const response = await AllMeet(this.moimid);
@@ -380,18 +464,16 @@ export default {
             response.data[item].scheduleName = response.data[item].name;
             this.setEvent(response.data[item]);
           }
-        this.calendar_settings.read_only=false;
+        this.calendar_settings.read_only = false;
         this.startKalendar = 1;
-        this.isAllbutton=1;
-      }
-      else{
-        this.Allbutton = "참여자 일정"
+        this.isAllbutton = 1;
+      } else {
+        this.Allbutton = "참여자 일정";
         this.events = [];
-        this.calendar_settings.read_only=true;
+        this.calendar_settings.read_only = true;
         this.startKalendar = await this.regularGet(this.moimid);
-        this.isAllbutton=0;
+        this.isAllbutton = 0;
       }
-      
     },
     startitem(kalendarEvent) {
       this.currentSelectedSchedule = kalendarEvent;
@@ -402,8 +484,11 @@ export default {
       var prep = this.preparations.find((x) => x.id === prepId);
       if (prep) {
         console.log(prep.userId);
-        if (prep.status === "N" && prep.userId != this.$cookies.get("MoimUserId")) {
-        //   // 이미 챙긴 준비물은 다시 못 뺀다!
+        if (
+          prep.status === "N" &&
+          prep.userId != this.$cookies.get("MoimUserId")
+        ) {
+          //   // 이미 챙긴 준비물은 다시 못 뺀다!
           prep.status = "Y";
         } else {
           //새로 준비물 챙기기
@@ -434,33 +519,40 @@ export default {
       this.updateRef();
     },
     openNewRefModal() {
-      this.$bvModal.show('newRefModal');
+      this.$bvModal.show("newRefModal");
     },
     closeDetailModal() {
-      this.$bvModal.hide('modal-scrollable');
+      this.$bvModal.hide("modal-scrollable");
     },
     async registerNewPrep(prepName) {
-      if(prepName.split(' ').join('') !== "") {
-        console.log(this.moimid, this.currentSelectedSchedule.kalendar_id, prepName);
-        let registerPrep =  await newMoimRef(this.moimid, this.currentSelectedSchedule.kalendar_id, prepName);
+      if (prepName.split(" ").join("") !== "") {
+        console.log(
+          this.moimid,
+          this.currentSelectedSchedule.kalendar_id,
+          prepName
+        );
+        let registerPrep = await newMoimRef(
+          this.moimid,
+          this.currentSelectedSchedule.kalendar_id,
+          prepName
+        );
         console.log(registerPrep);
         this.updateRef();
-        this.$bvModal.hide('newRefModal');
-        this.$bvModal.show('modal-scrollable');
-      }
-      else{
-        alert('준비물 이름이 입력되지 않았습니다.');
+        this.$bvModal.hide("newRefModal");
+        this.$bvModal.show("modal-scrollable");
+      } else {
+        alert("준비물 이름이 입력되지 않았습니다.");
       }
     },
-    Message(level){
-      if (level==0) {
+    Message(level) {
+      if (level == 0) {
         this.$bvToast.toast("기존 모임 일정에서 상세 내역을 볼 수 있습니다.", {
           toaster: "b-toaster-top-right",
           appendToast: false,
           autoHideDelay: 3000,
         });
       }
-    }
+    },
   },
 };
 </script>
