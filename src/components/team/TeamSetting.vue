@@ -30,7 +30,7 @@
             <div id="listTitle">모임 장소 찾기</div>
         </b-col>
       </b-row>
-      <PlaceSearch style="width:80%;" :class="{display: settingindex!=1}"></PlaceSearch>
+      <PlaceSearch style="width:80%;" v-if="settingindex==1"></PlaceSearch>
     </div>
     <div id="listBox">
       <b-row id="listTitle" align-v="center" style="cursor:pointer"  @click="settingindex= (settingindex!=2)? 2 : -1">
