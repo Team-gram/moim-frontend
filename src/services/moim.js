@@ -144,3 +144,14 @@ export function InviteMoim(moimId, userId, message) {
     }
   })
 }
+
+export function LeaveMoim(moimId, userId) {
+  return request({
+    url: "/moim/leave",
+    method: "delete",
+    data: {
+      moimId: moimId,
+      userId: userId,
+    }
+  })
+}

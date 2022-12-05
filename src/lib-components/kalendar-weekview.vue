@@ -126,7 +126,6 @@ export default {
 
       // // let distance = (time_obj - new Date(day_starts)) / 1000 / 60;
       let distance = (new Date(day_ends) - new Date(day_starts)) / 1000 / 60;
-      console.log(distance);
       return {distance, time};
     }
   },
