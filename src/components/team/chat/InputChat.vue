@@ -41,7 +41,6 @@ export default {
   width: 77%;
   height : 45px;
   background : #F8F8FA;
-  position: fixed;
   align-items: center;
   justify-content: center;
 }

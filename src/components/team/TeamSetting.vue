@@ -46,6 +46,18 @@
       </b-row>
       <ItemPrepare style="width:80%;" :class="{display: settingindex!=2}"></ItemPrepare>
     </div>
+    <b-button variant="danger" @click="showleaveModal()">모임 떠나기</b-button>
+    <b-modal
+      id="leave_modal"
+      centered
+      scrollable
+      title="모임 탈퇴하기"
+      @ok="leavemoim()"
+    >
+      <template #modal-header>
+        <h5>정말 떠나실거에요..?</h5>
+      </template>
+    </b-modal>
   </div>
 </template>
 <script>
@@ -53,6 +65,8 @@ import UserCalendar from "@/components/team/setting/UserCalendar";
 import HostCalendar from "@/components/team/setting/HostCalendar";
 import ItemPrepare from "@/components/team/setting/ItemPrepare";
 import PlaceSearch from "@/components/team/setting/PlaceSearch";
+import { LeaveMoim } from "@/services/moim"
+import { mapGetters } from "vuex";
 export default {
   components: {
     HostCalendar,
@@ -69,6 +83,24 @@ export default {
   methods:{
     moimSetTime(){
 
+    },
+    showleaveModal() {
+      this.$bvModal.show("leave_modal");
+    },
+   async leavemoim(){
+      const response = await LeaveMoim(this.MoimId,this.$cookies.get("MoimUserId"))
+      if(response.status==200){
+        this.$bvToast.toast(
+          "모임을 떠났습니다.",
+          {
+            toaster: "b-toaster-top-right",
+            appendToast: false,
+            autoHideDelay: 3000,
+          }
+        );
+        setTimeout(() => this.$router.push("/mymoim"), 300);
+      }
+      
     }
   },
   created(){
@@ -76,7 +108,10 @@ export default {
       this.ishost = true;
     else
       this.ishost = false;
-  }
+  },
+  computed:{
+    ...mapGetters("searchStore",{MoimId :'getSelectedMoimId'}),
+  },
 };
 </script>
 
