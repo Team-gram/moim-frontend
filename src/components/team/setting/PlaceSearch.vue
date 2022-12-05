@@ -1,15 +1,20 @@
 <template>
   <div
     align="center"
-    style="margin-top: 20px; margin-left: 20px; margin-right: 20px"
+    style="margin-top: 20px;"
   >
-    <b-card id="schedule-card" style="max-width: 1000px">
-      <h4 id="schedule-title">이런 장소는 어때요?</h4>
-      <div id="map"></div>
-      <b-form-input v-model="text" id="keyword" placeholder="Enter your name" @keyup.enter="searchPlaces()"></b-form-input>
-      <b-container class="bv-example-row">
-      </b-container>
-    </b-card>
+    <div class="map-area">
+      <div class="searchbox" v-for="rs in search.data" :key="rs.id">
+        <div class="searchdata">
+          <div class="place">
+            <div>{{rs.place_name}}</div>
+            <div class="searchaddress">{{rs.address_name}}</div>
+          </div>
+        </div>
+      </div>
+      <div id="map">map</div>
+    </div>
+    <b-form-input v-model="text" id="keyword" placeholder="Enter your name" @keyup.enter="searchPlaces()"></b-form-input>
     <b-button
       pill
       id="register-button"
@@ -28,8 +33,14 @@ export default {
     return {
       map:null,
       ps:null,
+      infowinodw:null,
       text:"",
       moimid:0,
+      search : {
+        keyword : null,
+        pgn : null,
+        data : [],
+      }
     };
   },
   methods: {
@@ -42,6 +53,7 @@ export default {
       this.map = new kakao.maps.Map(container,options);
       this.map.relayout();
       this.ps = new window.kakao.maps.services.Places();
+      this.infowinodw = new kakao.maps.InfoWindow({zIndex:1});
     },
     searchPlaces(){
       console.log(this.text);
@@ -50,27 +62,11 @@ export default {
             return false;
         }
       // 장소검색 객체를 통해 키워드로 장소검색을 요청합니다
-        this.ps.keywordSearch(this.text, (data, status, pagination)=>{
-          console.log(data)
-          console.log(status) 
-          console.log(pagination);
-      }); 
-    },
-    //eslint-disable-next-line
-    placesSearchCB(data, status, pagination) {
-      if (status === kakao.maps.services.Status.OK) {
-          // 정상적으로 검색이 완료됐으면
-          // 검색 목록과 마커를 표출합니다
-          // displayPlaces(data);
-          // 페이지 번호를 표출합니다-
-          // displayPagination(pagination);
-      } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
-          alert('검색 결과가 존재하지 않습니다.');
-          return;
-      } else if (status === kakao.maps.services.Status.ERROR) {
-          alert('검색 결과 중 오류가 발생했습니다.');
-          return;
-      }
+        this.ps.keywordSearch(this.text,(data,status,pgn)=>{
+          this.search.keyword = this.text;
+          this.search.pgn = pgn;
+          this.search.data = data;
+        });
     },
   },
   created() {
@@ -97,7 +93,26 @@ export default {
 </script>
 <style>
 #map{
-  width:400px;
-  height:400px;
+  flex: 1 1 auto;
+  height: 400px;
+}
+.map-area{
+  display: flex;
+  position: relative;
+}
+.searchbox{
+  flex-direction:column;
+  z-index:10000;
+  position: absolute;
+  padding-bottom: 10px;
+  height: 400px;
+  background-color: #ffffffaa;
+}
+.searchdata{
+  flex: 1 1 auto;
+  overflow-y: auto;
+}
+.place{
+  padding: 8px;
 }
 </style>
