@@ -145,6 +145,41 @@ export function InviteMoim(moimId, userId, message) {
   })
 }
 
+export function joinMeet(moimId, moimScheduleId, userId) {
+  return request({
+    url: "/meet",
+    method: "post",
+    data: {
+      moimId: moimId,
+      moimScheduleId: moimScheduleId,
+      userId: userId,
+    }
+  })
+}
+
+export function getOutMeet(moimId, moimScheduleId, userId) {
+  return request({
+    url: "/meet",
+    method: "delete",
+    data: {
+      moimId: moimId,
+      moimScheduleId: moimScheduleId,
+      userId: userId,
+    }
+  })
+}
+
+export function getMeetMembers(moimId, moimScheduleId) {
+  return request({
+    url: "/meet/"+moimId+"/"+moimScheduleId,
+    method: "get",
+    data: {
+      moimId: moimId,
+      moimScheduleId: moimScheduleId,
+    }
+  })
+}
+
 export function LeaveMoim(moimId, userId) {
   return request({
     url: "/moim/leave",
@@ -154,4 +189,5 @@ export function LeaveMoim(moimId, userId) {
       userId: userId,
     }
   })
+
 }
