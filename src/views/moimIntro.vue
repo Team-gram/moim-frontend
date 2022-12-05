@@ -181,10 +181,16 @@ export default {
 
     // }
     showJoinModal() {
-      if (this.moimData.isFreeEnter === "Y") {
+      if(this.$cookies.get('MoimUserId')) {
+        if (this.moimData.isFreeEnter === "Y") {
         this.$bvModal.show("moimFreeJoinModal");
       } else {
         this.$bvModal.show("moimApplyJoinModal");
+      }
+      }
+      
+      else{
+        alert("로그인 후 사용 가능한 기능입니다.")
       }
     },
     async joinMoim() {
