@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div id="main-text">
+      <b id="main-text-highlight">채팅</b>
+    </div>
     <div class="ChatBackground" id="chatscroll" style="overflow: auto; height:400px">
       <PreviousChat></PreviousChat>
       <PresentChat></PresentChat>

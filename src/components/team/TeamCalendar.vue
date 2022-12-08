@@ -1,5 +1,8 @@
 <template>
   <div id="Calendar" style="margin-top: 0px">
+    <div id="main-text">
+      <b id="main-text-highlight">모임 일정</b>
+    </div>
     <div
       style="margin-top: 3px"
       v-if="
@@ -13,8 +16,9 @@
     </div>
     <b-button
       @click="[(startKalendar = 0), MoimAllCall()]"
-      variant="outline-success"
+      variant="success"
       style="margin: 0 0 10px 80%"
+      id="Allbutton"
       >{{ Allbutton }}</b-button
     >
     <kalendar
@@ -444,7 +448,7 @@ export default {
   data() {
     return {
       memuindex: 0,
-      Allbutton: "참여자 일정",
+      Allbutton: "모임 일정 조율하기",
       isAllbutton: 0,
       userid: null,
       moimid: "",
@@ -848,5 +852,9 @@ svg {
   padding: 5px 5x 5px 5px;
   margin: 10px 0 10px 0;
   font-family: "NanumBarunGothic";
+}
+#Allbutton{
+  border-radius: 15px !important;
+  font-size:14px
 }
 </style>
