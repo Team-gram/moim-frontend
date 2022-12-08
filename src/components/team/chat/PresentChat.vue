@@ -13,7 +13,7 @@
       <div v-else class="opponentMessage">
         <img  v-if="newchat.id==HostId" src="@/assets/Host.png" class="hostImg">
         <div class="opponentData">
-          <div class="opponentName">{{chat.name}}</div>
+          <div class="opponentName">{{newchat.name}}</div>
           <div v-if="newchat.message != ''" class="opponentContent">
             {{ newchat.message }}
           </div>
@@ -40,6 +40,7 @@ export default{
   computed:{
     ...mapGetters("chatStore",{newchatList : 'getnewchatList'}),
     ...mapGetters("searchStore",{HostId:"getSelectedMoimHostId"}),
+    ...mapGetters("",{userinfo:"getUserData"}),
   },
   created(){
     this.id = this.$cookies.get("MoimUserId");

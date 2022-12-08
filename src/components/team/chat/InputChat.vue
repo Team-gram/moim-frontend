@@ -17,13 +17,14 @@ export default {
     computed : {
     ...mapGetters("searchStore",{MoimId :'getSelectedMoimId',HostId:"getSelectedMoimHostId"}),
     ...mapGetters("chatStore",{chatList : 'getchatList'}),
+    ...mapGetters({userinfo:"getUserData"}),
   },
   methods : {
      send(){
       const data = {
         id: this.$cookies.get("MoimUserId"),
         moimId: this.MoimId,
-        name: "이진기",
+        name: this.userinfo.name,
         message: this.text,
         createdAt: new Date()
       }

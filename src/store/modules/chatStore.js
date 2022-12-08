@@ -8,6 +8,7 @@ const getters = {
     return state.chatList;
   },
   getnewchatList(state){
+    console.log(state.newchatList)
     return state.newchatList
   }
 };

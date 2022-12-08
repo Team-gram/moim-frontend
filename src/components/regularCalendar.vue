@@ -45,6 +45,7 @@
 					placeholder="Description"
 					rows="2"
 				></textarea>
+				<!-- <input type="radio" name="open -->
 				<div class="buttons popup-event">
           <button class="add" @click="addAppointment(popup_information)">
 						추가
