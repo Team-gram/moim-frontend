@@ -3,11 +3,13 @@
     <b-row>
       <b-col>
         <div id="main-text">
-          <b id="main-text-highlight">'{{ this.userinfo.name}}' 님을 위한 추천 모임</b>
+          <b id="main-text-highlight"
+            >'{{ this.userinfo.name }}' 님을 위한 추천 모임</b
+          >
         </div>
       </b-col>
     </b-row>
-    <b-row v-if="this.allRecommendMoimData.length !== 0">
+    <b-row v-if="this.allRecommendMoimData.length > 0">
       <b-col>
         <div id="green-colored-option-button">
           <span @click="changePrevRecommendType()">
@@ -16,9 +18,7 @@
               id="recommend-type-change-button"
             ></i>
           </span>
-          <a>
-            {{ this.currentRecommendMoimData.recommendDetail }} 추천
-          </a>
+          <a> {{ this.currentRecommendMoimData.recommendDetail }} 추천 </a>
           <span @click="changeNextRecommendType()">
             <i
               class="fa-solid fa-angle-right"
@@ -35,13 +35,13 @@
             @click="moimDetail(moimItem)"
           >
             <b-row align-v="center">
-              <!-- <b-col cols="auto">
+              <b-col cols="auto">
                 <b-img
                   id="listImage"
-                  :src="moimItem.image"
+                  :src="moimItem.thumbnail"
                   rounded="circle"
                 ></b-img>
-              </b-col> -->
+              </b-col>
               <b-col>
                 <b-row id="listTitle">
                   <b-col>
@@ -62,9 +62,34 @@
                       :src="require(`@/assets/location.png`)"
                     ></b-img>
                   </b-col>
-                  <b-col cols="auto">
+                  <b-col
+                    cols="auto"
+                    style="
+                      width: 150px;
+                      text-overflow: ellipsis;
+                      overflow: hidden;
+                      white-space: nowrap;
+                    "
+                  >
                     {{ moimItem.sido }} {{ moimItem.sigungu }}
                     {{ moimItem.dong }}
+                  </b-col>
+                  <b-col cols="auto" style="padding: 0 0 0 15px">
+                    <b-img
+                      id="listIcon"
+                      :src="require(`@/assets/mic.png`)"
+                    ></b-img>
+                  </b-col>
+                  <b-col
+                    cols="auto"
+                    style="
+                      width: 220px;
+                      text-overflow: ellipsis;
+                      overflow: hidden;
+                      white-space: nowrap;
+                    "
+                  >
+                    {{ moimItem.content }}
                   </b-col>
                 </b-row>
               </b-col>
@@ -74,9 +99,7 @@
       </b-col>
     </b-row>
     <b-row v-else>
-      <b-col>
-        추천 모임이 없습니다.
-      </b-col>
+      <b-col> 추천 모임이 없습니다. </b-col>
     </b-row>
   </div>
 </template>
@@ -129,29 +152,38 @@ export default {
         for (let i = 0; i < keys.length; i++) {
           console.log(keys[i]);
           var recommendDetail;
-          if (this.recommendMoims[keys[i]].length > 0) { // 0개 이상의 추천 모임방이 존재하는 경우
-            if(keys[i] == "age") {
+          if (this.recommendMoims[keys[i]].length > 0) {
+            // 0개 이상의 추천 모임방이 존재하는 경우
+            if (keys[i] == "age") {
               recommendDetail = "연령";
-            }
-            else if (keys[i] == "gender") {
-              recommendDetail ="성별";
-            }
-            else {
-              recommendDetail ="관심사";
+            } else if (keys[i] == "gender") {
+              recommendDetail = "성별";
+            } else {
+              recommendDetail = "관심사";
             }
 
-            if(this.recommendMoims[keys[i]].length > 5 ) {
-              this.recommendMoims[keys[i]] = this.recommendMoims[keys[i]].slice(0,5);
+            if (this.recommendMoims[keys[i]].length > 5) {
+              this.recommendMoims[keys[i]] = this.recommendMoims[keys[i]].slice(
+                0,
+                5
+              );
             }
 
-            var newRecommend = new Object({recommendType: keys[i], recommendDetail: recommendDetail, moimList: this.recommendMoims[keys[i]]});
+            var newRecommend = new Object({
+              recommendType: keys[i],
+              recommendDetail: recommendDetail,
+              moimList: this.recommendMoims[keys[i]],
+            });
+            console.log(newRecommend);
             this.allRecommendMoimData.push(newRecommend);
+            console.log(this.allRecommendMoimData);
           }
           // const key = keys[i]; // 각각의 키
           // const value = this.recommendMoims[key]; // 각각의 키에 해당하는 각각의 값
 
           // console.log(value);
         }
+        this.currentRecommendMoimData = this.allRecommendMoimData[0];
       }
     },
   },
@@ -159,7 +191,10 @@ export default {
     if (this.$cookies.get("MoimUserId") != undefined) {
       // 로그인되어 있는 경우
       console.log("login!");
-      await this.$store.dispatch("UpdateUserInfo", this.$cookies.get("MoimUserId"));
+      await this.$store.dispatch(
+        "UpdateUserInfo",
+        this.$cookies.get("MoimUserId")
+      );
       this.userinfo = this.$store.getters.getUserData;
       console.log(this.userinfo);
     }
