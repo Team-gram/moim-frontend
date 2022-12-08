@@ -40,7 +40,7 @@ export default{
   computed:{
     ...mapGetters("chatStore",{newchatList : 'getnewchatList'}),
     ...mapGetters("searchStore",{HostId:"getSelectedMoimHostId"}),
-    ...mapGetters("",{userinfo:"getUserData"}),
+
   },
   created(){
     this.id = this.$cookies.get("MoimUserId");

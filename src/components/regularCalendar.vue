@@ -45,7 +45,14 @@
 					placeholder="Description"
 					rows="2"
 				></textarea>
-				<!-- <input type="radio" name="open -->
+				<b-form-group>
+					<b-form-radio-group
+						v-model="selected"
+						:options="options"
+						name="모임 일정 공개 비공개"
+						plain
+					></b-form-radio-group>
+				</b-form-group>
 				<div class="buttons popup-event">
           <button class="add" @click="addAppointment(popup_information)">
 						추가
@@ -101,6 +108,11 @@ export default {
 	},
 	data() {
 		return {
+			selected: true,
+			options: [
+				{ text: '공개', value: true },
+				{ text: '비공개', value: false },
+			],
 			colorlist : ["#AEDFDB","#96DFD8","#85D4BE","#AEE6CB","#60ABA8","#F6F3CF","#CDEEF3","#DAF1DE","#D6E9AA","#21B7A9","#EFF4E7","#EDE868"],
 			startKalendar:0,
 			currentSelectedSchedule:0,

@@ -3,6 +3,9 @@
     align="center"
     style="margin-top: 20px; margin-left: 20px; margin-right: 20px"
   >
+    <div id="main-text">
+      <b id="main-text-highlight">설정</b>
+    </div>
     <div id="listBox">
       <b-row id="listTitle" align-v="center" style="cursor:pointer" @click="settingindex= (settingindex!=0)? 0 : -1">
         <b-col cols="auto" style="padding: 0 0 0 15px">
