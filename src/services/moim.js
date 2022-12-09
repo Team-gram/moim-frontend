@@ -191,3 +191,28 @@ export function LeaveMoim(moimId, userId) {
   })
 
 }
+
+export function changeMoimUserLevel(moimId, userId, level) {
+  return request({
+    url: "/moim/member/level",
+    method: "put",
+    data: {
+      moimId: moimId,
+      userId: userId,
+      level: level
+    }
+  })
+
+}
+
+export function banishMember(moimId, userId) {
+  return request({
+    url: "/moim/member/banish",
+    method: "delete",
+    data: {
+      moimId: moimId,
+      userId: userId,
+    }
+  })
+
+}

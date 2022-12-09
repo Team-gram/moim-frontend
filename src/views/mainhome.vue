@@ -47,7 +47,7 @@
         </b-card>
       </b-col>
     </b-row>
-    <b-row>
+    <b-row  style="margin-top: 80px">
       <b-col>
         <recommendMoim></recommendMoim>
       </b-col>
