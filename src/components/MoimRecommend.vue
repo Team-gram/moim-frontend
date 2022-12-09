@@ -186,6 +186,12 @@ export default {
         this.currentRecommendMoimData = this.allRecommendMoimData[0];
       }
     },
+    moimDetail(moimItem) {
+      console.log(moimItem);
+      console.log(moimItem.moimId);
+      this.$store.commit("searchStore/setSelectedMoimId", moimItem.moimId);
+      this.$router.push({ name: "MoimIntro" });
+    },
   },
   async created() {
     if (this.$cookies.get("MoimUserId") != undefined) {
