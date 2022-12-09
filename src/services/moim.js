@@ -204,3 +204,15 @@ export function changeMoimUserLevel(moimId, userId, level) {
   })
 
 }
+
+export function banishMember(moimId, userId) {
+  return request({
+    url: "/moim/member/banish",
+    method: "delete",
+    data: {
+      moimId: moimId,
+      userId: userId,
+    }
+  })
+
+}
