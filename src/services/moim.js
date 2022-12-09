@@ -191,3 +191,16 @@ export function LeaveMoim(moimId, userId) {
   })
 
 }
+
+export function changeMoimUserLevel(moimId, userId, level) {
+  return request({
+    url: "/moim/member/level",
+    method: "put",
+    data: {
+      moimId: moimId,
+      userId: userId,
+      level: level
+    }
+  })
+
+}

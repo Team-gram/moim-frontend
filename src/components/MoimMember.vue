@@ -24,16 +24,16 @@
                       <b-col cols="auto">
                         <img
                           v-if="
-                            member.profileImage == undefined ||
-                            member.profileImage == null ||
-                            member.profileImage == ''
+                            member.details.profileImage == undefined ||
+                            member.details.profileImage == null ||
+                            member.details.profileImage == ''
                           "
                           src="../assets/default-profile.png"
                           width="40"
                           height="40"
                         /><b-img
                           v-else
-                          :src="`${member.profileImage}`"
+                          :src="`${member.details.profileImage}`"
                           rounded="circle"
                           width="40"
                           height="40"
@@ -42,7 +42,7 @@
                       <b-col style="margin: 5px 0 5px 0">
                         <b-row id="listTitle">
                           <b-col cols="auto">
-                            <div>{{ member.name }}</div>
+                            <div>{{ member.details.name }}</div>
                           </b-col>
                           <b-col cols="auto">
                             <div
@@ -52,10 +52,10 @@
                                 margin: 6px 0 6px 0;
                               "
                             >
-                              {{ member.detail }}
+                              {{ member.details.detail }}
                             </div>
                           </b-col>
-                          <b-col cols="auto" v-if="member.id == moimHostId">
+                          <b-col cols="auto" v-if="member.userId == moimHostId">
                             <i
                               class="fa-solid fa-crown"
                               style="color: #4fb26f"
@@ -75,7 +75,7 @@
                         margin: 10px;
                       "
                       v-b-modal.modal-member
-                      v-if="userId != member.id"
+                      v-if="userId != member.userId"
                       @click="setCurrentSelectedMember(member)"
                     >
                       더보기
@@ -95,6 +95,7 @@
       hide-footer
       centered
       style="font-family: 'NanumBarunGothic'"
+      v-if="this.currentSelectedMember != null"
     >
       <b-row>
         <b-col>
@@ -112,9 +113,9 @@
           </div>
         </b-col>
       </b-row>
-      <b-row v-if="this.userId == this.moimHostId">
+      <b-row v-if="this.userinfo.moimlevel >= 1">
         <b-col>
-          <div id="list-item" style="height: 30px !important">
+          <div id="list-item" style="height: 30px !important" @click="showMemberLevelModal()">
             <b-row style="padding: 5px 10px 5px 10px">
               <b-col cols="auto">
                 <i class="fa-solid fa-star" style="color: #4fb26f"></i>
@@ -144,7 +145,7 @@
           </div>
         </b-col>
       </b-row>
-      <b-row v-if="this.userId == this.moimHostId">
+      <b-row v-if="this.userinfo.moimlevel >= 1 && this.currentSelectedMember.level!=2">
         <b-col>
           <div id="list-item" style="height: 30px !important">
             <b-row style="padding: 5px 10px 5px 10px">
@@ -210,12 +211,48 @@
         </b-form-group>
       </form>
     </b-modal>
+    <b-modal
+      id="modal-level"
+      size="sm"
+      title="멤버 등급 변경하기"
+      hide-footer
+      centered
+      style="font-family: 'NanumBarunGothic'"
+      v-if="this.currentSelectedMember != null"
+    >
+    <b-row>
+      <b-col>
+        <div>현재 등급: <a v-if="this.currentSelectedMember.level == 0">일반 모임원</a><a v-else-if="this.currentSelectedMember.level == 1">부방장</a></div>
+      </b-col>
+    </b-row>
+      <b-row>
+        <b-col>
+          <div>
+            <b-form-select v-model="levelSelected" :options="options" class="mb-3">
+              <!-- This slot appears above the options from 'options' prop -->
+              <template #first>
+                <b-form-select-option :value="null" disabled
+                  >-- 변경할 등급을 선택하세요. --</b-form-select-option
+                >
+              </template>
+            </b-form-select>
+          </div>
+        </b-col>
+      </b-row>
+      <b-row align="center">
+        <b-col>
+          <div id="green-colored-option-button" style="cursor: pointer" @click="changeMemberLevel()">
+            변경하기
+          </div>
+        </b-col>
+      </b-row>
+    </b-modal>
   </div>
 </template>
 
 <script>
 import MemberCalendar from "@/components/MemberCalendar.vue";
-import { getMoimMember } from "@/services/moim.js";
+import { getMoimMember, changeMoimUserLevel } from "@/services/moim.js";
 import { getUserinfo } from "@/services/login.js";
 import { MyMoimList, InviteMoim } from "@/services/moim.js";
 export default {
@@ -228,42 +265,53 @@ export default {
       moimId: null,
       memberList: null,
       userId: null,
+      userinfo: null,
       moimHostId: this.$props.hostId,
       currentSelectedMember: null,
       inviteMsg: "",
       inviteMoim: null,
       inviteMoims: [],
       isCalendar: false,
+      levelSelected: null,
+        options: [
+          { value: 0, text: '일반 모임원' },
+          { value: 1, text: '부방장' }
+        ],
     };
   },
   methods: {
     async getMoimMemberList(moimId) {
       this.memberList = [];
       let moimMemberList = await getMoimMember(moimId);
+      console.log(moimMemberList);
       this.$emit("memberCount", moimMemberList.data.length);
       for (var i = 0; i < moimMemberList.data.length; i++) {
         var userId = moimMemberList.data[i].userId;
         let userDetail = await getUserinfo(userId);
+        var moimMember = moimMemberList.data[i];
+        moimMember.details = userDetail.data;
         if (this.$cookies.get("MoimUserId") == userDetail.data.id) {
-          this.memberList.unshift(userDetail.data);
+          this.memberList.unshift(moimMember);
+          this.userinfo.moimlevel = moimMember.level;
         } else {
-          this.memberList.push(userDetail.data);
+          this.memberList.push(moimMember);
         }
       }
       console.log(this.memberList);
     },
     async setCurrentSelectedMember(member) {
       this.inviteMoims = [];
+      console.log(member);
       this.currentSelectedMember = member;
+      
 
       let inviteMoims = await MyMoimList(this.userId); // 사용자가 가입한 모임 리스트
-      let memberMoims = await MyMoimList(member.id); // 선택한 멤버가 가입한 모임 리스트
+      let memberMoims = await MyMoimList(member.userId); // 선택한 멤버가 가입한 모임 리스트
 
       console.log(this.moimid);
       console.log(inviteMoims.data);
       console.log(memberMoims.data);
 
-      
       for (var i = 0; i < inviteMoims.data.length; i++) {
         //참가자가 가입한 모임 리스트 순회
         var exist = false;
@@ -273,7 +321,7 @@ export default {
             exist = true;
           }
         }
-        if(exist == false) {
+        if (exist == false) {
           this.inviteMoims.push(inviteMoims.data[i]);
         }
         // if (
@@ -286,6 +334,7 @@ export default {
         // }
       }
       console.log(this.inviteMoims);
+      console.log(this.currentSelectedMember);
 
       // this.currentSelectedMember.joinMoims = memberMoims.data;
       // for (var i = 0 ; i < memberMoims.data.length; i++) {
@@ -297,6 +346,10 @@ export default {
     showInviteMemberModal() {
       this.$bvModal.hide("modal-member");
       this.$bvModal.show("invite_modal");
+    },
+    showMemberLevelModal() {
+      this.$bvModal.hide("modal-member");
+      this.$bvModal.show("modal-level");
     },
     showCalendarMemberModal() {
       this.$bvModal.hide("modal-member");
@@ -340,6 +393,20 @@ export default {
       console.log(inviteMoims);
       // this.inviteMoims = inviteMoims.data;
     },
+    async changeMemberLevel() {
+      if(this.levelSelected != null) {
+        console.log(this.moimid, this.currentSelectedMember.userId, this.levelSelected);
+        console.log(this.currentSelectedMember);
+        await changeMoimUserLevel(this.moimid, this.currentSelectedMember.userId, this.levelSelected);
+        alert('모임원 등급 변경이 완료되었습니다.');
+        this.getMoimMemberList(this.moimid);
+        this.levelSelected = null;
+        this.$bvModal.hide("modal-level");
+      }
+      else {
+        alert('변경할 등급이 선택되지 않았습니다.');
+      }
+    }
   },
   created() {
     this.moimid = this.$store.getters["searchStore/getSelectedMoimId"];
@@ -348,6 +415,7 @@ export default {
     console.log(this.moimHostId);
     this.userId = this.$cookies.get("MoimUserId");
     this.getInviteMoimList(this.userId);
+    this.userinfo = this.$store.getters.getUserData;
   },
   // mounted() {
   //   console.log(this.moimHostId);
