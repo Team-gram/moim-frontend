@@ -113,7 +113,7 @@
           </div>
         </b-col>
       </b-row>
-      <b-row v-if="this.userlevel >= 1">
+      <b-row v-if="this.userlevel <= 1 && this.currentSelectedMember.level >= this.userlevel">
         <b-col>
           <div
             id="list-item"
@@ -151,7 +151,7 @@
       </b-row>
       <b-row
         v-if="
-          this.userlevel >= 1 && this.currentSelectedMember.level != 2
+          this.userlevel <= 1 && this.currentSelectedMember.level >= this.userlevel
         "
       >
         <b-col>
@@ -232,7 +232,7 @@
         <b-col>
           <div>
             현재 등급:
-            <a v-if="this.currentSelectedMember.level == 0">일반 모임원</a
+            <a v-if="this.currentSelectedMember.level == 2">일반 모임원</a
             ><a v-else-if="this.currentSelectedMember.level == 1">부방장</a>
           </div>
         </b-col>
