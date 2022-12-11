@@ -238,3 +238,23 @@ export function getMoimUpperStatus(moimId) {
     }
   })
 }
+
+export function getUpperMoimList(categoryId) {
+  return request({
+    url: "/moim/upper/"+categoryId,
+    method: "get",
+    params: {
+      categoryId: categoryId,
+    }
+  })
+}
+
+export function moimUpperHistory(moimId) {
+  return request({
+    url: "/moim/upper/history",
+    method: "post",
+    data: {
+      moimId: moimId,
+    }
+  })
+}
