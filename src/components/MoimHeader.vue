@@ -83,6 +83,7 @@
 
 <script>
 import { getLogin } from "@/services/login";
+import { mapGetters,mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -133,14 +134,11 @@ export default {
       if (login.status === 200) {
         window.location.href = login.data;
       }
-      // this.axios.get('/login')
-      //   .then((response) => {
-      //       window.location.href = response.data;
-      //   })
     },
     handleResize() {
       this.width = window.innerWidth;
       this.height = window.innerHeight;
+      this.Resize(this.width,this.height);
     },
     logout() {
       if (this.islogin) {
@@ -150,8 +148,17 @@ export default {
     },
   },
   async created() {
+    if(navigator.userAgent.match(/Android|Mobile|iP(hone|od|ad)|BlackBerry|IEMobile|Kindle|NetFront|Silk-Accelerated|(hpw|web)OS|Fennec|Minimo|Opera M(obi|ini)|Blazer|Dolfin|Dolphin|Skyfire|Zune/)){
+      //모바일(스마트폰+태블릿)일 때 실행 될 스크립트
+      this.Phone(true);
+    }
+    else{
+      this.Phone(false);
+    }
+    console.log(this.is_phone);
     this.width = window.innerWidth;
     this.height = window.innerHeight;
+    this.Resize(this.width,this.height);
     if (this.$cookies.get("MoimUserId") != undefined) {
       this.userID = "로그아웃";
       this.islogin = true;
@@ -162,9 +169,14 @@ export default {
         "UpdateUserInfo",
         this.$cookies.get("MoimUserId")
       );
-      this.userinfo = this.$store.getters.getUserData;
+      // this.userinfo = this.$store.getters.getUserData;
+      this.userinfo = this.getUserData;
       this.userProfile = this.userinfo.profileImage;
     }
+  },
+  computed:{
+    ...mapGetters("",{getUserData:"getUserData",isphone:"getPhone"}),
+    ...mapMutations("",{Phone:"Phone",Resize:"Resize"})
   },
   mounted() {
     window.addEventListener("resize", this.handleResize);

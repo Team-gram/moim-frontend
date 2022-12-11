@@ -76,7 +76,7 @@
 
 <script>
 import { SearchMoim } from "@/services/moim";
-
+import { mapGetters,mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -86,38 +86,33 @@ export default {
   methods: {
     async getMoimSearchResult() {
       var searchData = new Object();
-      if (this.$store.getters["searchStore/getSearchType"] === "keyword") {
+      // this.$store.getters["searchStore/getSearchType"] 
+      if(this.getSearchType === "keyword") {
         //title
-        searchData.title = this.$store.getters["searchStore/getSearchData"];
-      } else if (
-        this.$store.getters["searchStore/getSearchType"] === "category"
-      ) {
+        searchData.title = this.getSearchData;
+      } 
+      else if (this.getSearchType === "category"){
         //categoryId
-        if (
-          this.$store.getters["searchStore/getSelectedSubCategory"] !== null
-        ) {
-          searchData.categoryId =
-            this.$store.getters[
-              "searchStore/getSelectedSubCategory"
-            ].categoryId;
+        if (this.getSelectedSubCategory !== null) {
+          searchData.categoryId = this.getSelectedSubCategory
         } else {
-          searchData.categoryId =
-            this.$store.getters["searchStore/getSearchData"].categoryId;
+          searchData.categoryId = this.getSearchData.categoryId;
         }
       }
-      var location = this.$store.getters["searchStore/getSearchLocation"];
+      var location = this.getSearchLocation;
+      // var location = this.$store.getters["searchStore/getSearchLocation"];
       if (location) {
         if (location.sido) {
-          searchData.sido =
-            this.$store.getters["searchStore/getSearchLocation"].sido;
+          searchData.sido = this.getSearchLocation.sido;
+            // this.$store.getters["searchStore/getSearchLocation"].sido;
         }
         if (location.sigungu) {
-          searchData.sigungu =
-            this.$store.getters["searchStore/getSearchLocation"].sigungu;
+          searchData.sigungu = this.getSearchLocation.sigungu;
+            // this.$store.getters["searchStore/getSearchLocation"].sigungu;
         }
         if (location.dong) {
-          searchData.dong =
-            this.$store.getters["searchStore/getSearchLocation"].dong;
+          searchData.dong = this.getSearchLocation.dong;
+            // this.$store.getters["searchStore/getSearchLocation"].dong;
         }
       }
       console.log(searchData);
@@ -125,32 +120,54 @@ export default {
       this.moimList = result.data;
     },
     changeSubCategory() {
-      this.$store.commit("searchStore/initCategorySearchOptions");
+      // this.$store.commit("searchStore/initCategorySearchOptions");
+      this.initCategorySearchOptions();
     },
     moimDetail(moimItem) {
       console.log(moimItem.id);
-      this.$store.commit("searchStore/setSelectedMoimId", moimItem.id);
+      this.setSelectedMoimId(moimItem.id);
+      // this.$store.commit("searchStore/setSelectedMoimId", moimItem.id);
       this.$router.push({ name: "MoimIntro" });
     },
   },
   created() {
     this.getMoimSearchResult();
+    // console.log("다음 실행할 두개는 결과가 같아야 한다.");
+    // console.log(this.subCategory);
+    // console.log(this.subCate)
+    // console.log("다음 값이 변경 되었을 때 watch에 의해 적발 되어야 한다.")
+    // console.log("모든 테스트가 동일하니 변수를 대체할 수 있다. 리펙토링");
   },
   computed: {
-    subCategory: function () {
-      return this.$store.getters["searchStore/getSelectedSubCategory"];
-    },
-    location: function () {
-      return this.$store.getters["searchStore/getSearchLocation"];
-    },
+    ...mapGetters("searchStore",{
+      getSelectedSubCategory:"getSelectedSubCategory",
+      getSearchType:"getSearchType",
+      getSearchLocation:"getSearchLocation",
+      getSearchData:"getSearchData"
+      }),
+    ...mapMutations("searchStore",{
+      setSelectedMoimId:"setSelectedMoimId",
+      initCategorySearchOptions:"initCategorySearchOptions",
+      }),
+    // subCategory: function () {
+    //   return this.$store.getters["searchStore/getSelectedSubCategory"];
+    // },
+    // location: function () {
+    //   return this.$store.getters["searchStore/getSearchLocation"];
+    // },
   },
   watch: {
-    subCategory(value) {
+    // subCate(value) {
+    //   console.log("watch subcategory", value);
+    //   this.changeSubCategory();
+    //   this.getMoimSearchResult();
+    // },
+    getSelectedSubCategory(value) {
       console.log("watch subcategory", value);
       this.changeSubCategory();
       this.getMoimSearchResult();
     },
-    location(value) {
+    getSearchLocation(value) {
       console.log("watch location", value);
       this.getMoimSearchResult();
     },
