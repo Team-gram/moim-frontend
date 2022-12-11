@@ -20,8 +20,15 @@
           </b-col>
           <b-col>
             <b-row id="listTitle">
-              <b-col>
+              <b-col cols="auto">
                 <div>{{ moimItem.title }}</div>
+              </b-col>
+              <b-col v-if="currentSearchState == 'category' && moimItem.upper == true">
+                <div id= "green-colored-option-button" style="
+                                  font-size: 10px !important;
+                                  align: right;
+                                  margin: 0px;
+                                ">추천</div>
               </b-col>
             </b-row>
             <b-row id="listData">
@@ -75,16 +82,23 @@
 </template>
 
 <script>
-import { SearchMoim } from "@/services/moim";
+import { SearchMoim, getUpperMoimList, moimUpperHistory } from "@/services/moim";
 
 export default {
   data() {
     return {
       moimList: [],
+      upperMoimList: [],
+      currentSearchState: null,
     };
   },
   methods: {
+    async getUpperMoim(categoryId){
+      let upperMoimList = await getUpperMoimList(categoryId);
+      this.upperMoimList = upperMoimList.data;
+    },
     async getMoimSearchResult() {
+      this.moimList = [];
       var searchData = new Object();
       if (this.$store.getters["searchStore/getSearchType"] === "keyword") {
         //title
@@ -121,8 +135,36 @@ export default {
         }
       }
       console.log(searchData);
+
       let result = await SearchMoim(searchData);
-      this.moimList = result.data;
+
+      if(this.$store.getters["searchStore/getSearchType"] === "category") {
+        await this.getUpperMoim(searchData.categoryId);
+        console.log(result.data);
+        console.log(this.upperMoimList);
+        var upper = false;
+        for (var i = 0 ; i< result.data.length; i++) {
+          for (var j = 0; j < this.upperMoimList.length; j++) {
+            if(result.data[i].id == this.upperMoimList[j].id) {
+              upper = true;
+            }
+          }
+          if(upper == true) {
+            result.data[i].upper = true;
+            this.moimList.unshift(result.data[i]);
+            await moimUpperHistory(result.data[i].id);
+          }
+          else {
+            result.data[i].upper = false;
+            this.moimList.push(result.data[i]);
+          }
+        }
+        console.log(this.moimList);
+      }
+      else {
+        this.moimList = result.data;
+      }
+      // this.moimList = result.data;
     },
     changeSubCategory() {
       this.$store.commit("searchStore/initCategorySearchOptions");
@@ -135,6 +177,7 @@ export default {
   },
   created() {
     this.getMoimSearchResult();
+    this.currentSearchState = this.$store.getters["searchStore/getSearchType"];
   },
   computed: {
     subCategory: function () {
