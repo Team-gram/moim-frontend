@@ -22,5 +22,7 @@ options(검색 추가 옵션) : {subCategory(카테고리 검색 내에서 선�
 1. getters 사용할 경우, this.$store.getters['모듈이름/함수이름'] 사용
 2. mutations 사용할 경우, this.$store.commit('모듈이름/함수이름') 사용
 
-
-
+* 더 확장된 stroe 쉬운 ...map 사용법!
+import { mapGetters,mapMutations } from "vuex";
+...mapGetters("searchStore",{HostId:"getSelectedMoimHostId"}),
+...mapMutations("",{})
