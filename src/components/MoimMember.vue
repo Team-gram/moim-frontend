@@ -327,7 +327,7 @@ export default {
       isCalendar: false,
       levelSelected: null,
       options: [
-        { value: 0, text: "일반 모임원" },
+        { value: 2, text: "일반 모임원" },
         { value: 1, text: "부방장" },
       ],
     };
@@ -344,6 +344,7 @@ export default {
         let userDetail = await getUserinfo(userId);
         var moimMember = moimMemberList.data[i];
         moimMember.details = userDetail.data;
+        console.log(moimMember.details);
         if (this.$cookies.get("MoimUserId") == userDetail.data.id) {
           this.memberList.unshift(moimMember);
           this.userlevel = moimMember.level;

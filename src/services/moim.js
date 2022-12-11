@@ -173,7 +173,7 @@ export function getMeetMembers(moimId, moimScheduleId) {
   return request({
     url: "/meet/"+moimId+"/"+moimScheduleId,
     method: "get",
-    data: {
+    params: {
       moimId: moimId,
       moimScheduleId: moimScheduleId,
     }
@@ -215,4 +215,26 @@ export function banishMember(moimId, userId) {
     }
   })
 
+}
+
+export function applyMoimUpper(moimId, period, money) {
+  return request({
+    url: "/moim/upper",
+    method: "post",
+    data: {
+      moimId: moimId,
+      period: period,
+      money: money,
+    }
+  })
+}
+
+export function getMoimUpperStatus(moimId) {
+  return request({
+    url: "/moim/upper/detail/"+moimId,
+    method: "get",
+    params: {
+      moimId: moimId,
+    }
+  })
 }
