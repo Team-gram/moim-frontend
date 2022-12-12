@@ -195,6 +195,10 @@ export default {
       data["title"] = payload.data.title;
       data["detail"] = payload.data.description;
       data["userId"] = this.$cookies.get("MoimUserId");
+			if(this.selected)
+				data["isPublish"] = "Y"
+			else
+				data["isPublish"] = 'N'
 			let response = await regularSet(data);
       if(response.status==200){
         this.$bvToast.toast(data.title+': 개인일정이 등록되었습니다.', {

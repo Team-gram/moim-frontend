@@ -130,6 +130,7 @@ export default {
             this.placesecondlist.push(index)
              if(index.sigungu==this.moimData.sigungu){
               this.placethirdlist.push(index)
+              console.log("hi")
            }
           }
         }
