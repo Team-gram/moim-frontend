@@ -30,7 +30,7 @@
         slot="created-card"
         slot-scope="{ event_information }"
         class="details-card"
-        @click="[isAllbutton == 0 ? startitem(event_information) : Message(0)]"
+        @click="[isAllbutton == 0 ? startitem(event_information) : Message(level)]"
       >
         <h5 class="appointment-title appfont">
           {{ event_information.data.title }}
@@ -773,7 +773,7 @@ export default {
       }
     },
     Message(level) {
-      if (level == 0) {
+      if (level ==0 || level==1) {
         this.$bvToast.toast("기존 모임 일정에서 상세 내역을 볼 수 있습니다.", {
           toaster: "b-toaster-top-right",
           appendToast: false,
