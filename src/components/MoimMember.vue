@@ -180,7 +180,7 @@
     >
       <MemberCalendar
         v-if="isCalendar"
-        v-bind:Memberid="currentSelectedMember.id"
+        v-bind:Memberid="currentSelectedMember.userId"
       ></MemberCalendar>
     </b-modal>
     <b-modal
@@ -358,7 +358,6 @@ export default {
       this.inviteMoims = [];
       console.log(member);
       this.currentSelectedMember = member;
-
       let inviteMoims = await MyMoimList(this.userId); // 사용자가 가입한 모임 리스트
       let memberMoims = await MyMoimList(member.userId); // 선택한 멤버가 가입한 모임 리스트
 
