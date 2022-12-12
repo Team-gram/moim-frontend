@@ -90,11 +90,14 @@ export default {
 	},
   async created(){
 		const response = await regularGet(this.Memberid);
-		if(response.status==200)
-      this.calendar = response.data;
+		if(response.status==200){
+			this.calendar = response.data;
+		}
 		if(response.data.regular.length!=0)
 			for (var item in response.data.regular){
-				this.setEvent(response.data.regular[item]);
+				if(response.data.regular[item].isPublish=="Y"){
+					this.setEvent(response.data.regular[item]);
+				}
 			}
 		this.calendar_settings.day_starts_at = this.mintime;
 		this.calendar_settings.day_ends_at = this.maxtime;
