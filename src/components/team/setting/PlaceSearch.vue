@@ -8,13 +8,13 @@
         <b-form-input v-model="text" id="searchkeyword" placeholder="장소" @keyup.enter="searchPlaces()"></b-form-input>
         <div v-if="!search.data.length" style="font-size:10px">데이터가 존재하지 않습니다.</div>
         <div v-if="placethirdlist.length>0" class="placethird">
-          <p>우리 모임과 가장 일치하는 장소들이예요!</p>
+          <p style="font-size:10px; text-align : center;"><b>우리 모임과 가장 일치하는 장소들이예요!</b></p>
           <div class="searchdata" v-for="(third,index) in placethirdlist" :key="index">
             <div class="place">
-              <a @click="historyTop(third.id)" :href="third.page" target="_black"><b>{{third.placeName}}</b></a>
+              <a style="font-size:11px" @click="historyTop(third.id)" :href="third.page" target="_black"><b>☆{{third.placeName}}☆</b></a>
               <b-button variant="success" id="placeset" @click="placeTopAdd(third)">추가</b-button>
-            <div style="color:green;">{{third.phone}}</div>
-            <div class="searchaddress">{{third.placeName}}</div>
+            <div class="searchaddress">{{third.sido}} {{third.sigungu}} {{third.dong}}</div>
+            <div class="searchaddress"></div>
             <hr/>
           </div>
           </div>
@@ -33,12 +33,12 @@
     </div>
     <div v-if="moimlist.length">장소 리스트</div>
     <div v-for="(item,index) in moimlist.data" :key="index">
-      <div v-if="item.id>100000">
+      <div v-if="item.addressId>100000">
         <a :href="kakaourl+item.addressId" target="_black"> <b>{{item.placeName}}</b></a>
         <b-button variant="danger" id="placeset" @click="[placeRemove(item.id,index)]">삭제</b-button>
       </div>
       <div v-else>
-        <a :href="item.page" target="_black"> <b>{{item.placeName}}</b></a>
+        <a :href="item.page" target="_black"> <b>☆{{item.placeName}}☆</b></a>
         <b-button variant="danger" id="placeset" @click="[placeRemove(item.id,index)]">삭제</b-button>
       </div>
     </div>    
@@ -125,13 +125,14 @@ export default {
       const response = await GetPlaceTop(this.moimData.categoryId)
       for (var index of response.data){
         if(index.sido==this.moimData.sido){
-          this.placefirstlist.push(index)
           if(index.sigungu==this.moimData.sigungu){
-            this.placesecondlist.push(index)
-             if(index.sigungu==this.moimData.sigungu){
+            if(index.dong==this.moimData.dong){
               this.placethirdlist.push(index)
-              console.log("hi")
+           }else{
+             this.placesecondlist.push(index)
            }
+          }else{
+            this.placefirstlist.push(index)
           }
         }
       }
