@@ -21,10 +21,19 @@
           </b-col>
         </b-row>
       </div>
-      <div id="list-item" :class="{display: settingindex!=0}">
-        <b-row id="listTitle" align-v="center" style="padding: 25px" @click="settingindex= (settingindex!=0)? 0 : -1">
+      <div id="list-box" :class="{display: settingindex!=0}" @click="settingindex= (settingindex!=0)? 0 : -1">
+        <b-row id="listTitle" align-v="center" v-for="(item,index) in placecurrentList" :key="index">
           <b-col cols="auto">
-            <div id="listTitle">현황</div>
+            <div id="listdetail" >{{item.placeName}}</div>
+          </b-col>
+          <b-col cols="auto">
+            <div id="listdetail" >처리 상태 : {{item.status}}</div>
+          </b-col>
+          <b-col cols="auto">
+            <div id="listdetail" >시작일 : {{item.recStartDate.slice(0,10)}}</div>
+          </b-col>
+           <b-col cols="auto">
+            <div id="listdetail" >종료일: {{item.recEndDate.slice(0,10)}}</div>
           </b-col>
         </b-row>
       </div>
@@ -56,12 +65,15 @@ import { PlaceCurrentStatus } from '@/services/meet.js'
 export default {
   data(){
     return{
+      placecurrentList:[],
       settingindex:-1,
     }
   },
 async created(){
     const response = await PlaceCurrentStatus(this.$cookies.get("MoimUserId"))
-    console.log(response);
+    if(response.status==200){
+      this.placecurrentList = response.data;
+    }
   },
   methods:{
     end(){
@@ -79,7 +91,23 @@ async created(){
   font-weight: bold !important;
   font-size: 20px;
 }
+#listdetail {
+  text-align: left;
+  font-weight: bold !important;
+  font-size: 15px;
+}
 #listIcon {
   width: 20px !important;
 }
+#list-box{
+  border-radius: 20px !important;
+  border: 0px solid;
+  box-shadow: 0px 0px 5px #ccc;
+  background-color: #ffffff;
+  padding: 5px 5x 5px 5px;
+  margin: 10px 0 10px 0;
+  text-align : center;
+  justify-content : center;
+}
+
 </style>
