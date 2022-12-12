@@ -146,6 +146,7 @@ export default {
         this.$router.go();
       }
     },
+     ...mapMutations({Phone:"Phone",Resize:"Resize"}),
   },
   async created() {
     if(navigator.userAgent.match(/Android|Mobile|iP(hone|od|ad)|BlackBerry|IEMobile|Kindle|NetFront|Silk-Accelerated|(hpw|web)OS|Fennec|Minimo|Opera M(obi|ini)|Blazer|Dolfin|Dolphin|Skyfire|Zune/)){
@@ -175,8 +176,7 @@ export default {
     }
   },
   computed:{
-    ...mapGetters("",{getUserData:"getUserData",isphone:"getPhone"}),
-    ...mapMutations("",{Phone:"Phone",Resize:"Resize"})
+    ...mapGetters({getUserData:"getUserData",isphone:"getPhone"}),
   },
   mounted() {
     window.addEventListener("resize", this.handleResize);

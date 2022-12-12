@@ -13,6 +13,7 @@ import NewMoim from '@/views/newMoim'
 import RegisterSchedule from '@/views/RegisterSchedule'
 import MoimTeam from '@/views/moimteam'
 import Test from '@/components/inviteModal'
+import PlaceTop from '@/views/PlaceTop'
 Vue.use(VueRouter);
 
 const routes = 
@@ -76,6 +77,11 @@ const routes =
     path:"/test",
     name: 'Test',
     component: Test,
+  },
+  {
+    path:"/placetop",
+    name: 'PlaceTop',
+    component: PlaceTop,
   },
 ]
 

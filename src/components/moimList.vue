@@ -129,6 +129,10 @@ export default {
       // this.$store.commit("searchStore/setSelectedMoimId", moimItem.id);
       this.$router.push({ name: "MoimIntro" });
     },
+    ...mapMutations("searchStore",{
+      setSelectedMoimId:"setSelectedMoimId",
+      initCategorySearchOptions:"initCategorySearchOptions",
+    }),
   },
   created() {
     this.getMoimSearchResult();
@@ -145,10 +149,7 @@ export default {
       getSearchLocation:"getSearchLocation",
       getSearchData:"getSearchData"
       }),
-    ...mapMutations("searchStore",{
-      setSelectedMoimId:"setSelectedMoimId",
-      initCategorySearchOptions:"initCategorySearchOptions",
-      }),
+
     // subCategory: function () {
     //   return this.$store.getters["searchStore/getSelectedSubCategory"];
     // },
