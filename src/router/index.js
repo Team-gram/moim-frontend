@@ -13,6 +13,7 @@ import NewMoim from '@/views/newMoim'
 import RegisterSchedule from '@/views/RegisterSchedule'
 import MoimTeam from '@/views/moimteam'
 import Test from '@/components/inviteModal'
+import ModifyMoim from '@/views/modifyMoim'
 Vue.use(VueRouter);
 
 const routes = 
@@ -77,6 +78,11 @@ const routes =
     name: 'Test',
     component: Test,
   },
+  {
+    path:"/modify-moim",
+    name: 'ModifyMoim',
+    component: ModifyMoim,
+  }
 ]
 
 const router = new VueRouter({
