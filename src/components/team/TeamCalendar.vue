@@ -439,6 +439,7 @@ import {
 import Kalendar from "@/lib-components/kalendar-container.vue";
 import moment from "moment";
 import PlaceSearch from "@/components/team/setting/PlaceSearch.vue"
+import { mapGetters } from "vuex";  
 export default {
   name: "TeamCalendar",
   components: {
@@ -480,14 +481,18 @@ export default {
     };
   },
   async created() {
+    if(this.getPhone){
+			this.calendar_settings.read_only=true;
+		}
     this.userid = this.$cookies.get("MoimUserId");
     this.moimid = this.$store.getters["searchStore/getSelectedMoimId"];
     this.moimhostid = this.$store.getters["searchStore/getSelectedMoimHostId"];
-    this.setScreen();
     this.startKalendar = await this.regularGet(this.moimid);
     this.getMeetMemberList(this.moimid);
   },
-  mounted() {},
+  computed:{
+    ...mapGetters({getPhone:"getPhone"})
+  },
   methods: {
     async getMeetMemberList(moimId) {
       this.attendMembers = [];
@@ -549,19 +554,6 @@ export default {
         this.attendToggle = this.attendMembers[0].attend;
       }
     },
-    setScreen() {
-      // let hide = [0,1,2,3];
-      // if(this.$store.state.width<250){
-      // 	this.calendar_settings.hide_days = hide;
-      // }
-      // else if(this.$store.state.width<450){
-      // 	hide[0,1,2];
-      // 	this.calendar_settings.hide_days = hide;
-      // }
-      // else{
-      // 	this.calendar_settings.hide_days = [];
-      // }
-    },
     setEvent(item) {
       var calen = Object();
       var data = Object();
@@ -588,9 +580,6 @@ export default {
       this.events.push(calen);
     },
     async addAppointment(popup_info) {
-      const IDcolor = document.getElementById("creating-event");
-      IDcolor.style.backgroundColor =
-        this.colorlist[Math.floor(Math.random() * 4)];
       let payload = {
         data: {
           title: this.new_appointment.title,
@@ -697,7 +686,9 @@ export default {
             response.data[item].scheduleName = response.data[item].name;
             this.setEvent(response.data[item]);
           }
-        this.calendar_settings.read_only = false;
+        if(!this.getPhone){
+          this.calendar_settings.read_only = false;
+        }
         this.startKalendar = 1;
         this.isAllbutton = 1;
       } else {

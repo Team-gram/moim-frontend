@@ -102,6 +102,7 @@
 import Kalendar from '@/lib-components/kalendar-container.vue';
 import { regularGet, regularSet, regularRemove} from "@/services/calendar";
 import moment from "moment";
+import { mapGetters } from "vuex";
 export default {
 	components: {
 		Kalendar,
@@ -137,6 +138,9 @@ export default {
 		};
 	},
   async created(){
+		if(this.getPhone){
+			this.calendar_settings.read_only=true;
+		}
 		const response = await regularGet(this.$cookies.get("MoimUserId"));
 		if(response.status==200)
       this.calendar = response.data;
@@ -146,8 +150,9 @@ export default {
 			}
 		this.startKalendar=1;
   },
-	mounted(){
-	},
+	computed:{
+    ...mapGetters({getPhone:"getPhone"})
+  },
 	methods: {
 		startitem(kalendarEvent){
 			this.currentSelectedSchedule = kalendarEvent;
@@ -190,6 +195,10 @@ export default {
       data["title"] = payload.data.title;
       data["detail"] = payload.data.description;
       data["userId"] = this.$cookies.get("MoimUserId");
+			if(this.selected)
+				data["isPublish"] = "Y"
+			else
+				data["isPublish"] = 'N'
 			let response = await regularSet(data);
       if(response.status==200){
         this.$bvToast.toast(data.title+': 개인일정이 등록되었습니다.', {

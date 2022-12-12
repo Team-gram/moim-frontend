@@ -12,10 +12,17 @@ const store = new Vuex.Store({
     userinfo:"",
     width:400,
     height:650,
+    isphone:false,
   },
   getters: {
     getUserData(state) {
       return state.userinfo;
+    },
+    getPhone(state){
+      return state.isphone;
+    },
+    getSize(state){
+      return [state.width,state.height];
     }
   },
   mutations:{
@@ -25,7 +32,10 @@ const store = new Vuex.Store({
     Resize(state,width,height){
       state.width = width;
       state.height = height;
-    }
+    },
+    Phone(state,isphone){
+      state.isphone = isphone
+    },
   },
   actions:{
    async UpdateUserInfo(state, userId){
