@@ -46,6 +46,15 @@ export default {
     // get and render day cells
     // and then render any event
     // on top of them
+    if(navigator.userAgent.match(/Android|Mobile|iP(hone|od|ad)|BlackBerry|IEMobile|Kindle|NetFront|Silk-Accelerated|(hpw|web)OS|Fennec|Minimo|Opera M(obi|ini)|Blazer|Dolfin|Dolphin|Skyfire|Zune/)){
+      //모바일(스마트폰+태블릿)일 때 실행 될 스크립트
+      this.is_phone=true;
+    }
+    if(!navigator.userAgent.match(/Android|Mobile|iP(hone|od|ad)|BlackBerry|IEMobile|Kindle|NetFront|Silk-Accelerated|(hpw|web)OS|Fennec|Minimo|Opera M(obi|ini)|Blazer|Dolfin|Dolphin|Skyfire|Zune/)){
+        //PC에서만 실행 될 스크립트
+      this.is_phone=false;
+    }
+    console.log(this.is_phone);
     this.renderDay();
   },
   components: {

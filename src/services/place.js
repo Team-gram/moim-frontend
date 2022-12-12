@@ -36,6 +36,21 @@ export function MoimplaceSet(MoimId,Scheduleid,place) {
     }
   })
 }
+export function MoimplaceTopSet(MoimId,Scheduleid,place) {
+  return request({
+    url: "/place",
+    method: "post",
+    data: {
+      "moimId": MoimId,
+      "scheduleId": Scheduleid,
+      "addressId": place.id,
+      "placeName" : place.placeName,
+      "sido": place.sido,
+      "sigungu": place.sigungu,
+      "dong": place.dong
+    }
+  })
+}
 export function MoimplaceGet(MoimId,Scheduleid) {
   return request({
     url: "/place/"+MoimId+"/"+Scheduleid,
