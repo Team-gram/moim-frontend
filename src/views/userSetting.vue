@@ -21,8 +21,8 @@
           </b-col>
         </b-row>
       </div>
-      <div id="list-box" :class="{display: settingindex!=0}" @click="settingindex= (settingindex!=0)? 0 : -1">
-        <b-row id="listTitle" align-v="center" v-for="(item,index) in placecurrentList" :key="index">
+      <div id="list--box" :class="{display: settingindex!=0}" @click="settingindex= (settingindex!=0)? 0 : -1">
+        <b-row id="listTitle" v-for="(item,index) in placecurrentList" :key="index">
           <b-col cols="auto">
             <div id="listdetail" >{{item.placeName}}</div>
           </b-col>
@@ -99,15 +99,14 @@ async created(){
 #listIcon {
   width: 20px !important;
 }
-#list-box{
+#list--box{
   border-radius: 20px !important;
   border: 0px solid;
   box-shadow: 0px 0px 5px #ccc;
   background-color: #ffffff;
-  padding: 5px 5x 5px 5px;
-  margin: 10px 0 10px 0;
-  text-align : center;
-  justify-content : center;
+  max-width: 700px;
+  height: 80px;
+  font-family: "NanumBarunGothic";
 }
 
 </style>
