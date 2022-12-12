@@ -7,16 +7,28 @@
       <div class="searchbox" align="left" >
         <b-form-input v-model="text" id="searchkeyword" placeholder="장소" @keyup.enter="searchPlaces()"></b-form-input>
         <div v-if="!search.data.length" style="font-size:10px">데이터가 존재하지 않습니다.</div>
-        <div v-if="placethirdlist.length>0" class="placethird">
-          <p style="font-size:10px; text-align : center;"><b>우리 모임과 가장 일치하는 장소들이예요!</b></p>
-          <div class="searchdata" v-for="(third,index) in placethirdlist" :key="index">
-            <div class="place">
-              <a style="font-size:11px" @click="historyTop(third.id)" :href="third.page" target="_black"><b>☆{{third.placeName}}☆</b></a>
-              <b-button variant="success" id="placeset" @click="placeTopAdd(third)">추가</b-button>
-            <div class="searchaddress">{{third.sido}} {{third.sigungu}} {{third.dong}}</div>
-            <div class="searchaddress"></div>
-            <hr/>
+          <div v-if="placethirdlist.length>0" class="placethird">
+            <p style="font-size:10px; text-align : center;"><b>우리 모임과 가장 어울리는 장소예요!</b></p>
+            <div class="searchdata" v-for="(third,index) in placethirdlist" :key="index">
+              <div class="place">
+                <a style="font-size:11px" @click="historyTop(third.id)" :href="third.page" target="_black"><b>☆{{third.placeName}}☆</b></a>
+                <b-button variant="success" id="placeset" @click="placeTopAdd(third)">추가</b-button>
+              <div class="searchaddress">{{third.sido}} {{third.sigungu}} {{third.dong}}</div>
+              <div class="searchaddress"></div>
+              <hr/>
+            </div>
           </div>
+        </div>
+        <div v-if="placesecondlist.length>0" class="placesecond">
+            <p style="font-size:10px; text-align : center;"><b>이런 장소는 어떤가요?</b></p>
+            <div class="searchdata" v-for="(second,index) in placesecondlist" :key="index">
+              <div class="place">
+                <a style="font-size:11px" @click="historyTop(second.id)" :href="second.page" target="_black"><b>◐{{second.placeName}}◐</b></a>
+                <b-button variant="success" id="placeset" @click="placeTopAdd(second)">추가</b-button>
+              <div class="searchaddress">{{second.sido}} {{second.sigungu}} {{second.dong}}</div>
+              <div class="searchaddress"></div>
+              <hr/>
+            </div>
           </div>
         </div>
         <div class="searchdata" v-for="(rs,index) in search.data" :key="index" @click="move(rs)">
@@ -145,8 +157,8 @@ export default {
       // this.recommend = recommend.data
       const response = await getCategoryname(this.moimData.categoryId)
       this.text = this.moimData.sido + " " + this.moimData.sigungu+ " " + this.moimData.dong + " " + response.data
-      this.searchPlaces()
       this.PlaceTop()
+      this.searchPlaces()
     },
     async placeTopAdd(place){
       console.log(place)
@@ -251,5 +263,8 @@ export default {
 }
 .placethird{
   background-color: #fccfcf77;
+}
+.placesecond{
+  background-color: #fcdfcf77;
 }
 </style>
