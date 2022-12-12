@@ -12,17 +12,24 @@
     </b-row>
     <div v-if="this.$cookies.get('MoimUserId')">
       <div id="list-item">
-        <b-row id="listTitle" align-v="center" style="padding: 25px">
+        <b-row id="listTitle" align-v="center" style="padding: 25px" @click="settingindex= (settingindex!=0)? 0 : -1">
           <b-col cols="auto" style="padding: 0 0 0 15px">
             <b-img id="listIcon" :src="require('@/assets/settle.png')"></b-img>
           </b-col>
           <b-col cols="auto">
-            <div id="listTitle">개인 정보 설정</div>
+            <div id="listTitle">장소 상위 신청 현황</div>
+          </b-col>
+        </b-row>
+      </div>
+      <div id="list-item" :class="{display: settingindex!=0}">
+        <b-row id="listTitle" align-v="center" style="padding: 25px" @click="settingindex= (settingindex!=0)? 0 : -1">
+          <b-col cols="auto">
+            <div id="listTitle">현황</div>
           </b-col>
         </b-row>
       </div>
       <div id="list-item">
-        <b-row id="listTitle" align-v="center"  style="padding: 25px">
+        <b-row id="listTitle" align-v="center"  style="padding: 25px" @click="end()">
           <b-col cols="auto" style="padding: 0 0 0 15px">
             <b-img
               id="listIcon"
@@ -45,8 +52,24 @@
   </div>
 </template>
 <script>
+import { PlaceCurrentStatus } from '@/services/meet.js'
 export default {
-  components: {},
+  data(){
+    return{
+      settingindex:-1,
+    }
+  },
+async created(){
+    const response = await PlaceCurrentStatus(this.$cookies.get("MoimUserId"))
+    console.log(response);
+  },
+  methods:{
+    end(){
+      this.$cookies.remove("MoimUserId");
+      alert("모임 서비스를 이용해주셔서 감사했습니다.");
+      this.$router.go();
+    }
+  }
 };
 </script>
 
