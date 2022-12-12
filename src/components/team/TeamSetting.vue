@@ -46,7 +46,7 @@
         v-on:closeUpper="closeUpperTab"
       ></MoimUpper>
     </div>
-    <div id="listBox">
+    <div id="listBox" v-if="moimUserData != null && moimUserData.level <= 1">
       <b-row
         id="listTitle"
         align-v="center"

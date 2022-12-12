@@ -114,6 +114,7 @@ export default {
         }
       }
       var location = this.getSearchLocation;
+      console.log(location);
       // var location = this.$store.getters["searchStore/getSearchLocation"];
       if (location) {
         if (location.sido) {
@@ -130,11 +131,14 @@ export default {
         }
       }
       console.log(searchData);
+      console.log(searchData);
 
-      let result = await SearchMoim(searchData);
+      let result;
+      console.log(result);
 
       if(this.$store.getters["searchStore/getSearchType"] === "category") {
-        await this.getUpperMoim(searchData.categoryId);
+        result = await SearchMoim(searchData.categoryId);
+        await this.getUpperMoim(searchData.categoryId.categoryId);
         console.log(result.data);
         console.log(this.upperMoimList);
         var upper = false;
@@ -148,6 +152,7 @@ export default {
             result.data[i].upper = true;
             this.moimList.unshift(result.data[i]);
             await moimUpperHistory(result.data[i].id);
+            upper = false;
           }
           else {
             result.data[i].upper = false;
@@ -157,6 +162,7 @@ export default {
         console.log(this.moimList);
       }
       else {
+        result = await SearchMoim(searchData);
         this.moimList = result.data;
       }
       // this.moimList = result.data;
