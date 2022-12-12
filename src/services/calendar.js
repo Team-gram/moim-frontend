@@ -10,7 +10,8 @@ export function regularSet(data) {
         "startTime" : data.startTime,
         "endTime" : data.endTime,
         "title" : data.title,
-        "detail" : data.detail
+        "detail" : data.detail,
+        "isPublish" : data.isPublish
       }
     });
   }
