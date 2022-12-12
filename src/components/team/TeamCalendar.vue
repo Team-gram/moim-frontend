@@ -378,7 +378,7 @@
         <!-- Button with custom close trigger value -->
         <b-button
           size="sm"
-          v-if="moimhostid == userid"
+          v-if="level < 2"
           @click="[removeEvent(currentSelectedSchedule), hide('forget')]"
           style="background-color: red"
         >
@@ -448,6 +448,7 @@ export default {
   },
   data() {
     return {
+      level : 2,
       memuindex: 0,
       Allbutton: "모임 일정 조율하기",
       isAllbutton: 0,
@@ -502,6 +503,7 @@ export default {
         var userId = moimMemberList.data[i].userId;
         let userDetail = await getUserinfo(userId);
         if (this.$cookies.get("MoimUserId") == userDetail.data.id) {
+          this.level = moimMemberList.data[i].level
           this.attendMembers.unshift(userDetail.data);
         } else {
           this.attendMembers.push(userDetail.data);
@@ -588,7 +590,7 @@ export default {
         from: popup_info.start_time,
         to: popup_info.end_time,
       };
-      if (this.moimhostid != this.$cookies.get("MoimUserId")) {
+      if (this.level > 1) {
         this.$bvToast.toast("모임일정을 등록할 권한이 없습니다.", {
           toaster: "b-toaster-top-right",
           appendToast: false,
@@ -676,6 +678,7 @@ export default {
       return 1;
     },
     async MoimAllCall() {
+      this.memuindex=0;
       if (this.isAllbutton == 0) {
         this.Allbutton = "기존 모임 일정";
         this.events = [];
