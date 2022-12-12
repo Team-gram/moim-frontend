@@ -2,7 +2,7 @@
   <div class="calendar-wrap" :style="`--space-between-cols: ${colsSpace}`">
     <div class="sticky-top">
       <ul class="days">
-        <li
+        <li style="width:10px"
           class="day-indicator"
           :key="index"
           v-for="({ value }, index) in days || []"
