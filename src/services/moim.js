@@ -258,3 +258,23 @@ export function moimUpperHistory(moimId) {
     }
   })
 }
+
+export function modifyMoim(data) {
+  return request({
+    url: "/moim",
+    method: "put",
+    data: {
+      id: data.id,
+      userId: data.userId,
+      categoryId: data.categoryId,
+      title: data.title,
+      content: data.content,
+      sido: data.sido,
+      sigungu: data.sigungu,
+      dong: data.dong,
+      isPublish: data.isPublish,
+      isFreeEnter: data.isFreeEnter,
+      maxMember: data.maxMember,
+    },
+  });
+}

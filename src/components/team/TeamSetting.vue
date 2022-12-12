@@ -46,6 +46,21 @@
         v-on:closeUpper="closeUpperTab"
       ></MoimUpper>
     </div>
+    <div id="listBox">
+      <b-row
+        id="listTitle"
+        align-v="center"
+        style="cursor: pointer"
+        @click="moveToModifyWindow()"
+      >
+        <b-col cols="auto" style="padding: 0 0 0 15px">
+          <b-img id="listIcon" :src="require('@/assets/edit.png')"></b-img>
+        </b-col>
+        <b-col cols="auto">
+          <div id="listTitle">모임 정보 수정하기</div>
+        </b-col>
+      </b-row>
+    </div>
   </div>
 </template>
 <script>
@@ -86,6 +101,11 @@ export default {
     async checkMoimUpperStatus(moimId){
       let upperStatus = await getMoimUpperStatus(moimId);
       this.moimUpperStatus = upperStatus.data;
+    },
+    moveToModifyWindow() {
+      this.$router.push({
+        name: "ModifyMoim",
+      });
     }
   },
   created() {
